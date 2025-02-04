@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { useEffect, useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const installCommand = `npm install starknet-agent-kit`;
 
 export default function Terminal() {
-  const [typed, setTyped] = useState('');
+  const [typed, setTyped] = useState("");
   const [showCopied, setShowCopied] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Terminal() {
             language="bash"
             style={vscDarkPlus}
             customStyle={{
-              background: 'transparent',
+              background: "transparent",
               padding: 0,
               margin: 0,
             }}
@@ -54,7 +54,7 @@ export default function Terminal() {
             onClick={copyToClipboard}
             className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
           >
-            {showCopied ? '✓ Copied!' : 'Copy'}
+            {showCopied ? "✓ Copied!" : "Copy"}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import Terminal from './components/Terminal';
+import Terminal from "./components/Terminal";
 
 export default function Home() {
   return (
@@ -10,7 +10,8 @@ export default function Home() {
             Starknet Agent Kit
           </h1>
           <p className="text-xl text-gray-300 mb-8">
-            A powerful toolkit for building and managing Starknet agents with ease
+            A powerful toolkit for building and managing Starknet agents with
+            ease
           </p>
           <div className="flex space-x-4">
             <a
