@@ -6,10 +6,10 @@ import { BsTelegram, BsTwitter, BsGithub } from "react-icons/bs";
 const Footer = () => {
   return (
     <footer className="w-full bg-neutral-900 border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {/* Column 1 - KasarLabs Logo and Terms */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col items-center sm:items-start space-y-4">
             <div className="w-[125px] sm:w-[140px]">
               <div className="relative w-full h-10">
                 <Image
@@ -20,7 +20,7 @@ const Footer = () => {
                 />
               </div>
             </div>
-            <div className="text-neutral-400 text-sm flex flex-wrap gap-2">
+            <div className="text-neutral-400 text-sm flex flex-wrap justify-center sm:justify-start gap-2">
               <a
                 href="https://pay.kasar.io/pages/terms-and-conditions"
                 target="_blank"
@@ -51,7 +51,7 @@ const Footer = () => {
           </div>
 
           {/* Column 2 - Resources */}
-          <div className="sm:mt-0">
+          <div className="text-center sm:text-left">
             <h3 className="text-white font-semibold mb-3 md:mb-4 text-base md:text-lg">
               Resources
             </h3>
@@ -80,37 +80,37 @@ const Footer = () => {
           </div>
 
           {/* Column 3 - Contact Us */}
-          <div className="sm:mt-0">
+          <div className="text-center sm:text-left">
             <h3 className="text-white font-semibold mb-3 md:mb-4 text-base md:text-lg">
               Contact us
             </h3>
-            <div className="flex space-x-4 md:space-x-6">
+            <div className="flex justify-center sm:justify-start space-x-4 md:space-x-6">
               <Link
                 href="https://twitter.com/kasarlabs"
                 target="_blank"
                 className="text-neutral-400 hover:text-white transition-colors"
               >
-                <BsTwitter className="w-6 h-6 sm:w-7 sm:h-7" />
+                <BsTwitter className="w-5 h-5 sm:w-6 sm:h-6" />
               </Link>
               <Link
                 href="https://t.me/+jZZuOamlUM5lNWNk"
                 target="_blank"
                 className="text-neutral-400 hover:text-white transition-colors"
               >
-                <BsTelegram className="w-6 h-6 sm:w-7 sm:h-7" />
+                <BsTelegram className="w-5 h-5 sm:w-6 sm:h-6" />
               </Link>
               <Link
                 href="https://github.com/kasarlabs"
                 target="_blank"
                 className="text-neutral-400 hover:text-white transition-colors"
               >
-                <BsGithub className="w-6 h-6 sm:w-7 sm:h-7" />
+                <BsGithub className="w-5 h-5 sm:w-6 sm:h-6" />
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 pt-6 md:mt-8 md:pt-8 border-t border-neutral-800">
+        <div className="mt-8 pt-6 border-t border-neutral-800">
           <p className="text-center text-neutral-400 text-xs md:text-sm">
             © {new Date().getFullYear()} KasarLabs. All rights reserved.
           </p>
