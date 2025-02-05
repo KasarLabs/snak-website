@@ -1,34 +1,55 @@
 import Terminal from "./components/Terminal";
+import { Github, Package, Twitter } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         {/* Left side - Title and Description */}
         <div>
-          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            Starknet Agent Kit
-          </h1>
+          <div className="flex items-center gap-4 mb-6">
+            <Image
+              src="/starknet.png"
+              alt="Starknet Logo"
+              width={62}
+              height={62}
+              className="object-contain"
+            />
+            <h1 className="text-5xl font-bold text-white">
+              Starknet Agent Kit
+            </h1>
+          </div>
           <p className="text-xl text-gray-300 mb-8">
-            A powerful toolkit for building and managing Starknet agents with
-            ease
+            A powerful and simple toolkit for creating AI agents that can interact with the Starknet blockchain.
           </p>
-          <div className="flex space-x-4">
+          <div className="flex space-x-6">
             <a
-              href="https://github.com/yourusername/starknet-agent-kit"
+              href="https://github.com/kasarlabs/starknet-agent-kit"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+              className="text-white hover:text-gray-300 transition-colors"
+              aria-label="GitHub Repository"
             >
-              GitHub
+              <Github size={32} />
             </a>
             <a
               href="https://www.npmjs.com/package/starknet-agent-kit"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+              className="text-white hover:text-gray-300 transition-colors"
+              aria-label="NPM Package"
             >
-              NPM
+              <Package size={32} />
+            </a>
+            <a
+              href="https://twitter.com/kasarlabs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition-colors"
+              aria-label="Twitter Profile"
+            >
+              <Twitter size={32} />
             </a>
           </div>
         </div>

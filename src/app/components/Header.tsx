@@ -35,7 +35,7 @@ const Header = () => {
               href="/about"
               className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
             >
-              About
+              Plugins
             </Link>
             <Link
               href="/docs"
@@ -65,16 +65,16 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 right-0 bg-neutral-900 border-b border-neutral-800 py-4 px-6 space-y-4">
+          <div className="md:hidden absolute top-20 left-0 right-0 bg-black border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
               href="/about"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-neutral-800 py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               About
             </Link>
             <Link
               href="/docs"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-neutral-800 py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               Docs
             </Link>
@@ -82,7 +82,7 @@ const Header = () => {
               href="https://github.com/kasarlabs/starknet-agent-kit"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-neutral-800 py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               GitHub
             </a>
