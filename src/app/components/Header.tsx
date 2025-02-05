@@ -32,7 +32,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <Link
-              href="/about"
+              href="/plugins"
               className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
             >
               Plugins
@@ -67,7 +67,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute top-20 left-0 right-0 bg-black border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
-              href="/about"
+              href="/plugins"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               Plugins

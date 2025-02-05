@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
             <div className="text-neutral-400 text-sm flex flex-wrap justify-center sm:justify-start gap-2">
               <a
-                href="https://pay.kasar.io/pages/terms-and-conditions"
+                href="https://kasar.io/pages/terms-and-conditions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white cursor-pointer transition-colors"
@@ -31,7 +31,7 @@ const Footer = () => {
               </a>
               <span className="hidden sm:inline">•</span>
               <a
-                href="https://pay.kasar.io/pages/general-conditions-of-sale"
+                href="https://kasar.io/pages/general-conditions-of-sale"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white cursor-pointer transition-colors"
@@ -40,7 +40,7 @@ const Footer = () => {
               </a>
               <span className="hidden sm:inline">•</span>
               <a
-                href="https://pay.kasar.io/pages/legal-information"
+                href="https://kasar.io/pages/legal-information"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white cursor-pointer transition-colors"
