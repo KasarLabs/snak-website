@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Starknet Agent Kit | AI Agents for Starknet Blockchain",
+  title: "Starknet Agent Kit",
   description:
     "A powerful and simple toolkit for creating AI agents that can interact with the Starknet blockchain. Build autonomous agents for DeFi, NFTs, and more.",
   keywords: [
