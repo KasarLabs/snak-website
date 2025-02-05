@@ -16,7 +16,7 @@ const Footer = () => {
                   src="https://github.com/KasarLabs/brand/blob/main/kasar/logo/KasarWhiteLogo.png?raw=true"
                   fill
                   alt="kasarlabs"
-                  className="dark:invert object-contain"
+                  className="object-contain"
                 />
               </div>
             </div>
