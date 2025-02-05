@@ -38,7 +38,7 @@ const Header = () => {
               Plugins
             </Link>
             <Link
-              href="/docs"
+              href="https://docs.starkagent.ai"
               className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
             >
               Docs
@@ -70,10 +70,10 @@ const Header = () => {
               href="/about"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
-              About
+              Plugins
             </Link>
             <Link
-              href="/docs"
+              href="https://docs.starkagent.ai"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               Docs
