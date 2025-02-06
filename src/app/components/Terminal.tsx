@@ -10,68 +10,69 @@ const Terminal = () => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
 
-  const spinnerFrames = useMemo(() => 
-    ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
-    []
+  const spinnerFrames = useMemo(
+    () => ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+    [],
   );
 
-  const steps = useMemo(() => [
-    { text: "pnpm run local", delay: 1000, loading: true },
-    {
-      text: "╭──────────────────────────────────────────────╮\n│ Starknet-Agent-Kit v0.0.1                    │\n╰──────────────────────────────────────────────╯",
-      delay: 800,
-      loading: false,
-      class: "text-gray-300",
-    },
-    {
-      text: "? Select operation mode:",
-      delay: 1000,
-      loading: false,
-      class: "text-blue-400",
-    },
-    {
-      text: "  > Interactive Mode\n❯ > Autonomous Mode",
-      delay: 500,
-      loading: false,
-      class: "text-white",
-    },
-    {
-      text: "✔ Agent initialized successfully",
-      delay: 1200,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: "✔ Character config loaded successfully",
-      delay: 800,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: "🤖 Starting autonomous session...",
-      delay: 1000,
-      loading: true,
-      class: "text-blue-400",
-    },
-    {
-      text: "📊 Analyzing market conditions...",
-      delay: 1200,
-      loading: true,
-      class: "text-blue-400",
-    },
-    {
-      text: `Market Analysis:
+  const steps = useMemo(
+    () => [
+      { text: "pnpm run local", delay: 1000, loading: true },
+      {
+        text: "╭──────────────────────────────────────────────╮\n│ Starknet-Agent-Kit v0.0.1                    │\n╰──────────────────────────────────────────────╯",
+        delay: 800,
+        loading: false,
+        class: "text-gray-300",
+      },
+      {
+        text: "? Select operation mode:",
+        delay: 1000,
+        loading: false,
+        class: "text-blue-400",
+      },
+      {
+        text: "  > Interactive Mode\n❯ > Autonomous Mode",
+        delay: 500,
+        loading: false,
+        class: "text-white",
+      },
+      {
+        text: "✔ Agent initialized successfully",
+        delay: 1200,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: "✔ Character config loaded successfully",
+        delay: 800,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: "🤖 Starting autonomous session...",
+        delay: 1000,
+        loading: true,
+        class: "text-blue-400",
+      },
+      {
+        text: "📊 Analyzing market conditions...",
+        delay: 1200,
+        loading: true,
+        class: "text-blue-400",
+      },
+      {
+        text: `Market Analysis:
 - ETH/USDC Price: $3,245.67
 - 24h Volume: $2.1B
 - Market Direction: Bullish
 - Volatility Index: Medium
 - Optimal Entry Point: Current`,
-      delay: 1500,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: `Route information: {
+        delay: 1500,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: `Route information: {
   "name": "Ekubo",
   "address": "0x5dd3d2f4429af886cd1a3b08289dbcea99a294197e9eb43b0e0325b4b",
   "routeInfo": {
@@ -82,54 +83,56 @@ const Terminal = () => {
     "extension": "0x0"
   }
 }`,
-      delay: 1500,
-      loading: false,
-      class: "text-blue-300",
-    },
-    {
-      text: "✔ Allowance verification successful",
-      delay: 800,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: "🔄 Executing swap transaction...",
-      delay: 1000,
-      loading: true,
-      class: "text-blue-400",
-    },
-    {
-      text: "✔ Transaction executed: 0x7da3ae0b687f45a56079b58d3e8abc841d0326e14783f65b346a19f9d965741d",
-      delay: 800,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: '✔ Swap completed successfully { execution_status: "SUCCEEDED", finality_status: "ACCEPTED_ON_L2" }',
-      delay: 1200,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: "📢 Preparing social media update...",
-      delay: 800,
-      loading: true,
-      class: "text-blue-400",
-    },
-    {
-      text: `🐦 Posted to Twitter:
+        delay: 1500,
+        loading: false,
+        class: "text-blue-300",
+      },
+      {
+        text: "✔ Allowance verification successful",
+        delay: 800,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: "🔄 Executing swap transaction...",
+        delay: 1000,
+        loading: true,
+        class: "text-blue-400",
+      },
+      {
+        text: "✔ Transaction executed: 0x7da3ae0b687f45a56079b58d3e8abc841d0326e14783f65b346a19f9d965741d",
+        delay: 800,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: '✔ Swap completed successfully { execution_status: "SUCCEEDED", finality_status: "ACCEPTED_ON_L2" }',
+        delay: 1200,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: "📢 Preparing social media update...",
+        delay: 800,
+        loading: true,
+        class: "text-blue-400",
+      },
+      {
+        text: `🐦 Posted to Twitter:
 "$ekb sitting at $30m mcap. protocol putting in work - privacy pools + onchain dca + native account abstraction. real defi still exists in 2025"`,
-      delay: 1500,
-      loading: false,
-      class: "text-green-400",
-    },
-    {
-      text: "✨ Looking for next opportunity...",
-      delay: 1000,
-      loading: false,
-      class: "text-green-400",
-    },
-  ], []);
+        delay: 1500,
+        loading: false,
+        class: "text-green-400",
+      },
+      {
+        text: "✨ Looking for next opportunity...",
+        delay: 1000,
+        loading: false,
+        class: "text-green-400",
+      },
+    ],
+    [],
+  );
 
   // Spinner animation
   useEffect(() => {
