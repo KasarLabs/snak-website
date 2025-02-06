@@ -1,7 +1,7 @@
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import {SearchProvider} from "./plugins/context/SearchContext"
+import { SearchProvider } from "./plugins/context/SearchContext";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -54,11 +54,11 @@ export default function RootLayout({
         <link rel="canonical" href="https://starkagent.ai" />
       </head>
       <body className="bg-black">
-		<SearchProvider>
-			<Header />
-			<main>{children}</main>
-			<Footer />
-		</SearchProvider>
+        <SearchProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </SearchProvider>
       </body>
     </html>
   );

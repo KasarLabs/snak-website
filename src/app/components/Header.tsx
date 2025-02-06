@@ -3,19 +3,19 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X , Search} from "lucide-react";
-import { usePathname } from 'next/navigation';
-import { useSearch } from '../plugins/context/SearchContext';
+import { Menu, X, Search } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useSearch } from "../plugins/context/SearchContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-	const { searchQuery, setSearchQuery } = useSearch();
+  const { searchQuery, setSearchQuery } = useSearch();
 
-	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearchQuery(e.target.value);
-	  };
-	const isPluginPage = pathname === '/plugins'
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+  const isPluginPage = pathname === "/plugins";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,7 +40,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-		  {isPluginPage && (
+            {isPluginPage && (
               <div className="relative flex items-center">
                 <input
                   type="text"

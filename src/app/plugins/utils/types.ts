@@ -1,29 +1,33 @@
 export interface Placeholder {
-	id: string;
-	name : string;
-	image?: string;
-	color?: string;
+  id: string;
+  name: string;
+  image?: string;
+  color?: string;
 }
 
 export interface ActionParameter {
-	name: string;
-	type: string;
-	description: string;
-	required: boolean;
+  name: string;
+  type: string;
+  description: string;
+  required: boolean;
 }
 
 export interface Action {
-	name: string;
-	description: string;
-	parameters?: ActionParameter[];
+  name: string;
+  description: string;
+  parameters?: ActionParameter[];
 }
 
 export interface Plugin {
-	id: string;
-	name: string;
-	description: string;
-	image: string;
-	actions: Action[];
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  actions: Action[];
 }
 
-export type GridItem = (Plugin | Placeholder) & { x: number; y: number; color?: string };
+export type GridItem = (Plugin | Placeholder) & {
+  x: number;
+  y: number;
+  color?: string;
+};
