@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback} from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { allPlugins} from './plugins/plugins'
+import { allPlugins} from '../../../data/plugins'
 import { PluginModal } from './components/PluginModal';
 import { Plugin, GridItem } from './utils/types';
 import { useSearch } from './context/SearchContext';

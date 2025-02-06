@@ -1,4 +1,4 @@
-import { Plugin } from "../utils/types"
+import { Plugin } from "../src/app/plugins/utils/types"
 
 export const allPlugins: Array<Plugin> = [
 	{
