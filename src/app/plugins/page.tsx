@@ -268,7 +268,7 @@ export default function HomePage() {
         <PluginModal
           plugin={selectedCircle}
           isVisible={isModalVisible}
-		  expandedActions={expandedActions}
+          expandedActions={expandedActions}
           onClose={() => {
             setIsModalVisible(false);
             setExpandedActions(new Set());
