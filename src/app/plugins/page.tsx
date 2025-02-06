@@ -196,7 +196,7 @@ export default function HomePage() {
             x: dragPosition.x,
             y: dragPosition.y,
           }}
-          onDragStart={(e, info) => {
+          onDragStart={() => {
             setIsDragging(true);
             if (mousePosition) {
               setFrozenMousePosition(mousePosition);
@@ -268,6 +268,7 @@ export default function HomePage() {
         <PluginModal
           plugin={selectedCircle}
           isVisible={isModalVisible}
+		  expandedActions={expandedActions}
           onClose={() => {
             setIsModalVisible(false);
             setExpandedActions(new Set());

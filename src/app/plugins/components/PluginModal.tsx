@@ -6,6 +6,7 @@ import { CollapsibleSection } from "./CollapsibleSection";
 interface PluginModalProps {
   plugin: Plugin | null;
   isVisible: boolean;
+  expandedActions: Set<number>;
   onClose: () => void;
 }
 
