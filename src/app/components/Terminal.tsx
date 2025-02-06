@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 const Terminal = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -8,11 +8,14 @@ const Terminal = () => {
   const [showCursor, setShowCursor] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
-
-  const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
   const [spinnerFrame, setSpinnerFrame] = useState(0);
 
-  const steps = [
+  const spinnerFrames = useMemo(() => 
+    ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+    []
+  );
+
+  const steps = useMemo(() => [
     { text: "pnpm run local", delay: 1000, loading: true },
     {
       text: "╭──────────────────────────────────────────────╮\n│ Starknet-Agent-Kit v0.0.1                    │\n╰──────────────────────────────────────────────╯",
@@ -126,15 +129,16 @@ const Terminal = () => {
       loading: false,
       class: "text-green-400",
     },
-  ];
+  ], []);
 
   // Spinner animation
   useEffect(() => {
+    const spinnerLength = spinnerFrames.length;
     const interval = setInterval(() => {
-      setSpinnerFrame((prev) => (prev + 1) % spinnerFrames.length);
+      setSpinnerFrame((prev) => (prev + 1) % spinnerLength);
     }, 80);
     return () => clearInterval(interval);
-  }, []);
+  }, [spinnerFrames]);
 
   // Cursor blink effect
   useEffect(() => {
@@ -169,7 +173,7 @@ const Terminal = () => {
     } else {
       setIsLoading(false);
     }
-  }, [currentStep]);
+  }, [currentStep, steps]);
 
   return (
     <div className="relative w-full">
