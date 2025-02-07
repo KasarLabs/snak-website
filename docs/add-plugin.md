@@ -1,6 +1,6 @@
 # Steps to submit a new plugin:
 
-- Build your plugin configuration in [data/plugins.ts](https://github.com/minhanhld/starkagent/blob/main/data/plugins.ts).
+- Build your plugin configuration in [data/plugins.ts](../data/plugins.ts).
   The format is the following :
 
 ```typescript
@@ -31,5 +31,5 @@ interface ActionParameter {
 ```
 
 - Ensure you assign a unique UUID for your plugin. You can generate one here [v4 UUID Generator](https://www.uuidgenerator.net/version4)
-- Upload your plugin's logo to [public/logos/](https://github.com/minhanhld/starkagent/tree/main/public/logos) with the format being "plugin_name.png".
+- Upload your plugin's logo to [public/logos/](../public/logos/) with the format being "plugin_name.png".
 - Submit a Pull Request titled "feat(plugin): Introducing PluginName" and verify it passes all CI checks.
