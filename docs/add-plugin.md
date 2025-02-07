@@ -1,7 +1,8 @@
 # Steps to submit a new plugin:
 
 - Build your plugin configuration in [data/plugins.ts](https://github.com/minhanhld/starkagent/blob/main/data/plugins.ts).
-The format is the following :
+  The format is the following :
+
 ```typescript
 const yourPluginName: Plugin {
   id: string;          // Unique identifier for your plugin (UUID)
@@ -11,19 +12,21 @@ const yourPluginName: Plugin {
   actions: Action[];   // List of actions your plugin supports
 }
 ```
+
 ```typescript
 interface Action {
-  name: string;        // Name of the action
+  name: string; // Name of the action
   description: string; // Description of what the action does
   parameters?: ActionParameter[]; // Optional list of parameters (if your action needs inputs)
 }
 ```
+
 ```typescript
 interface ActionParameter {
-  name: string;        // Name of the parameter
-  type: string;        // Data type (e.g., "string", "number", "boolean")
+  name: string; // Name of the parameter
+  type: string; // Data type (e.g., "string", "number", "boolean")
   description: string; // Description of what the parameter is for
-  required: boolean;   // Whether this parameter is mandatory
+  required: boolean; // Whether this parameter is mandatory
 }
 ```
 
