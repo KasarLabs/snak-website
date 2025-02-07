@@ -53,10 +53,10 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsClient(true);
-	setDragPosition({
-		x: -window.innerWidth * 0.025,
-		y: 0
-	  });
+    setDragPosition({
+      x: -window.innerWidth * 0.025,
+      y: 0,
+    });
     const handleResize = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };

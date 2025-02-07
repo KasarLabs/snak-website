@@ -1,44 +1,11 @@
 import { Plugin } from "../src/app/plugins/utils/types";
 
-const vesuPlugin: Plugin = {
-  id: "9d3e05ef-c85a-43cc-8e57-486e94fcf40f",
-  name: "Vesu",
-  description:
-    "Deposit and withdraw tokens to earn yield in the Vesu DeFi protocol",
-  image: "/logos/vesu.png",
-
-  actions: [
-    {
-      name: "Deposit Earn",
-      description: "Deposit tokens into Vesu protocol to earn yield",
-      parameters: [
-        {
-          name: "depositTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to deposit (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "depositAmount",
-          type: "string",
-          description: "Amount of tokens to deposit",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Withdraw Earn",
-      description: "Withdraw tokens and earned yield from Vesu protocol",
-      parameters: [
-        {
-          name: "withdrawTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to withdraw",
-          required: true,
-        },
-      ],
-    },
-  ],
+const corePlugin: Plugin = {
+  id: "a5dcf686-50ee-41f5-bdcb-44eaacbeaf81",
+  name: "Core",
+  description: "",
+  image: "/logos/starknet.png",
+  actions: [],
 };
 
 const unruggablePlugin: Plugin = {
@@ -135,6 +102,47 @@ const unruggablePlugin: Plugin = {
           name: "contractAddress",
           type: "string",
           description: "Address of the memecoin contract to check",
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+const vesuPlugin: Plugin = {
+  id: "9d3e05ef-c85a-43cc-8e57-486e94fcf40f",
+  name: "Vesu",
+  description:
+    "Deposit and withdraw tokens to earn yield in the Vesu DeFi protocol",
+  image: "/logos/vesu.png",
+
+  actions: [
+    {
+      name: "Deposit Earn",
+      description: "Deposit tokens into Vesu protocol to earn yield",
+      parameters: [
+        {
+          name: "depositTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to deposit (e.g., ETH, USDC)",
+          required: true,
+        },
+        {
+          name: "depositAmount",
+          type: "string",
+          description: "Amount of tokens to deposit",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "Withdraw Earn",
+      description: "Withdraw tokens and earned yield from Vesu protocol",
+      parameters: [
+        {
+          name: "withdrawTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to withdraw",
           required: true,
         },
       ],
@@ -262,7 +270,199 @@ const twitterPlugin: Plugin = {
   actions: [],
 };
 
+const discordPlugin: Plugin = {
+  id: "1e489b06-d538-4e29-8412-2e4724a777e3",
+  name: "Discord",
+  description: "",
+  image: "/logos/discord.png",
+  actions: [],
+};
+
+const telegramPlugin: Plugin = {
+  id: "297bf546-ba26-4556-a65c-2317ba710d32",
+  name: "Telegram",
+  description: "",
+  image: "/logos/telegram.png",
+  actions: [],
+};
+
+const duckduckgoPlugin: Plugin = {
+  id: "544bb4dd-4c2f-42da-95be-cbbc86f0585e",
+  name: "Duckduckgo",
+  description:
+    "A plugin that performs web searches using DuckDuckGo's search engine, as part of LangChain tools.",
+  image: "/logos/duckduckgo.png",
+  actions: [
+    {
+      name: "Invoke",
+      description: "Perform a search query using DuckDuckGo",
+      parameters: [
+        {
+          name: "input",
+          type: "string",
+          description: "The search query to execute",
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+const dallEPlugin: Plugin = {
+  id: "68290790-695f-4aaa-bb8c-95583899b47a",
+  name: "Dall-E",
+  description:
+    "A powerful AI image generation plugin that creates unique images from textual description, as part of LangChain tools.",
+  image: "/logos/dallE.png",
+  actions: [
+    {
+      name: "Invoke",
+      description:
+        "Generate an image based on a text prompt and return its URL",
+      parameters: [
+        {
+          name: "input",
+          type: "string",
+          description: "Text description of the image you want to generate",
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+const gmailPlugin: Plugin = {
+  id: "0a463a27-f236-4f2a-88f5-ab6c4a4da9a9",
+  name: "Gmail",
+  description:
+    "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
+  image: "/logos/gmail.png",
+  actions: [],
+};
+
+const gcalendarPlugin: Plugin = {
+  id: "3a15ea40-0211-48c9-a3a8-1b9c92502ab6",
+  name: "Google Calendar",
+  description:
+    "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
+  image: "/logos/gcalendar.png",
+  actions: [],
+};
+
+const searchapiPlugin: Plugin = {
+  id: "fe276fc9-3b3d-438d-bb4f-b613aef97531",
+  name: "Search API",
+  description:
+    "Search and retrieve current news articles from various sources using Google News engine, with support for filtering, sorting, and customized results, as part of LangChain tools.",
+  image: "/logos/searchapi.png",
+  actions: [],
+};
+
+const wikipediaPlugin: Plugin = {
+  id: "c36dd777-e209-4c7d-b60c-57003c53d9de",
+  name: "Wikipedia",
+  description:
+    "Search and retrieve information from Wikipedia, including articles, summaries, and related content, as part of LangChain tools.",
+  image: "/logos/wikipedia.png",
+  actions: [],
+};
+
+const coinmarketcapPlugin: Plugin = {
+  id: "22caebb4-27ec-425a-9868-bbf15e381249",
+  name: "CoinMarketCap",
+  description: "",
+  image: "/logos/coinmarketcap.png",
+  actions: [],
+};
+
+const atlanticPlugin: Plugin = {
+  id: "abd3235d-67d0-4a33-a506-00fd5811481f",
+  name: "Atlantic",
+  description:
+    "A plugin for interacting with Atlantic's proof generation and verification services",
+  image: "/logos/atlantic.png",
+  actions: [
+    {
+      name: "getProof",
+      description: "Generate a proof by uploading a ZIP file to Atlantic",
+      parameters: [
+        {
+          name: "agent",
+          type: "StarknetAgentInterface",
+          description: "The Starknet agent interface",
+          required: true,
+        },
+        {
+          name: "param",
+          type: "AtlanticParam",
+          description: "The Atlantic parameters, including the filename",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "verifyProof",
+      description: "Verify a proof using the Atlantic service",
+      parameters: [
+        {
+          name: "agent",
+          type: "StarknetAgentInterface",
+          description: "The Starknet agent interface",
+          required: true,
+        },
+        {
+          name: "param",
+          type: "AtlanticParam",
+          description: "The Atlantic parameters, including the filename",
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+const argentxPlugin: Plugin = {
+  id: "4d3e0dc1-c027-491c-8d50-a337a38ec10d",
+  name: "Argent X",
+  description: "",
+  image: "/logos/argentx.png",
+  actions: [],
+};
+
+const braavosPlugin: Plugin = {
+  id: "ae0057b0-e6e7-40bc-a22f-6afa5addb57a",
+  name: "Braavos",
+  description: "",
+  image: "/logos/braavos.png",
+  actions: [],
+};
+
+const pragmaPlugin: Plugin = {
+  id: "f5ed5517-267b-4d4e-b4ba-1dab110d6dbd",
+  name: "Pragma",
+  description: "",
+  image: "/logos/pragma.png",
+  actions: [],
+};
+
+const madaraPlugin: Plugin = {
+  id: "62121657-9286-4002-ab6d-5c984232477a",
+  name: "Madara",
+  description: "",
+  image: "/logos/madara.png",
+  actions: [],
+};
+
+const fibrousPlugin: Plugin = {
+  id: "cc0f610c-29c4-4377-a51c-20f31838df71",
+  name: "Fibrous",
+  description: "",
+  image: "/logos/fibrous.png",
+  actions: [],
+};
+
 export const allPlugins: Array<Plugin> = [
+  corePlugin,
   unruggablePlugin,
   vesuPlugin,
   avnuPlugin,
@@ -270,4 +470,19 @@ export const allPlugins: Array<Plugin> = [
   dexscreenerPlugin,
   artpeacePlugin,
   twitterPlugin,
+  discordPlugin,
+  telegramPlugin,
+  duckduckgoPlugin,
+  dallEPlugin,
+  gmailPlugin,
+  gcalendarPlugin,
+  wikipediaPlugin,
+  searchapiPlugin,
+  atlanticPlugin,
+  coinmarketcapPlugin,
+  argentxPlugin,
+  braavosPlugin,
+  pragmaPlugin,
+  madaraPlugin,
+  fibrousPlugin,
 ];
