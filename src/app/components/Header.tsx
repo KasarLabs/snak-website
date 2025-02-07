@@ -27,7 +27,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="https://kasar.io" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <Image
                 src="https://kasar.io/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FkasarLogo.0513044c.png&w=640&q=75"
                 alt="Logo"
