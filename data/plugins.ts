@@ -146,7 +146,7 @@ const avnuPlugin: Plugin = {
   id: "7d3e05ef-c85a-43cc-8e57-486e94fcf38e",
   name: "AVNU",
   description:
-    "Decentralized exchange aggregator for swapping tokens on StarkNet with the best rates",
+    "Decentralized exchange aggregator for swapping tokens on Starknet with the best rates",
   image: "/logos/avnu.png",
 
   actions: [
