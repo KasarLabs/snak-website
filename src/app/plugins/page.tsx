@@ -38,7 +38,7 @@ export default function HomePage() {
     x: windowSize.width / 2,
     y: windowSize.height / 2,
   });
-  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+  const [dragPosition, setDragPosition] = useState({ x: -windowSize.width * 0.025, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [frozenMousePosition, setFrozenMousePosition] = useState({
     x: windowSize.width / 2,
@@ -181,15 +181,15 @@ export default function HomePage() {
       onMouseMove={handleMouseMove}
       className="relative w-full h-screen bg-black overflow-hidden"
     >
-      <div className="relative w-full h-full px-5">
+      <div className="relative w-full h-full">
         {/* Draggable Grid */}
         <motion.div
           drag
           dragConstraints={{
-            left: -250,
-            right: 250,
-            top: -250,
-            bottom: 250,
+            left: -windowSize.width * 0.4,
+            right: windowSize.width * 0.4,
+            top: -windowSize.height * 0.4,
+            bottom: windowSize.height * 0.4,
           }}
           style={{ x: dragPosition.x, y: dragPosition.y }}
           animate={{
