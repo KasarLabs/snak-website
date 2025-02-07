@@ -22,8 +22,8 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full">
-      <nav className="h-20 px-4 md:px-6">
+    <header className="w-full fixed top-0 z-50 ">
+      <nav className="h-20 px-4 bg-black/50 backdrop-blur-sm md:px-6">
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <div className="flex items-center">
