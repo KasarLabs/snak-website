@@ -39,7 +39,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className=" md:flex items-center gap-8">
             {isPluginPage && (
               <div className="relative flex items-center">
                 <input
@@ -52,26 +52,28 @@ const Header = () => {
                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               </div>
             )}
-            <Link
-              href="/plugins"
-              className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-            >
-              Plugins
-            </Link>
-            <Link
-              href="https://docs.starkagent.ai"
-              className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-            >
-              Docs
-            </Link>
-            <a
-              href="https://github.com/kasarlabs/starknet-agent-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-            >
-              GitHub
-            </a>
+			<div className="hidden md:flex items-center gap-8">
+				<Link
+				href="/plugins"
+				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+				>
+				Plugins
+				</Link>
+				<Link
+				href="https://docs.starkagent.ai"
+				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+				>
+				Docs
+				</Link>
+				<a
+				href="https://github.com/kasarlabs/starknet-agent-kit"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+				>
+				GitHub
+				</a>
+			</div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -86,7 +88,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 right-0 bg-black border-b border-neutral-800 py-4 px-6 space-y-4">
+          <div className="md:hidden absolute top-20 left-0 right-0 bg-black/50 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
               href="/plugins"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
