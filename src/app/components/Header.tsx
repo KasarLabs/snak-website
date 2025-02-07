@@ -52,28 +52,28 @@ const Header = () => {
                 <Search className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               </div>
             )}
-			<div className="hidden md:flex items-center gap-8">
-				<Link
-				href="/plugins"
-				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-				>
-				Plugins
-				</Link>
-				<Link
-				href="https://docs.starkagent.ai"
-				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-				>
-				Docs
-				</Link>
-				<a
-				href="https://github.com/kasarlabs/starknet-agent-kit"
-				target="_blank"
-				rel="noopener noreferrer"
-				className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
-				>
-				GitHub
-				</a>
-			</div>
+            <div className="hidden md:flex items-center gap-8">
+              <Link
+                href="/plugins"
+                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+              >
+                Plugins
+              </Link>
+              <Link
+                href="https://docs.starkagent.ai"
+                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+              >
+                Docs
+              </Link>
+              <a
+                href="https://github.com/kasarlabs/starknet-agent-kit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+              >
+                GitHub
+              </a>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}

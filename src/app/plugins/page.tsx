@@ -38,7 +38,10 @@ export default function HomePage() {
     x: windowSize.width / 2,
     y: windowSize.height / 2,
   });
-  const [dragPosition, setDragPosition] = useState({ x: -windowSize.width * 0.025, y: 0 });
+  const [dragPosition, setDragPosition] = useState({
+    x: -windowSize.width * 0.025,
+    y: 0,
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [frozenMousePosition, setFrozenMousePosition] = useState({
     x: windowSize.width / 2,
