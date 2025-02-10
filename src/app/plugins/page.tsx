@@ -39,7 +39,7 @@ export default function HomePage() {
     y: windowSize.height / 2,
   });
   const [dragPosition, setDragPosition] = useState({
-    x: -windowSize.width * 0.025,
+    x: 0,
     y: 0,
   });
   const [isDragging, setIsDragging] = useState(false);
@@ -53,7 +53,10 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsClient(true);
-
+    setDragPosition({
+      x: -window.innerWidth * 0.025,
+      y: 0,
+    });
     const handleResize = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
@@ -187,7 +190,7 @@ export default function HomePage() {
       <div className="relative w-full h-full">
         {/* Draggable Grid */}
         <motion.div
-          drag
+          drag={false}
           dragConstraints={{
             left: -windowSize.width * 0.4,
             right: windowSize.width * 0.4,
