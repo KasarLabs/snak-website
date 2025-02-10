@@ -549,10 +549,22 @@ const gmailPlugin: Plugin = {
 const gcalendarPlugin: Plugin = {
   id: "3a15ea40-0211-48c9-a3a8-1b9c92502ab6",
   name: "Google Calendar",
-  description:
-    "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
+  description: "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
   image: "/logos/gcalendar.png",
-  actions: [],
+  actions: [
+	{
+		name: "GoogleCalendarCreateTool",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "GoogleCalendarViewTool",
+		description: "",
+		parameters: [
+		],
+	  },
+  ],
 };
 
 const searchapiPlugin: Plugin = {
