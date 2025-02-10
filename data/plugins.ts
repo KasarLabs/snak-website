@@ -265,17 +265,193 @@ const artpeacePlugin: Plugin = {
 const twitterPlugin: Plugin = {
   id: "3d3e05ef-c85a-43cc-8e57-486e94fcf34e",
   name: "Twitter",
-  description: "",
+  description: "Interact with Twitter/X platform - post tweets, manage threads, follow users, and retrieve information",
   image: "/logos/twitter.png",
-  actions: [],
+  actions: [
+    {
+      name: "createTwitterPost",
+      description: "Create and publish a new tweet",
+      parameters: [
+        {
+          name: "post",
+          type: "string",
+          description: "Content of the tweet to be posted",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "replyTweet",
+      description: "Reply to an existing tweet",
+      parameters: [
+        {
+          name: "tweet_id",
+          type: "string",
+          description: "ID of the tweet to reply to",
+          required: true
+        },
+        {
+          name: "response_text",
+          type: "string",
+          description: "Content of the reply tweet",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "createAndPostTwitterThread",
+      description: "Create and post a thread of multiple tweets",
+      parameters: [
+        {
+          name: "thread",
+          type: "string[]",
+          description: "Array of tweet contents that will form the thread",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "followXUserFromUsername",
+      description: "Follow a Twitter user by their username",
+      parameters: [
+        {
+          name: "username",
+          type: "string",
+          description: "Username of the account to follow",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "getLastUserTweet",
+      description: "Retrieve the most recent tweet from a specified user",
+      parameters: [
+        {
+          name: "account_name",
+          type: "string",
+          description: "Username of the account to get the latest tweet from",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "getLastTweetsOptions",
+      description: "Search and retrieve tweets based on a query",
+      parameters: [
+        {
+          name: "query",
+          type: "string",
+          description: "Search query for finding tweets",
+          required: true
+        },
+        {
+          name: "maxTweets",
+          type: "number",
+          description: "Maximum number of tweets to retrieve",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "getLastTweetsFromUser",
+      description: "Retrieve recent tweets from a specified user",
+      parameters: [
+        {
+          name: "username",
+          type: "string",
+          description: "Username of the account to get tweets from",
+          required: true
+        },
+        {
+          name: "maxTweets",
+          type: "number",
+          description: "Maximum number of tweets to retrieve",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "getLastTweetsAndRepliesFromUser",
+      description: "Retrieve recent tweets and replies from a specified user",
+      parameters: [
+        {
+          name: "username",
+          type: "string",
+          description: "Username of the account to get tweets and replies from",
+          required: true
+        },
+        {
+          name: "maxTweets",
+          type: "number",
+          description: "Maximum number of tweets and replies to retrieve",
+          required: false
+        }
+      ]
+    },
+    {
+      name: "getTwitterUserIdFromUsername",
+      description: "Get the Twitter user ID for a given username",
+      parameters: [
+        {
+          name: "username",
+          type: "string",
+          description: "Username to get the ID for",
+          required: true
+        }
+      ]
+    },
+    {
+      name: "getTwitterProfileFromUsername",
+      description: "Get the Twitter profile information for a given username",
+      parameters: [
+        {
+          name: "username",
+          type: "string",
+          description: "Username to get the profile information for",
+          required: true
+        }
+      ]
+    }
+  ]
 };
 
 const discordPlugin: Plugin = {
   id: "1e489b06-d538-4e29-8412-2e4724a777e3",
   name: "Discord",
-  description: "",
+  description: "Interact with Discord",
   image: "/logos/discord.png",
-  actions: [],
+  actions: [
+	{
+		name: "DiscordChannelSearchTool",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "DiscordGetGuildsTool",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "DiscordGetMessagesTool",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "DiscordGetTextChannelsTool",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "DiscordSendMessagesTool",
+		description: "",
+		parameters: [
+		],
+	  },
+  ],
 };
 
 const telegramPlugin: Plugin = {
@@ -334,10 +510,40 @@ const dallEPlugin: Plugin = {
 const gmailPlugin: Plugin = {
   id: "0a463a27-f236-4f2a-88f5-ab6c4a4da9a9",
   name: "Gmail",
-  description:
-    "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
+  description: "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
   image: "/logos/gmail.png",
-  actions: [],
+  actions: [
+	{
+		name: "GmailCreateDraft",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "GmailGetMessage",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "GmailGetThread",
+		description:"",
+		parameters: [
+		],
+	  },
+	  {
+		name: "GmailSearch",
+		description: "",
+		parameters: [
+		],
+	  },
+	  {
+		name: "GmailSendMessage",
+		description: "",
+		parameters: [
+		],
+	  },
+  ],
 };
 
 const gcalendarPlugin: Plugin = {
