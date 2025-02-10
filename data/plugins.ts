@@ -265,7 +265,8 @@ const artpeacePlugin: Plugin = {
 const twitterPlugin: Plugin = {
   id: "3d3e05ef-c85a-43cc-8e57-486e94fcf34e",
   name: "Twitter",
-  description: "Interact with Twitter/X platform - post tweets, manage threads, follow users, and retrieve information",
+  description:
+    "Interact with Twitter/X platform - post tweets, manage threads, follow users, and retrieve information",
   image: "/logos/twitter.png",
   actions: [
     {
@@ -276,9 +277,9 @@ const twitterPlugin: Plugin = {
           name: "post",
           type: "string",
           description: "Content of the tweet to be posted",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "replyTweet",
@@ -288,15 +289,15 @@ const twitterPlugin: Plugin = {
           name: "tweet_id",
           type: "string",
           description: "ID of the tweet to reply to",
-          required: true
+          required: true,
         },
         {
           name: "response_text",
           type: "string",
           description: "Content of the reply tweet",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "createAndPostTwitterThread",
@@ -306,9 +307,9 @@ const twitterPlugin: Plugin = {
           name: "thread",
           type: "string[]",
           description: "Array of tweet contents that will form the thread",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "followXUserFromUsername",
@@ -318,9 +319,9 @@ const twitterPlugin: Plugin = {
           name: "username",
           type: "string",
           description: "Username of the account to follow",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "getLastUserTweet",
@@ -330,9 +331,9 @@ const twitterPlugin: Plugin = {
           name: "account_name",
           type: "string",
           description: "Username of the account to get the latest tweet from",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "getLastTweetsOptions",
@@ -342,15 +343,15 @@ const twitterPlugin: Plugin = {
           name: "query",
           type: "string",
           description: "Search query for finding tweets",
-          required: true
+          required: true,
         },
         {
           name: "maxTweets",
           type: "number",
           description: "Maximum number of tweets to retrieve",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "getLastTweetsFromUser",
@@ -360,15 +361,15 @@ const twitterPlugin: Plugin = {
           name: "username",
           type: "string",
           description: "Username of the account to get tweets from",
-          required: true
+          required: true,
         },
         {
           name: "maxTweets",
           type: "number",
           description: "Maximum number of tweets to retrieve",
-          required: false
-        }
-      ]
+          required: false,
+        },
+      ],
     },
     {
       name: "getLastTweetsAndRepliesFromUser",
@@ -378,15 +379,15 @@ const twitterPlugin: Plugin = {
           name: "username",
           type: "string",
           description: "Username of the account to get tweets and replies from",
-          required: true
+          required: true,
         },
         {
           name: "maxTweets",
           type: "number",
           description: "Maximum number of tweets and replies to retrieve",
-          required: false
-        }
-      ]
+          required: false,
+        },
+      ],
     },
     {
       name: "getTwitterUserIdFromUsername",
@@ -396,9 +397,9 @@ const twitterPlugin: Plugin = {
           name: "username",
           type: "string",
           description: "Username to get the ID for",
-          required: true
-        }
-      ]
+          required: true,
+        },
+      ],
     },
     {
       name: "getTwitterProfileFromUsername",
@@ -408,11 +409,11 @@ const twitterPlugin: Plugin = {
           name: "username",
           type: "string",
           description: "Username to get the profile information for",
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const discordPlugin: Plugin = {
@@ -421,36 +422,31 @@ const discordPlugin: Plugin = {
   description: "Interact with Discord",
   image: "/logos/discord.png",
   actions: [
-	{
-		name: "DiscordChannelSearchTool",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "DiscordGetGuildsTool",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "DiscordGetMessagesTool",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "DiscordGetTextChannelsTool",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "DiscordSendMessagesTool",
-		description: "",
-		parameters: [
-		],
-	  },
+    {
+      name: "DiscordChannelSearchTool",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "DiscordGetGuildsTool",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "DiscordGetMessagesTool",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "DiscordGetTextChannelsTool",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "DiscordSendMessagesTool",
+      description: "",
+      parameters: [],
+    },
   ],
 };
 
@@ -510,60 +506,55 @@ const dallEPlugin: Plugin = {
 const gmailPlugin: Plugin = {
   id: "0a463a27-f236-4f2a-88f5-ab6c4a4da9a9",
   name: "Gmail",
-  description: "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
+  description:
+    "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
   image: "/logos/gmail.png",
   actions: [
-	{
-		name: "GmailCreateDraft",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "GmailGetMessage",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "GmailGetThread",
-		description:"",
-		parameters: [
-		],
-	  },
-	  {
-		name: "GmailSearch",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "GmailSendMessage",
-		description: "",
-		parameters: [
-		],
-	  },
+    {
+      name: "GmailCreateDraft",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "GmailGetMessage",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "GmailGetThread",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "GmailSearch",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "GmailSendMessage",
+      description: "",
+      parameters: [],
+    },
   ],
 };
 
 const gcalendarPlugin: Plugin = {
   id: "3a15ea40-0211-48c9-a3a8-1b9c92502ab6",
   name: "Google Calendar",
-  description: "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
+  description:
+    "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
   image: "/logos/gcalendar.png",
   actions: [
-	{
-		name: "GoogleCalendarCreateTool",
-		description: "",
-		parameters: [
-		],
-	  },
-	  {
-		name: "GoogleCalendarViewTool",
-		description: "",
-		parameters: [
-		],
-	  },
+    {
+      name: "GoogleCalendarCreateTool",
+      description: "",
+      parameters: [],
+    },
+    {
+      name: "GoogleCalendarViewTool",
+      description: "",
+      parameters: [],
+    },
   ],
 };
 
