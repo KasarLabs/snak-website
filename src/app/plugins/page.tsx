@@ -7,23 +7,16 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { allPlugins } from "../../../data/plugins";
 import { PluginModal } from "./components/PluginModal";
 import { Plugin, GridItem } from "./utils/types";
 import { useSearch } from "./context/SearchContext";
+import { generateHoneycombPositions } from "./utils/honeycomb";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-
-const RADIUS = 60;
-const CENTER_ZOOM = 1.3;
-const ZOOM_ZONE_SIZE = 500;
-
-const SPACING = RADIUS * 0.7;
-const HEX_RATIO = Math.sqrt(3) / 2;
+import Circle from "./components/Circle";
 
 const PASTEL_COLORS = ["#0A0A0A"];
-
 const APPS = allPlugins;
 
 export default function HomePage() {
@@ -49,6 +42,11 @@ export default function HomePage() {
     positionY: 0,
   });
   const [hasPanned, setHasPanned] = useState(false);
+  const [isFrozen, setIsFrozen] = useState(false);
+  const [frozenMousePosition, setFrozenMousePosition] = useState({
+    x: windowSize.width / 2,
+    y: windowSize.height / 2,
+  });
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -60,42 +58,6 @@ export default function HomePage() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const generateHoneycombPositions = (
-    totalItems: number,
-    width: number,
-    height: number,
-  ) => {
-    const positions = [];
-    const hexWidth = SPACING * 2;
-    const hexHeight = hexWidth * HEX_RATIO;
-    const ringsNeeded = Math.ceil(Math.sqrt(totalItems / 3)) + 2;
-
-    for (let q = -ringsNeeded; q <= ringsNeeded; q++) {
-      for (let r = -ringsNeeded; r <= ringsNeeded; r++) {
-        const x = hexWidth * (q + r / 2);
-        const y = hexHeight * r;
-
-        if (Math.abs(q) + Math.abs(r) + Math.abs(-q - r) <= 2 * ringsNeeded) {
-          positions.push({
-            x: width / 2 + x,
-            y: height / 2 + y,
-          });
-        }
-      }
-    }
-    return positions
-      .sort((a, b) => {
-        const distA = Math.sqrt(
-          Math.pow(a.x - width / 2, 2) + Math.pow(a.y - height / 2, 2),
-        );
-        const distB = Math.sqrt(
-          Math.pow(b.x - width / 2, 2) + Math.pow(b.y - height / 2, 2),
-        );
-        return distA - distB;
-      })
-      .slice(0, totalItems);
-  };
 
   const circles = useMemo(() => {
     if (!isClient) return [];
@@ -140,30 +102,10 @@ export default function HomePage() {
     if (!hasPanned && "actions" in circle) {
       setSelectedCircle(circle);
       setIsModalVisible(true);
+      setIsFrozen(true);
+      setFrozenMousePosition(mousePosition); // Freeze the current mouse position
     }
     setHasPanned(false);
-  };
-
-  const renderItem = (circle: GridItem) => {
-    if (circle.image) {
-      return (
-        <div className="w-full h-full rounded-full">
-          <Image
-            src={circle.image}
-            alt={circle.name}
-            width={RADIUS}
-            height={RADIUS}
-            className="rounded-full"
-          />
-        </div>
-      );
-    }
-    return (
-      <div
-        className="w-full h-full rounded-full"
-        style={{ backgroundColor: circle.color }}
-      />
-    );
   };
 
   const handleMouseMove = useCallback(
@@ -211,56 +153,15 @@ export default function HomePage() {
           contentClass="!w-full !h-full"
         >
           <div className="relative w-full h-full">
-            {/* Draggable Grid */}
             <motion.div className="absolute w-full h-full">
-              {visibleCircles.map((circle) => {
-                const circleCenter = {
-                  x: circle.x + RADIUS / 2,
-                  y: circle.y + RADIUS / 2,
-                };
-                const distanceFromMouse = Math.sqrt(
-                  Math.pow(circleCenter.x - mousePosition.x, 2) +
-                    Math.pow(circleCenter.y - mousePosition.y, 2),
-                );
-                const scale =
-                  distanceFromMouse < ZOOM_ZONE_SIZE / 2
-                    ? 1 +
-                      (CENTER_ZOOM - 1) *
-                        Math.max(1 - distanceFromMouse / (ZOOM_ZONE_SIZE / 2))
-                    : 1;
-                return (
-                  <motion.div
-                    key={circle.id}
-                    onClick={() => handleCirclePress(circle)}
-                    style={{
-                      position: "absolute",
-                      left: circle.x,
-                      top: circle.y,
-                      width: RADIUS,
-                      height: RADIUS,
-                      borderRadius: "50%",
-                      overflow: "visible",
-                      transform: `scale(${scale})`,
-                      transformOrigin: "center center",
-                      willChange: "transform",
-                    }}
-                    whileHover={{
-                      transition: { duration: 0.2 },
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        cursor: "pointer",
-                        position: "relative",
-                      }}
-                    >
-                      {renderItem(circle)}
-                    </div>
-                  </motion.div>
-                );
-              })}
+              {visibleCircles.map((circle) => (
+                <Circle
+                  key={circle.id}
+                  circle={circle}
+                  mousePosition={isFrozen ? frozenMousePosition : mousePosition}
+                  onPress={handleCirclePress}
+                />
+              ))}
             </motion.div>
           </div>
         </TransformComponent>
@@ -274,6 +175,7 @@ export default function HomePage() {
         onClose={() => {
           setIsModalVisible(false);
           setExpandedActions(new Set());
+          setIsFrozen(false); // Unfreeze when modal closes
         }}
       />
     </div>
