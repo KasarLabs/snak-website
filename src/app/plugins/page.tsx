@@ -6,9 +6,10 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  Touch,
 } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useTransform, useSpring, useMotionValue, motionValue } from "framer-motion";
 import { allPlugins } from "../../../data/plugins";
 import { PluginModal } from "./components/PluginModal";
 import { Plugin, GridItem } from "./utils/types";
@@ -22,6 +23,9 @@ const SPACING = RADIUS * 0.7;
 const HEX_RATIO = Math.sqrt(3) / 2;
 
 const PASTEL_COLORS = ["#0A0A0A"];
+
+
+
 
 const APPS = allPlugins;
 
@@ -50,6 +54,12 @@ export default function HomePage() {
   const [expandedActions, setExpandedActions] = useState<Set<number>>(
     new Set(),
   );
+  const [hasDragged, setHasDragged] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const lastTouch = useRef<Touch | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const motionX = useMotionValue(0);
+	const motionY = useMotionValue(0);
 
   useEffect(() => {
     setIsClient(true);
@@ -140,10 +150,12 @@ export default function HomePage() {
   }, [circles, searchQuery]);
 
   const handleCirclePress = (circle: GridItem, event: React.MouseEvent) => {
-    if ("actions" in circle) {
-      setSelectedCircle(circle);
-      setIsModalVisible(true);
-      setFrozenMousePosition({ x: event.clientX, y: event.clientY });
+    if (!hasDragged) {
+      if ("actions" in circle) {
+        setSelectedCircle(circle);
+        setIsModalVisible(true);
+        setFrozenMousePosition({ x: event.clientX, y: event.clientY });
+      }
     }
   };
 
@@ -169,7 +181,6 @@ export default function HomePage() {
     );
   };
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (!containerRef.current) return;
@@ -181,39 +192,134 @@ export default function HomePage() {
     [dragPosition],
   );
 
+  const applyConstraints = useCallback(
+    (newX: number, newY: number) => {
+      const minX = -windowSize.width * 0.4;
+      const maxX = windowSize.width * 0.4;
+      const minY = -windowSize.height * 0.4;
+      const maxY = windowSize.height * 0.4;
+
+      return {
+        x: Math.min(Math.max(newX, minX), maxX),
+        y: Math.min(Math.max(newY, minY), maxY),
+      };
+    },
+    [windowSize],
+  );
+
+  const startDrag = useCallback(
+    (clientX: number, clientY: number) => {
+      setIsDragging(true);
+      setHasDragged(false); // Reset drag flag on new interaction
+      setDragStart({
+        x: clientX - dragPosition.x,
+        y: clientY - dragPosition.y,
+      });
+      setFrozenMousePosition(mousePosition);
+    },
+    [dragPosition, mousePosition],
+  );
+
+  const handleDrag = useCallback((clientX: number, clientY: number) => {
+	if (!isDragging) return;
+
+	setHasDragged(true);
+
+	const newX = clientX - dragStart.x;
+	const newY = clientY - dragStart.y;
+
+	// Apply constraints
+	const minX = -windowSize.width * 0.4;
+	const maxX = windowSize.width * 0.4;
+	const minY = -windowSize.height * 0.4;
+	const maxY = windowSize.height * 0.4;
+
+	motionX.set(Math.min(Math.max(newX, minX), maxX));
+	motionY.set(Math.min(Math.max(newY, minY), maxY));
+
+	// Update dragPosition less frequently
+	requestAnimationFrame(() => {
+	  setDragPosition({
+		x: motionX.get(),
+		y: motionY.get()
+	  });
+	});
+  }, [isDragging, dragStart, windowSize]);
+
+  const endDrag = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className="relative w-full h-screen bg-black overflow-hidden"
+      style={{
+        WebkitTouchCallout: "none",
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        overscrollBehavior: "none",
+      }}
     >
       <div className="relative w-full h-full">
         {/* Draggable Grid */}
         <motion.div
-          drag={false}
-          dragConstraints={{
-            left: -windowSize.width * 0.4,
-            right: windowSize.width * 0.4,
-            top: -windowSize.height * 0.4,
-            bottom: windowSize.height * 0.4,
+          drag={false} // Ensure Framer's drag is disabled
+          style={{
+            x: motionX,
+            y: motionY,
+            cursor: isDragging ? "grabbing" : "grab",
+            willChange: "transform",
+            touchAction: "none",
+            WebkitOverflowScrolling: "touch", // Add smooth scrolling on iOS
+            transform: 'translate3d(0,0,0)', // Force GPU acceleration
           }}
-          style={{ x: dragPosition.x, y: dragPosition.y }}
-          animate={{
-            x: dragPosition.x,
-            y: dragPosition.y,
+          onMouseDown={(e) => {
+            if (e.button !== 0) return;
+            e.preventDefault();
+            document.body.style.cursor = "grabbing";
+            startDrag(e.clientX, e.clientY);
           }}
-          onDragStart={() => {
-            setIsDragging(true);
-            if (mousePosition) {
-              setFrozenMousePosition(mousePosition);
+          onMouseMove={(e) => {
+            if (e.buttons === 1) {
+              // Check if primary button is held down
+              handleDrag(e.clientX, e.clientY);
+            } else if (isDragging) {
+              // If button was released outside the window
+              document.body.style.cursor = "grab";
+              endDrag();
             }
           }}
-          onDragEnd={(event, info) => {
-            setDragPosition((prev) => ({
-              x: prev.x + info.offset.x,
-              y: prev.y + info.offset.y,
-            }));
-            setIsDragging(false);
+          onMouseUp={() => {
+            document.body.style.cursor = "grab";
+            endDrag();
+          }}
+          onMouseLeave={() => {
+            if (isDragging) {
+              document.body.style.cursor = "grab";
+              endDrag();
+            }
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault(); // Prevent default touch behaviors
+            const touch = e.touches[0];
+            lastTouch.current = touch;
+            startDrag(touch.clientX, touch.clientY);
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault(); // Prevent default touch behaviors
+            const touch = e.touches[0];
+            lastTouch.current = touch;
+            handleDrag(touch.clientX, touch.clientY);
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            lastTouch.current = null;
+            endDrag();
+          }}
+          onContextMenu={(e) => {
+            e.preventDefault(); // Empêche le menu contextuel d'apparaître
           }}
           className="absolute w-full h-full"
         >
