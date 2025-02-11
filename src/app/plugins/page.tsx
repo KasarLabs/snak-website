@@ -43,7 +43,12 @@ export default function HomePage() {
   const [expandedActions, setExpandedActions] = useState<Set<number>>(
     new Set(),
   );
-  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
+  const [transform, setTransform] = useState({
+    scale: 1,
+    positionX: 0,
+    positionY: 0,
+  });
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -163,11 +168,13 @@ export default function HomePage() {
     (e: React.MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const relativeX = e.clientX - rect.left + panPosition.x;
-      const relativeY = e.clientY - rect.top + panPosition.y;
+      const relativeX =
+        (e.clientX - rect.left + transform.positionX) / transform.scale;
+      const relativeY =
+        (e.clientY - rect.top + transform.positionY) / transform.scale;
       setMousePosition({ x: relativeX, y: relativeY });
     },
-    [panPosition],
+    [transform],
   );
 
   return (
@@ -184,9 +191,10 @@ export default function HomePage() {
         doubleClick={{ disabled: false, step: 0.7 }}
         limitToBounds={false}
         onTransformed={(e) => {
-          setPanPosition({
-            x: -e.state.positionX,
-            y: -e.state.positionY,
+          setTransform({
+            scale: e.state.scale,
+            positionX: -e.state.positionX,
+            positionY: -e.state.positionY,
           });
         }}
       >
