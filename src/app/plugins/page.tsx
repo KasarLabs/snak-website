@@ -48,6 +48,7 @@ export default function HomePage() {
     positionX: 0,
     positionY: 0,
   });
+  const [hasPanned, setHasPanned] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -136,10 +137,11 @@ export default function HomePage() {
   }, [circles, searchQuery]);
 
   const handleCirclePress = (circle: GridItem) => {
-    if ("actions" in circle) {
+    if (!hasPanned && "actions" in circle) {
       setSelectedCircle(circle);
       setIsModalVisible(true);
     }
+    setHasPanned(false);
   };
 
   const renderItem = (circle: GridItem) => {
@@ -196,6 +198,12 @@ export default function HomePage() {
             positionX: -e.state.positionX,
             positionY: -e.state.positionY,
           });
+        }}
+        onPanningStart={() => {
+          setHasPanned(false);
+        }}
+        onPanning={() => {
+          setHasPanned(true);
         }}
       >
         <TransformComponent
