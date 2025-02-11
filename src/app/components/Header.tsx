@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <header className="w-full fixed top-0 z-50 ">
-      <nav className="h-20 px-4 bg-black/50 backdrop-blur-sm md:px-6">
+      <nav className="h-20 px-4 bg-black/100 md:bg-black/80 backdrop-blur-sm md:px-6">
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <div className="flex items-center">
@@ -88,7 +88,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 right-0 bg-black/50 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
+          <div className="md:hidden absolute top-20 left-0 right-0 bg-black/100 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
               href="/plugins"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
