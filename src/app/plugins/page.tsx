@@ -96,7 +96,7 @@ export default function HomePage() {
 
     const grid: GridItem[] = [];
     const totalApps = APPS.length;
-    const totalDecorativeCircles = 390;
+    const totalDecorativeCircles = 400;
     const totalItems = totalApps + totalDecorativeCircles;
     const positions = generateHoneycombPositions(
       totalItems,
@@ -196,13 +196,7 @@ export default function HomePage() {
         >
           <div className="relative w-full h-full">
             {/* Draggable Grid */}
-            <motion.div
-              animate={{
-                x: -window.innerWidth * 0.025,
-                y: 0,
-              }}
-              className="absolute w-full h-full"
-            >
+            <motion.div className="absolute w-full h-full">
               {visibleCircles.map((circle) => {
                 const circleCenter = {
                   x: circle.x + RADIUS / 2,
