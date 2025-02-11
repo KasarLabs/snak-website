@@ -6,6 +6,11 @@ import Link from "next/link";
 import { Menu, X, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useSearch } from "../plugins/context/SearchContext";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,14 +32,28 @@ const Header = () => {
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center gap-3">
               <Image
-                src="https://kasar.io/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FkasarLogo.0513044c.png&w=640&q=75"
+                src="/starknetbrand.png"
                 alt="Logo"
-                className="w-11 h-11 rounded-full"
+                width={200}
+                height={46}
+                className="hidden sm:block object-contain -mt-1	" // Negative margin top to move up
+              />
+              <Image
+                src="/starknet.png"
+                alt="Logo"
                 width={44}
                 height={44}
+                className="block sm:hidden object-contain" // Hide on mobile, show on desktop
               />
+              <span className="hidden sm:block object-contain text-white hidden sm:flex items-center text-xl md:text-2xl gap-1">
+                <span
+                  className={`${inter.className} text-gray-200 font-medium`}
+                >
+                  Agent Kit
+                </span>
+              </span>
             </Link>
           </div>
 
