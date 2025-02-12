@@ -6,6 +6,11 @@ import Link from "next/link";
 import { Menu, X, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useSearch } from "../plugins/context/SearchContext";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,18 +28,32 @@ const Header = () => {
 
   return (
     <header className="w-full fixed top-0 z-50 ">
-      <nav className="h-20 px-4 bg-black/50 backdrop-blur-sm md:px-6">
+      <nav className="h-20 px-4 bg-black/100 md:bg-black/80 backdrop-blur-sm md:px-6">
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center gap-3">
               <Image
-                src="https://kasar.io/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FkasarLogo.0513044c.png&w=640&q=75"
+                src="/starknetbrand.png"
                 alt="Logo"
-                className="w-11 h-11 rounded-full"
+                width={200}
+                height={46}
+                className="hidden sm:block object-contain -mt-1	" // Negative margin top to move up
+              />
+              <Image
+                src="/starknet.png"
+                alt="Logo"
                 width={44}
                 height={44}
+                className="block sm:hidden object-contain" // Hide on mobile, show on desktop
               />
+              <span className="hidden sm:block object-contain text-white hidden sm:flex items-center text-xl md:text-2xl gap-1">
+                <span
+                  className={`${inter.className} text-gray-200 font-medium`}
+                >
+                  Agent Kit
+                </span>
+              </span>
             </Link>
           </div>
 
@@ -88,7 +107,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 right-0 bg-black/50 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
+          <div className="md:hidden absolute top-20 left-0 right-0 bg-black/100 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
               href="/plugins"
               className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
