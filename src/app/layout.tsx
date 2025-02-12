@@ -20,8 +20,7 @@ export const metadata: Metadata = {
   robots: "index, follow",
   openGraph: {
     title: "Starknet Agent Kit | AI Agents for Starknet Blockchain",
-    description:
-      "Build powerful and secure AI Agents on Starknet.",
+    description: "Build powerful and secure AI Agents on Starknet.",
     images: [
       {
         url: "/og-image.png",
@@ -36,8 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Starknet Agent Kit | AI Agents for Starknet Blockchain",
-    description:
-      "Build powerful and secure AI Agents on Starknet.",
+    description: "Build powerful and secure AI Agents on Starknet.",
     creator: "@kasarlabs",
     images: ["/og-image.png"],
   },

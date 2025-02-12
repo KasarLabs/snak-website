@@ -27,13 +27,20 @@ export default function Home() {
                 powered by
               </p>
 
-              <Image
-                src="https://github.com/KasarLabs/brand/blob/main/kasar/logo/KasarWhiteLogo.png?raw=true"
-                alt="Kasarlabs"
-                width={84}
-                height={0}
-                className="w-28"
-              />
+              <a
+                href="https://kasar.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-transform duration-300 hover:scale-105"
+              >
+                <Image
+                  src="https://github.com/KasarLabs/brand/blob/main/kasar/logo/KasarWhiteLogo.png?raw=true"
+                  alt="Kasarlabs"
+                  width={84}
+                  height={0}
+                  className="w-28"
+                />
+              </a>
             </div>
           </div>
         </div>

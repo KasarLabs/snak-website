@@ -12,12 +12,18 @@ const Footer = () => {
           <div className="flex flex-col items-center sm:items-start space-y-4">
             <div className="w-[125px] sm:w-[140px]">
               <div className="relative w-full h-10">
-                <Image
-                  src="https://github.com/KasarLabs/brand/blob/main/kasar/logo/KasarWhiteLogo.png?raw=true"
-                  fill
-                  alt="kasarlabs"
-                  className="object-contain"
-                />
+                <a
+                  href="https://kasar.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="https://github.com/KasarLabs/brand/blob/main/kasar/logo/KasarWhiteLogo.png?raw=true"
+                    fill
+                    alt="kasarlabs"
+                    className="object-contain"
+                  />
+                </a>
               </div>
             </div>
             <div className="text-neutral-400 text-sm flex flex-wrap justify-center sm:justify-start gap-2">
