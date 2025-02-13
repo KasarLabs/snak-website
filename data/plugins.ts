@@ -681,7 +681,8 @@ const madaraPlugin: Plugin = {
 const fibrousPlugin: Plugin = {
   id: "cc0f610c-29c4-4377-a51c-20f31838df71",
   name: "Fibrous",
-  description: "The best decentralized liquidity platform on Starknet for swapping tokens", 
+  description:
+    "The best decentralized liquidity platform on Starknet for swapping tokens",
   image: "/logos/fibrous.png",
   actions: [
     {
@@ -741,7 +742,8 @@ const fibrousPlugin: Plugin = {
         {
           name: "sellTokenSymbols",
           type: "string array",
-          description: "Symbols of the tokens to sell (e.g., [ETH, USDT, STRK], USDC)",
+          description:
+            "Symbols of the tokens to sell (e.g., [ETH, USDT, STRK], USDC)",
           required: true,
         },
         {
