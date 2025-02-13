@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { AgentData } from "../types/agent";
+import { v4 as uuidv4 } from "uuid";
+import { allPlugins } from "../../../../data/plugins";
 
 const AgentForm = () => {
   const { toast } = useToast();
@@ -76,13 +78,22 @@ const AgentForm = () => {
   );
 
   const handleSubmit = () => {
-    if (!formData.name.trim() || !formData.bio.trim()) {
-      // Show error message
-      alert("Name and Bio are required fields");
-      // Optionally return to the first step
-      setCurrentStep(0);
-      return;
-    }
+    const selectedPluginIds = formData.plugins;
+    const internal_plugins: string[] = [];
+    const external_plugins: string[] = [];
+
+    selectedPluginIds.forEach((pluginId) => {
+      // Find the plugin in your allPlugins array
+      const plugin = allPlugins.find((p) => p.id === pluginId);
+      if (plugin) {
+        // If internal is undefined or true, it's an internal plugin
+        if (plugin.internal ?? true) {
+          internal_plugins.push(pluginId);
+        } else {
+          external_plugins.push(pluginId);
+        }
+      }
+    });
 
     // Format the data
     try {
@@ -92,8 +103,10 @@ const AgentForm = () => {
         lore: formData.lore.filter((item) => item.trim() !== ""), // Remove empty entries
         objectives: formData.objectives.filter((item) => item.trim() !== ""),
         knowledge: formData.knowledge.filter((item) => item.trim() !== ""),
-        plugins: formData.plugins,
-        createdAt: new Date().toISOString(),
+        interval: formData.interval,
+        chat_id: uuidv4(),
+        external_plugins,
+        internal_plugins,
       };
 
       // Create a Blob containing the JSON data
