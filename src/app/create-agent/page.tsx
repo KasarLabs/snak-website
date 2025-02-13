@@ -53,8 +53,9 @@ export default function AgentForm() {
         toast({
           variant: "destructive",
           title: "Required information",
-          description: "Please fill in both the name and bio fields before continuing.",
-		  duration:3000,
+          description:
+            "Please fill in both the name and bio fields before continuing.",
+          duration: 3000,
         });
         return;
       }
