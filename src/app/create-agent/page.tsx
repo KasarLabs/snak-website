@@ -269,7 +269,9 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
                 <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>A description of your agent's purpose and capabilities.</p>
+                <p>
+                  A description of your agent&apos;s purpose and capabilities.
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
