@@ -11,12 +11,17 @@ export async function GET(
       .select("config")
       .eq("id", params.id)
       .single();
-
-    if (error) throw error;
-    if (!data) {
+    if (error?.code === "PGRST116") {
       return NextResponse.json(
         { error: "Agent configuration not found" },
         { status: 404 },
+      );
+    }
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Error fetching agent configuration" },
+        { status: 500 },
       );
     }
 
