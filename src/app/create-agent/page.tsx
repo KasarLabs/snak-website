@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface AgentData {
   name: string;
@@ -34,6 +35,7 @@ interface MultiInputStepProps extends StepProps {
 }
 
 export default function AgentForm() {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<AgentData>({
     name: "",
@@ -43,6 +45,22 @@ export default function AgentForm() {
     knowledge: [],
     plugins: [],
   });
+
+  const handleNext = () => {
+    if (currentStep === 0) {
+      // Validate name and bio before allowing to proceed
+      if (!formData.name.trim() || !formData.bio.trim()) {
+        toast({
+          variant: "destructive",
+          title: "Required information",
+          description: "Please fill in both the name and bio fields before continuing.",
+        });
+        return;
+      }
+    }
+
+    setCurrentStep((prev) => Math.min(steps.length - 1, prev + 1));
+  };
 
   const steps = useMemo(
     () => [
@@ -79,35 +97,48 @@ export default function AgentForm() {
   );
 
   const handleSubmit = () => {
+    if (!formData.name.trim() || !formData.bio.trim()) {
+      // Show error message
+      alert("Name and Bio are required fields");
+      // Optionally return to the first step
+      setCurrentStep(0);
+      return;
+    }
+
     // Format the data
-    const agentConfig = {
-      name: formData.name,
-      bio: formData.bio,
-      lore: formData.lore.filter((item) => item.trim() !== ""), // Remove empty entries
-      objectives: formData.objectives.filter((item) => item.trim() !== ""),
-      knowledge: formData.knowledge.filter((item) => item.trim() !== ""),
-      plugins: formData.plugins,
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      const agentConfig = {
+        name: formData.name,
+        bio: formData.bio,
+        lore: formData.lore.filter((item) => item.trim() !== ""), // Remove empty entries
+        objectives: formData.objectives.filter((item) => item.trim() !== ""),
+        knowledge: formData.knowledge.filter((item) => item.trim() !== ""),
+        plugins: formData.plugins,
+        createdAt: new Date().toISOString(),
+      };
 
-    // Create a Blob containing the JSON data
-    const jsonString = JSON.stringify(agentConfig, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
+      // Create a Blob containing the JSON data
+      const jsonString = JSON.stringify(agentConfig, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
 
-    // Create a download link and trigger it
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${formData.name.toLowerCase().replace(/\s+/g, "-")}-config.json`;
+      // Create a download link and trigger it
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${formData.name.toLowerCase().replace(/\s+/g, "-")}-config.json`;
 
-    document.body.appendChild(link);
-    link.click();
+      document.body.appendChild(link);
+      link.click();
 
-    // Cleanup
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-    console.log("Agent configuration saved:", agentConfig);
+      console.log("Agent configuration saved:", agentConfig);
+    } catch (error) {
+      console.error("Error creating agent:", error);
+      alert("Error creating agent. Please try again.");
+    }
   };
 
   return (
@@ -171,9 +202,7 @@ export default function AgentForm() {
             </motion.button>
           ) : (
             <motion.button
-              onClick={() =>
-                setCurrentStep((prev) => Math.min(steps.length - 1, prev + 1))
-              }
+              onClick={handleNext}
               className="flex items-center text-gray-300 px-6 py-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -189,6 +218,24 @@ export default function AgentForm() {
 }
 
 const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
+  const [errors, setErrors] = useState<{ name?: string; bio?: string }>({});
+
+  // Validate on blur
+  const validateField = (field: "name" | "bio", value: string) => {
+    if (!value.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: `${field.charAt(0).toUpperCase() + field.slice(1)} is required`,
+      }));
+    } else {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
   return (
     <motion.div
       className="space-y-6"
@@ -197,26 +244,38 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
     >
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Name
+          Name*
         </label>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors"
+          onBlur={(e) => validateField("name", e.target.value)}
+          className={`w-full p-2 bg-neutral-800 border rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors ${
+            errors.name ? "border-red-500" : "border-neutral-700"
+          }`}
           placeholder="Enter agent name"
         />
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+        )}
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-2">
-          Bio
+          Bio*
         </label>
         <textarea
           value={formData.bio}
           onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-          className="w-full p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors h-32"
+          onBlur={(e) => validateField("bio", e.target.value)}
+          className={`w-full p-2 bg-neutral-800 border rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors h-32 ${
+            errors.bio ? "border-red-500" : "border-neutral-700"
+          }`}
           placeholder="Enter agent bio"
         />
+        {errors.bio && (
+          <p className="mt-1 text-sm text-red-500">{errors.bio}</p>
+        )}
       </div>
     </motion.div>
   );
@@ -293,7 +352,7 @@ const MultiInputStep: React.FC<MultiInputStepProps> = ({
         whileTap={{ scale: 0.95 }}
       >
         <Plus className="w-4 h-4" />
-        Add {title}
+        Add {title.toLowerCase()}
       </motion.button>
     </motion.div>
   );
