@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AgentData } from "../types/agent";
 import { v4 as uuidv4 } from "uuid";
 import { allPlugins } from "../../../../data/plugins";
+import { supabase } from "@/lib/supabase";
 
 const AgentForm = () => {
   const { toast } = useToast();
@@ -77,7 +78,7 @@ const AgentForm = () => {
     [formData, setFormData],
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const selectedPluginIds = formData.plugins;
     const internal_plugins: string[] = [];
     const external_plugins: string[] = [];
@@ -97,6 +98,7 @@ const AgentForm = () => {
 
     // Format the data
     try {
+      const agent_id = uuidv4();
       const agentConfig = {
         name: formData.name,
         bio: formData.bio,
@@ -108,6 +110,21 @@ const AgentForm = () => {
         external_plugins,
         internal_plugins,
       };
+
+      // Save to Supabase with our generated ID
+      const { error } = await supabase.from("agents").insert({
+        id: agent_id,
+        config: agentConfig,
+      });
+
+      if (error) throw error;
+
+      // Show success message with the agent ID we generated
+      toast({
+        title: "Success!",
+        description: `Agent created successfully! Your agent ID is: ${agent_id}`,
+        duration: 5000,
+      });
 
       // Create a Blob containing the JSON data
       const jsonString = JSON.stringify(agentConfig, null, 2);
