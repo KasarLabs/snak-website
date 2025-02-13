@@ -56,7 +56,6 @@ const AgentForm = () => {
 
   const handleNext = () => {
     if (currentStep === 0) {
-      // Validate name and bio before allowing to proceed
       if (!formData.name.trim() || !formData.bio.trim() || !formData.interval) {
         toast({
           variant: "destructive",
@@ -117,10 +116,8 @@ const AgentForm = () => {
     const external_plugins: string[] = [];
 
     selectedPluginIds.forEach((pluginId) => {
-      // Find the plugin in your allPlugins array
       const plugin = allPlugins.find((p) => p.id === pluginId);
       if (plugin) {
-        // If internal is undefined or true, it's an internal plugin
         if (plugin.internal ?? true) {
           internal_plugins.push(pluginId);
         } else {
@@ -129,12 +126,11 @@ const AgentForm = () => {
       }
     });
 
-    // Format the data
     try {
       const agentConfig = {
         name: formData.name,
         bio: formData.bio,
-        lore: formData.lore.filter((item) => item.trim() !== ""), // Remove empty entries
+        lore: formData.lore.filter((item) => item.trim() !== ""),
         objectives: formData.objectives.filter((item) => item.trim() !== ""),
         knowledge: formData.knowledge.filter((item) => item.trim() !== ""),
         interval: formData.interval,
@@ -152,7 +148,7 @@ const AgentForm = () => {
       if (existingAgent) {
         setIsExisting(true);
         setConfigId(config_hash);
-        setCurrentStep(steps.length); // Move to success view
+        setCurrentStep(steps.length);
       } else {
         setIsExisting(false);
         const { error } = await supabase.from("agents").insert({
@@ -161,7 +157,7 @@ const AgentForm = () => {
         });
         if (error) throw error;
         setConfigId(config_hash);
-        setCurrentStep(steps.length); // Move to success view
+        setCurrentStep(steps.length);
       }
 
       console.log("Agent configuration saved:", agentConfig);

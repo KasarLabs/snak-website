@@ -20,7 +20,6 @@ export async function GET(
       );
     }
 
-    // Return just the config object
     return NextResponse.json(data.config);
   } catch (error) {
     console.error("Error:", error);
