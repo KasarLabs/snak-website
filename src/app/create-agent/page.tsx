@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Info } from "lucide-react";
 import { allPlugins } from "../../../data/plugins";
 import {
   Dialog,
@@ -12,10 +12,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AgentData {
   name: string;
   bio: string;
+  interval: number;
   lore: string[];
   objectives: string[];
   knowledge: string[];
@@ -40,6 +47,7 @@ export default function AgentForm() {
   const [formData, setFormData] = useState<AgentData>({
     name: "",
     bio: "",
+    interval: 5,
     lore: [],
     objectives: [],
     knowledge: [],
@@ -49,12 +57,11 @@ export default function AgentForm() {
   const handleNext = () => {
     if (currentStep === 0) {
       // Validate name and bio before allowing to proceed
-      if (!formData.name.trim() || !formData.bio.trim()) {
+      if (!formData.name.trim() || !formData.bio.trim() || !formData.interval) {
         toast({
           variant: "destructive",
           title: "Required information",
-          description:
-            "Please fill in both the name and bio fields before continuing.",
+          description: "Please fill in all required fields before continuing.",
           duration: 3000,
         });
         return;
@@ -220,24 +227,6 @@ export default function AgentForm() {
 }
 
 const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
-  const [errors, setErrors] = useState<{ name?: string; bio?: string }>({});
-
-  // Validate on blur
-  const validateField = (field: "name" | "bio", value: string) => {
-    if (!value.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        [field]: `${field.charAt(0).toUpperCase() + field.slice(1)} is required`,
-      }));
-    } else {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
-    }
-  };
-
   return (
     <motion.div
       className="space-y-6"
@@ -245,39 +234,89 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
       animate={{ opacity: 1, x: 0 }}
     >
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Name*
-        </label>
+        <div className="flex items-center gap-2 mb-2">
+          <label className="block text-sm font-medium text-gray-300">
+            Name*
+          </label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>The name of your agent. This will be used to identify it.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          onBlur={(e) => validateField("name", e.target.value)}
-          className={`w-full p-2 bg-neutral-800 border rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors ${
-            errors.name ? "border-red-500" : "border-neutral-700"
-          }`}
+          className="w-full p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors"
           placeholder="Enter agent name"
         />
-        {errors.name && (
-          <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-        )}
       </div>
+
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Bio*
-        </label>
+        <div className="flex items-center gap-2 mb-2">
+          <label className="block text-sm font-medium text-gray-300">
+            Bio*
+          </label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>A description of your agent's purpose and capabilities.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <textarea
           value={formData.bio}
           onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-          onBlur={(e) => validateField("bio", e.target.value)}
-          className={`w-full p-2 bg-neutral-800 border rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors h-32 ${
-            errors.bio ? "border-red-500" : "border-neutral-700"
-          }`}
+          className="w-full p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors h-32"
           placeholder="Enter agent bio"
         />
-        {errors.bio && (
-          <p className="mt-1 text-sm text-red-500">{errors.bio}</p>
-        )}
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <label className="block text-sm font-medium text-gray-300">
+            Interval (ms)*
+          </label>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  How often should the agent check for updates and perform its
+                  tasks? (in milliseconds)
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            min="1"
+            required
+            value={formData.interval}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              if (!isNaN(value) && value > 0) {
+                setFormData({ ...formData, interval: value });
+              }
+            }}
+            className="w-32 p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors"
+          />
+          <span className="text-gray-400 text-sm">ms</span>
+        </div>
       </div>
     </motion.div>
   );
@@ -304,13 +343,39 @@ const MultiInputStep: React.FC<MultiInputStepProps> = ({
     onChange(newValues);
   };
 
+  const getTooltipContent = (title: string) => {
+    switch (title) {
+      case "Lore":
+        return "Background information and context that defines your agent's personality and knowledge base.";
+      case "Objectives":
+        return "The specific goals and tasks your agent should strive to accomplish.";
+      case "Knowledge":
+        return "Specific information and capabilities your agent should be aware of.";
+      default:
+        return "";
+    }
+  };
+
   return (
     <motion.div
       className="space-y-4"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
     >
-      <h3 className="text-lg font-medium text-gray-200">{title}</h3>
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-medium text-gray-200">{title}</h3>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{getTooltipContent(title)}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
       {values.map((value, index) => (
         <motion.div
           key={index}
@@ -359,6 +424,7 @@ const MultiInputStep: React.FC<MultiInputStepProps> = ({
     </motion.div>
   );
 };
+
 const LoreStep: React.FC<StepProps> = ({ formData, setFormData }) => (
   <MultiInputStep
     title="Lore"
@@ -414,7 +480,22 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
 
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-      <h3 className="text-lg font-medium text-gray-200 mb-4">Plugins</h3>
+      <div className="flex items-center gap-2 mb-4">
+        <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                Select the plugins your agent will have access to. Each plugin
+                provides different capabilities and integrations.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       {/* Selected Plugins Display */}
       <div className="flex flex-wrap gap-4">
