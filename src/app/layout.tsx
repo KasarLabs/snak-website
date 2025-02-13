@@ -54,7 +54,9 @@ export default function RootLayout({
       <body className="bg-black">
         <SearchProvider>
           <Header />
-          <main>{children}</main>
+          <main className="min-h-screen pt-20 flex flex-col items-center justify-center">
+            {children}
+          </main>
           <Footer />
         </SearchProvider>
       </body>
