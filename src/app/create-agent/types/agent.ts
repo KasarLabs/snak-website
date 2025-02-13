@@ -19,3 +19,9 @@ export interface MultiInputStepProps extends StepProps {
   onChange: (newValues: string[]) => void;
   placeholder: string;
 }
+
+export interface SuccessViewProps {
+  configId: string;
+  onReset: () => void; // Add reset function prop
+  isExisting: boolean;
+}

@@ -13,19 +13,46 @@ import { AgentData } from "../types/agent";
 import { v4 as uuidv4 } from "uuid";
 import { allPlugins } from "../../../../data/plugins";
 import { supabase } from "@/lib/supabase";
+import SuccessView from "./steps/SuccessView";
+
+function getJsonHash(
+  obj: Record<string, unknown>,
+  excludeFields: string[] = [],
+): string {
+  const clone = JSON.parse(JSON.stringify(obj));
+
+  const removeFields = (object: Record<string, unknown>) => {
+    for (const key in object) {
+      if (excludeFields.includes(key)) {
+        delete object[key];
+      } else if (typeof object[key] === "object" && object[key] !== null) {
+        removeFields(object[key] as Record<string, unknown>);
+      }
+    }
+    return object;
+  };
+  const result = btoa(JSON.stringify(removeFields(clone)))
+    .split("=")[0]
+    .replace(/[/+]/g, "_");
+  return result;
+}
 
 const AgentForm = () => {
-  const { toast } = useToast();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<AgentData>({
+  const initialFormData: AgentData = {
     name: "",
     bio: "",
-    interval: 5,
+    interval: 5000,
     lore: [],
     objectives: [],
     knowledge: [],
     plugins: [],
-  });
+  };
+
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [configId, setConfigId] = useState<string | null>(null);
+  const [formData, setFormData] = useState<AgentData>(initialFormData);
+  const [isExisting, setIsExisting] = useState(false);
 
   const handleNext = () => {
     if (currentStep === 0) {
@@ -42,6 +69,12 @@ const AgentForm = () => {
     }
 
     setCurrentStep((prev) => Math.min(steps.length - 1, prev + 1));
+  };
+
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setConfigId(null);
+    setCurrentStep(0);
   };
 
   const steps = useMemo(
@@ -98,7 +131,6 @@ const AgentForm = () => {
 
     // Format the data
     try {
-      const agent_id = uuidv4();
       const agentConfig = {
         name: formData.name,
         bio: formData.bio,
@@ -110,45 +142,49 @@ const AgentForm = () => {
         external_plugins,
         internal_plugins,
       };
+      const config_hash = getJsonHash(agentConfig, ["chat_id"]);
+      const { data: existingAgent } = await supabase
+        .from("agents")
+        .select("id")
+        .eq("id", config_hash)
+        .maybeSingle();
 
-      // Save to Supabase with our generated ID
-      const { error } = await supabase.from("agents").insert({
-        id: agent_id,
-        config: agentConfig,
-      });
-
-      if (error) throw error;
-
-      // Show success message with the agent ID we generated
-      toast({
-        title: "Success!",
-        description: `Agent created successfully! Your agent ID is: ${agent_id}`,
-        duration: 5000,
-      });
-
-      // Create a Blob containing the JSON data
-      const jsonString = JSON.stringify(agentConfig, null, 2);
-      const blob = new Blob([jsonString], { type: "application/json" });
-
-      // Create a download link and trigger it
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${formData.name.toLowerCase().replace(/\s+/g, "-")}-config.json`;
-
-      document.body.appendChild(link);
-      link.click();
-
-      // Cleanup
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      if (existingAgent) {
+        setIsExisting(true);
+        setConfigId(config_hash);
+        setCurrentStep(steps.length); // Move to success view
+      } else {
+        setIsExisting(false);
+        const { error } = await supabase.from("agents").insert({
+          id: config_hash,
+          config: agentConfig,
+        });
+        if (error) throw error;
+        setConfigId(config_hash);
+        setCurrentStep(steps.length); // Move to success view
+      }
 
       console.log("Agent configuration saved:", agentConfig);
     } catch (error) {
       console.error("Error creating agent:", error);
-      alert("Error creating agent. Please try again.");
+      toast({
+        title: "Error",
+        description: "Failed to create agent. Please try again.",
+        duration: 3000,
+      });
     }
   };
+  if (currentStep === steps.length && configId) {
+    return (
+      <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[400px]">
+        <SuccessView
+          configId={configId}
+          onReset={resetForm}
+          isExisting={isExisting}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[400px]">
