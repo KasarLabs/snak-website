@@ -54,6 +54,7 @@ export default function AgentForm() {
           variant: "destructive",
           title: "Required information",
           description: "Please fill in both the name and bio fields before continuing.",
+		  duration:3000,
         });
         return;
       }
