@@ -115,13 +115,13 @@ const AgentForm = () => {
     const internal_plugins: string[] = [];
     const external_plugins: string[] = [];
 
-    selectedPluginIds.forEach((pluginId) => {
-      const plugin = allPlugins.find((p) => p.id === pluginId);
+    selectedPluginIds.forEach((pluginName) => {
+      const plugin = allPlugins.find((p) => p.name === pluginName);
       if (plugin) {
         if (plugin.internal ?? true) {
-          internal_plugins.push(pluginId);
+          internal_plugins.push(pluginName);
         } else {
-          external_plugins.push(pluginId);
+          external_plugins.push(pluginName);
         }
       }
     });

@@ -21,17 +21,17 @@ import CircularSlider from "../CircularSlider";
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const togglePlugin = (pluginId: string) => {
+  const togglePlugin = (pluginName: string) => {
     setFormData({
       ...formData,
-      plugins: formData.plugins.includes(pluginId)
-        ? formData.plugins.filter((id) => id !== pluginId)
-        : [...formData.plugins, pluginId],
+      plugins: formData.plugins.includes(pluginName)
+        ? formData.plugins.filter((name) => name !== pluginName)
+        : [...formData.plugins, pluginName],
     });
   };
 
   const selectedPlugins = allPlugins.filter((plugin) =>
-    formData.plugins.includes(plugin.id),
+    formData.plugins.includes(plugin.name),
   );
 
   return (
@@ -53,42 +53,67 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
         </TooltipProvider>
       </div>
 
-      <div className="flex flex-wrap gap-4 items-center">
-        {/* Add Plugin Button */}
-        <motion.div
-          className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsOpen(true)}
-        >
-          <Plus className="w-6 h-6" />
-        </motion.div>
-
-        {/* Interval Slider */}
-        <CircularSlider
-          value={formData.interval}
-          onChange={(value) => setFormData({ ...formData, interval: value })}
-        />
-
-        {/* Selected Plugins Display */}
-        {selectedPlugins.map((plugin) => (
+      <div className="space-y-4">
+        {" "}
+        {/* Added container with vertical spacing */}
+        {/* Top row with Add button and Slider */}
+        <div className="flex gap-4 items-center">
+          {/* Add Plugin Button */}
           <motion.div
-            key={plugin.id}
-            className="w-16 h-16 rounded-full flex items-center justify-center cursor-pointer bg-neutral-800 border border-neutral-700 overflow-hidden"
+            className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => togglePlugin(plugin.id)}
+            onClick={() => setIsOpen(true)}
           >
-            <div className="relative w-full h-full">
-              <Image
-                src={plugin.image}
-                alt={plugin.name}
-                fill
-                className="object-cover"
-              />
-            </div>
+            <Plus className="w-6 h-6" />
           </motion.div>
-        ))}
+
+          <div className="flex items-center gap-2">
+            <CircularSlider
+              value={formData.interval}
+              onChange={(value) =>
+                setFormData({ ...formData, interval: value })
+              }
+            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-2 cursor-help">
+                    <span className="text-gray-300 text-sm">Interval</span>
+                    <Info className="h-4 w-4 text-gray-400" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    How often the agent should check for updates and perform its
+                    tasks (in seconds)
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+        {/* Bottom row with selected plugins */}
+        <div className="flex flex-wrap gap-6">
+          {selectedPlugins.map((plugin) => (
+            <motion.div
+              key={plugin.name}
+              className="w-16 h-16 rounded-full flex items-center justify-center cursor-pointer bg-neutral-800 border border-neutral-700 overflow-hidden"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => togglePlugin(plugin.name)}
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={plugin.image}
+                  alt={plugin.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Plugin Selection Dialog */}
@@ -103,16 +128,16 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
           <div className="flex-1 overflow-y-auto mt-4 pr-4 -mr-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
               {allPlugins.map((plugin) => (
-                <div key={plugin.id} className="p-1">
+                <div key={plugin.name} className="p-1">
                   {" "}
                   {/* Padding container */}
                   <motion.div
                     className={`h-24 p-4 rounded-lg border cursor-pointer ${
-                      formData.plugins.includes(plugin.id)
+                      formData.plugins.includes(plugin.name)
                         ? "bg-neutral-700 border-neutral-600"
                         : "bg-neutral-800 border-neutral-700"
                     }`}
-                    onClick={() => togglePlugin(plugin.id)}
+                    onClick={() => togglePlugin(plugin.name)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
