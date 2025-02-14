@@ -3,13 +3,14 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
+  const { id } = await params;
   try {
     const { data, error } = await supabase
       .from("agents")
       .select("config")
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
     if (error?.code === "PGRST116") {
       return NextResponse.json(
