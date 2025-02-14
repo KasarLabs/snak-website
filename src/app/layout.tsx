@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { SearchProvider } from "./plugins/context/SearchContext";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Starknet Agent Kit",
@@ -54,8 +55,11 @@ export default function RootLayout({
       <body className="bg-black">
         <SearchProvider>
           <Header />
-          <main>{children}</main>
+          <main className="min-h-screen pt-20 flex flex-col items-center justify-center">
+            {children}
+          </main>
           <Footer />
+          <Toaster />
         </SearchProvider>
       </body>
     </html>

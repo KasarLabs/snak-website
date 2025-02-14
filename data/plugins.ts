@@ -573,6 +573,7 @@ const wikipediaPlugin: Plugin = {
   description:
     "Search and retrieve information from Wikipedia, including articles, summaries, and related content, as part of LangChain tools.",
   image: "/logos/wikipedia.png",
+  internal: false,
   actions: [],
 };
 

@@ -103,7 +103,7 @@ export default function HomePage() {
       setSelectedCircle(circle);
       setIsModalVisible(true);
       setIsFrozen(true);
-      setFrozenMousePosition(mousePosition); // Freeze the current mouse position
+      setFrozenMousePosition(mousePosition);
     }
     setHasPanned(false);
   };
@@ -175,7 +175,7 @@ export default function HomePage() {
         onClose={() => {
           setIsModalVisible(false);
           setExpandedActions(new Set());
-          setIsFrozen(false); // Unfreeze when modal closes
+          setIsFrozen(false);
         }}
       />
     </div>

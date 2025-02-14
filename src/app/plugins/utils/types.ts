@@ -23,6 +23,7 @@ export interface Plugin {
   name: string;
   description: string;
   image: string;
+  internal?: boolean;
   actions: Action[];
 }
 
