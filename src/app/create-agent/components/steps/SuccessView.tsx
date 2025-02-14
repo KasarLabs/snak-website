@@ -32,7 +32,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
           : "Your agent has been created!"}
       </h2>
       <p className="text-gray-400 mb-4">
-        Here&apos;s your agent configuration ID:
+        Here&apos;s the command you can run to get started with your agent:
       </p>
 
       <motion.div
@@ -43,7 +43,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
       >
         <div className="flex items-center gap-3">
           <span className="text-gray-200 font-mono text-sm truncate max-w-[300px]">
-            {configId}
+            curl -sSL https://kasar.io/setup-agent | bash -s {configId}
           </span>
           <motion.div
             initial={{ opacity: 0.5 }}
@@ -60,7 +60,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
       </motion.div>
 
       <p className="text-sm text-gray-400 mt-4 mb-6">
-        Click the ID to copy it to your clipboard
+        Click the command to copy it to your clipboard
       </p>
 
       <motion.button

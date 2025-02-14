@@ -36,6 +36,7 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
 
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+      {/* Tooltip */}
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
         <TooltipProvider>
@@ -45,75 +46,52 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
             </TooltipTrigger>
             <TooltipContent>
               <p>
-                Select the plugins your agent will have access to. Each plugin
-                provides different capabilities and integrations.
+                Select the plugins your agent will have access to. The interval
+                in seconds defines how often the agent checks for updates.
               </p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
 
-      <div className="space-y-4">
-        {" "}
-        {/* Added container with vertical spacing */}
-        {/* Top row with Add button and Slider */}
-        <div className="flex gap-4 items-center">
-          {/* Add Plugin Button */}
+      <div className="flex flex-wrap gap-6 items-center">
+        {/* Interval Slider */}
+        <div className="flex flex-col items-center gap-2">
+          <CircularSlider
+            value={formData.interval}
+            onChange={(value) => setFormData({ ...formData, interval: value })}
+          />
+        </div>
+
+        {/* Add Plugin Button */}
+        <motion.div
+          className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsOpen(true)}
+        >
+          <Plus className="w-6 h-6" />
+        </motion.div>
+
+        {/* Selected Plugins */}
+        {selectedPlugins.map((plugin) => (
           <motion.div
-            className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
+            key={plugin.name}
+            className="w-16 h-16 rounded-full flex items-center justify-center cursor-pointer bg-neutral-800 border border-neutral-700 overflow-hidden"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setIsOpen(true)}
+            onClick={() => togglePlugin(plugin.name)}
           >
-            <Plus className="w-6 h-6" />
+            <div className="relative w-full h-full">
+              <Image
+                src={plugin.image}
+                alt={plugin.name}
+                fill
+                className="object-cover"
+              />
+            </div>
           </motion.div>
-
-          <div className="flex items-center gap-2">
-            <CircularSlider
-              value={formData.interval}
-              onChange={(value) =>
-                setFormData({ ...formData, interval: value })
-              }
-            />
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center gap-2 cursor-help">
-                    <span className="text-gray-300 text-sm">Interval</span>
-                    <Info className="h-4 w-4 text-gray-400" />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    How often the agent should check for updates and perform its
-                    tasks (in seconds)
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-        {/* Bottom row with selected plugins */}
-        <div className="flex flex-wrap gap-6">
-          {selectedPlugins.map((plugin) => (
-            <motion.div
-              key={plugin.name}
-              className="w-16 h-16 rounded-full flex items-center justify-center cursor-pointer bg-neutral-800 border border-neutral-700 overflow-hidden"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => togglePlugin(plugin.name)}
-            >
-              <div className="relative w-full h-full">
-                <Image
-                  src={plugin.image}
-                  alt={plugin.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        ))}
       </div>
 
       {/* Plugin Selection Dialog */}
@@ -121,7 +99,7 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
         <DialogContent className="bg-neutral-900 border border-neutral-800 text-gray-200 max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">
-              Select Plugins
+              Select plugins
             </DialogTitle>
           </DialogHeader>
 

@@ -20,7 +20,6 @@ function getJsonHash(
   excludeFields: string[] = [],
 ): string {
   const clone = JSON.parse(JSON.stringify(obj));
-
   const removeFields = (object: Record<string, unknown>) => {
     for (const key in object) {
       if (excludeFields.includes(key)) {
@@ -31,12 +30,23 @@ function getJsonHash(
     }
     return object;
   };
-  const result = btoa(JSON.stringify(removeFields(clone)))
-    .split("=")[0]
-    .replace(/[/+]/g, "_");
-  return result;
-}
 
+  const str = JSON.stringify(removeFields(clone));
+
+  let hash1 = 0;
+  let hash2 = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash1 = (hash1 << 5) - hash1 + char;
+    hash1 = hash1 & hash1;
+    hash2 = (hash2 << 5) + hash2 + char;
+    hash2 = hash2 & hash2;
+  }
+
+  const firstHalf = Math.abs(hash1).toString(16).padStart(8, "0");
+  const secondHalf = Math.abs(hash2).toString(16).padStart(8, "0");
+  return firstHalf + secondHalf;
+}
 const AgentForm = () => {
   const initialFormData: AgentData = {
     name: "",

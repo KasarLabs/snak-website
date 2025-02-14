@@ -63,12 +63,17 @@ const CircularSlider: React.FC<CircularSliderProps> = ({ value, onChange }) => {
   const handleY = center + radius * Math.sin(angle);
 
   return (
-    <div className="select-none touch-none" ref={circleRef}>
-      <div className="relative w-17 h-16 flex items-center justify-center">
+    <div
+      className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700"
+      ref={circleRef}
+    >
+      <div className="relative w-full h-full flex items-center justify-center">
+        {" "}
+        {/* Changed from w-17 to w-16 */}
         <svg
           width={center * 2}
           height={center * 2}
-          className="cursor-pointer"
+          className="cursor-pointer absolute"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -89,9 +94,9 @@ const CircularSlider: React.FC<CircularSliderProps> = ({ value, onChange }) => {
           {/* Progress circle */}
           <path
             d={`
-              M ${center} ${center - radius}
-              A ${radius} ${radius} 0 ${normalizedValue > 0.5 ? 1 : 0} 1 ${handleX} ${handleY}
-            `}
+			  M ${center} ${center - radius}
+			  A ${radius} ${radius} 0 ${normalizedValue > 0.5 ? 1 : 0} 1 ${handleX} ${handleY}
+			`}
             fill="none"
             stroke="#404040"
             strokeWidth={strokeWidth}
@@ -106,9 +111,8 @@ const CircularSlider: React.FC<CircularSliderProps> = ({ value, onChange }) => {
             className="fill-neutral-600 hover:fill-neutral-500 cursor-grab active:cursor-grabbing"
           />
         </svg>
-
         {/* Center value */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+        <div className="z-10 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-sm font-medium text-gray-200">{value} s</span>
         </div>
       </div>
