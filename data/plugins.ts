@@ -805,9 +805,86 @@ const madaraPlugin: Plugin = {
 const fibrousPlugin: Plugin = {
   id: "cc0f610c-29c4-4377-a51c-20f31838df71",
   name: "Fibrous",
-  description: "",
+  description:
+    "The best decentralized liquidity platform on Starknet for swapping tokens",
   image: "/logos/fibrous.png",
-  actions: [],
+  actions: [
+    {
+      name: "Swap Tokens on Fibrous",
+      description: "Swap tokens using the best available routes and rates",
+      parameters: [
+        {
+          name: "sellTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to sell (e.g., ETH, USDC)",
+          required: true,
+        },
+        {
+          name: "buyTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to buy (e.g., ETH, USDC)",
+          required: true,
+        },
+        {
+          name: "sellAmount",
+          type: "string",
+          description: "Amount of tokens to sell",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "Fetch Route on Fibrous",
+      description:
+        "Get the best route and quote for a token swap without executing it",
+      parameters: [
+        {
+          name: "sellTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to sell (e.g., ETH, USDC)",
+          required: true,
+        },
+        {
+          name: "buyTokenSymbol",
+          type: "string",
+          description: "Symbol of the token to buy (e.g., ETH, USDC)",
+          required: true,
+        },
+        {
+          name: "sellAmount",
+          type: "number",
+          description: "Amount of tokens to sell",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "Batch Swap on Fibrous",
+      description:
+        "Swap multiple tokens using the best available routes and rates in a single transaction",
+      parameters: [
+        {
+          name: "sellTokenSymbols",
+          type: "string array",
+          description:
+            "Symbols of the tokens to sell (e.g., [ETH, USDT, STRK], USDC)",
+          required: true,
+        },
+        {
+          name: "buyTokenSymbol",
+          type: "string array",
+          description: "Symbol of the token to buy (e.g., [ETH], [USDC])",
+          required: true,
+        },
+        {
+          name: "sellAmount",
+          type: "number array",
+          description: "Amounts of tokens to sell",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 export const allPlugins: Array<Plugin> = [
