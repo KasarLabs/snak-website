@@ -637,34 +637,35 @@ const argentxPlugin: Plugin = {
   image: "/logos/argentx.png",
   actions: [
     {
-      name: 'createNewArgentAccount',
+      name: "createNewArgentAccount",
       description: "Creates a new Argent account and returns credentials",
-      parameters: []
+      parameters: [],
     },
     {
       name: "deployExistingArgentAccount",
-      description: "Deploy an existing Argent X Account and returns the deploy transaction address",
+      description:
+        "Deploy an existing Argent X Account and returns the deploy transaction address",
       parameters: [
         {
           name: "contractAddress",
           type: "string",
           description: "The address of the account's contract",
-          required: true
+          required: true,
         },
         {
           name: "publicKey",
-          type: "string", 
+          type: "string",
           description: "The public key of the account",
-          required: true
+          required: true,
         },
         {
           name: "privateKey",
           type: "string",
           description: "The private key of the account",
-          required: true
-        }
-      ]
-    }
+          required: true,
+        },
+      ],
+    },
   ],
 };
 
@@ -677,33 +678,34 @@ const openzeppelinPlugin: Plugin = {
     {
       name: "createNewOpenzeppelinAccount",
       description: "Creates a new OpenZeppelin account and returns credentials",
-      parameters: []
+      parameters: [],
     },
     {
       name: "deployExistingOpenzeppelinAccount",
-      description: "Deploy an existing OpenZeppelin Account and returns the deploy transaction address",
+      description:
+        "Deploy an existing OpenZeppelin Account and returns the deploy transaction address",
       parameters: [
         {
           name: "contractAddress",
           type: "string",
           description: "The address of the account's contract",
-          required: true
+          required: true,
         },
         {
           name: "publicKey",
           type: "string",
           description: "The public key of the account",
-          required: true
+          required: true,
         },
         {
           name: "privateKey",
           type: "string",
           description: "The private key of the account",
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const okxPlugin: Plugin = {
@@ -715,33 +717,34 @@ const okxPlugin: Plugin = {
     {
       name: "createNewOkxAccount",
       description: "Creates a new OKX account and returns credentials",
-      parameters: []
+      parameters: [],
     },
     {
       name: "deployExistingOkxAccount",
-      description: "Deploy an existing OKX Account and returns the deploy transaction address",
+      description:
+        "Deploy an existing OKX Account and returns the deploy transaction address",
       parameters: [
         {
           name: "contractAddress",
           type: "string",
           description: "The address of the account's contract",
-          required: true
+          required: true,
         },
         {
           name: "publicKey",
           type: "string",
           description: "The public key of the account",
-          required: true
+          required: true,
         },
         {
           name: "privateKey",
           type: "string",
           description: "The private key of the account",
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const braavosPlugin: Plugin = {
@@ -753,33 +756,34 @@ const braavosPlugin: Plugin = {
     {
       name: "createNewBraavosAccount",
       description: "Creates a new Braavos account and returns credentials",
-      parameters: []
+      parameters: [],
     },
     {
       name: "deployExistingBraavosAccount",
-      description: "Deploy an existing Braavos Account and returns the deploy transaction address",
+      description:
+        "Deploy an existing Braavos Account and returns the deploy transaction address",
       parameters: [
         {
           name: "contractAddress",
           type: "string",
           description: "The address of the account's contract",
-          required: true
+          required: true,
         },
         {
           name: "publicKey",
           type: "string",
           description: "The public key of the account",
-          required: true
+          required: true,
         },
         {
           name: "privateKey",
           type: "string",
           description: "The private key of the account",
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const pragmaPlugin: Plugin = {
