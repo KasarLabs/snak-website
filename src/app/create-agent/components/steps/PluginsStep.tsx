@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import CircularSlider from "../CircularSlider";
 
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,8 +53,24 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
         </TooltipProvider>
       </div>
 
-      {/* Selected Plugins Display */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 items-center">
+        {/* Add Plugin Button */}
+        <motion.div
+          className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsOpen(true)}
+        >
+          <Plus className="w-6 h-6" />
+        </motion.div>
+
+        {/* Interval Slider */}
+        <CircularSlider
+          value={formData.interval}
+          onChange={(value) => setFormData({ ...formData, interval: value })}
+        />
+
+        {/* Selected Plugins Display */}
         {selectedPlugins.map((plugin) => (
           <motion.div
             key={plugin.id}
@@ -72,16 +89,6 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
             </div>
           </motion.div>
         ))}
-
-        {/* Add Plugin Button remains the same */}
-        <motion.div
-          className="w-16 h-16 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-300"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsOpen(true)}
-        >
-          <Plus className="w-6 h-6" />
-        </motion.div>
       </div>
 
       {/* Plugin Selection Dialog */}

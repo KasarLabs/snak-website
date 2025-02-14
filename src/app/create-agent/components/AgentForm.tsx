@@ -41,7 +41,7 @@ const AgentForm = () => {
   const initialFormData: AgentData = {
     name: "",
     bio: "",
-    interval: 5000,
+    interval: 60,
     lore: [],
     objectives: [],
     knowledge: [],
@@ -56,7 +56,7 @@ const AgentForm = () => {
 
   const handleNext = () => {
     if (currentStep === 0) {
-      if (!formData.name.trim() || !formData.bio.trim() || !formData.interval) {
+      if (!formData.name.trim() || !formData.bio.trim()) {
         toast({
           variant: "destructive",
           title: "Required information",
@@ -133,7 +133,7 @@ const AgentForm = () => {
         lore: formData.lore.filter((item) => item.trim() !== ""),
         objectives: formData.objectives.filter((item) => item.trim() !== ""),
         knowledge: formData.knowledge.filter((item) => item.trim() !== ""),
-        interval: formData.interval,
+        interval: formData.interval * 1000,
         chat_id: uuidv4(),
         external_plugins,
         internal_plugins,

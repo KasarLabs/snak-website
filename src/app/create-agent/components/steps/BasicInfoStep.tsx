@@ -65,43 +65,6 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
           placeholder="Enter agent bio"
         />
       </div>
-
-      <div>
-        <div className="flex items-center gap-2 mb-2">
-          <label className="block text-sm font-medium text-gray-300">
-            Interval (ms)*
-          </label>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  How often should the agent check for updates and perform its
-                  tasks? (in milliseconds)
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="number"
-            min="1"
-            required
-            value={formData.interval}
-            onChange={(e) => {
-              const value = parseInt(e.target.value);
-              if (!isNaN(value) && value > 0) {
-                setFormData({ ...formData, interval: value });
-              }
-            }}
-            className="w-32 p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors"
-          />
-          <span className="text-gray-400 text-sm">ms</span>
-        </div>
-      </div>
     </motion.div>
   );
 };
