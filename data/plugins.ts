@@ -633,33 +633,157 @@ const atlanticPlugin: Plugin = {
 const argentxPlugin: Plugin = {
   id: "4d3e0dc1-c027-491c-8d50-a337a38ec10d",
   name: "Argent X",
-  description: "",
+  description: "Interact with Argent X accounts on Starknet",
   image: "/logos/argentx.png",
-  actions: [],
+  actions: [
+    {
+      name: "createNewArgentAccount",
+      description: "Creates a new Argent account and returns credentials",
+      parameters: [],
+    },
+    {
+      name: "deployExistingArgentAccount",
+      description:
+        "Deploy an existing Argent X Account and returns the deploy transaction address",
+      parameters: [
+        {
+          name: "contractAddress",
+          type: "string",
+          description: "The address of the account's contract",
+          required: true,
+        },
+        {
+          name: "publicKey",
+          type: "string",
+          description: "The public key of the account",
+          required: true,
+        },
+        {
+          name: "privateKey",
+          type: "string",
+          description: "The private key of the account",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const openzeppelinPlugin: Plugin = {
   id: "0a0d8122-0fa7-4278-b207-1ea0277e99ed",
   name: "OpenZeppelin",
-  description: "",
+  description: "Interact with OpenZeppelin accounts on Starknet",
   image: "/logos/openzeppelin.png",
-  actions: [],
+  actions: [
+    {
+      name: "createNewOpenzeppelinAccount",
+      description: "Creates a new OpenZeppelin account and returns credentials",
+      parameters: [],
+    },
+    {
+      name: "deployExistingOpenzeppelinAccount",
+      description:
+        "Deploy an existing OpenZeppelin Account and returns the deploy transaction address",
+      parameters: [
+        {
+          name: "contractAddress",
+          type: "string",
+          description: "The address of the account's contract",
+          required: true,
+        },
+        {
+          name: "publicKey",
+          type: "string",
+          description: "The public key of the account",
+          required: true,
+        },
+        {
+          name: "privateKey",
+          type: "string",
+          description: "The private key of the account",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const okxPlugin: Plugin = {
   id: "e9e7054e-e3b1-4b9a-ae69-53371e9b4a02",
-  name: "Okx",
-  description: "",
+  name: "OKX",
+  description: "Interact with OKX accounts on Starknet",
   image: "/logos/okx.png",
-  actions: [],
+  actions: [
+    {
+      name: "createNewOkxAccount",
+      description: "Creates a new OKX account and returns credentials",
+      parameters: [],
+    },
+    {
+      name: "deployExistingOkxAccount",
+      description:
+        "Deploy an existing OKX Account and returns the deploy transaction address",
+      parameters: [
+        {
+          name: "contractAddress",
+          type: "string",
+          description: "The address of the account's contract",
+          required: true,
+        },
+        {
+          name: "publicKey",
+          type: "string",
+          description: "The public key of the account",
+          required: true,
+        },
+        {
+          name: "privateKey",
+          type: "string",
+          description: "The private key of the account",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const braavosPlugin: Plugin = {
   id: "ae0057b0-e6e7-40bc-a22f-6afa5addb57a",
   name: "Braavos",
-  description: "",
+  description: "Interact with Braavos accounts on Starknet",
   image: "/logos/braavos.png",
-  actions: [],
+  actions: [
+    {
+      name: "createNewBraavosAccount",
+      description: "Creates a new Braavos account and returns credentials",
+      parameters: [],
+    },
+    {
+      name: "deployExistingBraavosAccount",
+      description:
+        "Deploy an existing Braavos Account and returns the deploy transaction address",
+      parameters: [
+        {
+          name: "contractAddress",
+          type: "string",
+          description: "The address of the account's contract",
+          required: true,
+        },
+        {
+          name: "publicKey",
+          type: "string",
+          description: "The public key of the account",
+          required: true,
+        },
+        {
+          name: "privateKey",
+          type: "string",
+          description: "The private key of the account",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const pragmaPlugin: Plugin = {
