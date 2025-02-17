@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { SuccessViewProps } from "../../types/agent";
 
@@ -9,10 +9,11 @@ const SuccessView: React.FC<SuccessViewProps> = ({
   isExisting,
 }) => {
   const [copied, setCopied] = useState(false);
-
+  const commandRef = useRef<HTMLSpanElement>(null);
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(configId);
+      const command = commandRef.current?.textContent || "";
+      await navigator.clipboard.writeText(command);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -42,8 +43,11 @@ const SuccessView: React.FC<SuccessViewProps> = ({
         whileTap={{ scale: 0.98 }}
       >
         <div className="flex items-center gap-3">
-          <span className="text-gray-200 font-mono text-sm truncate max-w-[300px]">
-            curl -sSL https://kasar.io/setup-agent | bash -s {configId}
+          <span
+            ref={commandRef}
+            className="text-gray-200 font-mono text-sm truncate max-w-[300px]"
+          >
+            curl -sSL https://kasar.io/setup-agent | bash -s -- {configId}
           </span>
           <motion.div
             initial={{ opacity: 0.5 }}
@@ -59,9 +63,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
         </div>
       </motion.div>
 
-      <p className="text-sm text-gray-400 mt-4 mb-6">
-        Click the command to copy it to your clipboard
-      </p>
+      <p className="text-sm text-gray-400 mt-4 mb-6"></p>
 
       <motion.button
         onClick={onReset}
