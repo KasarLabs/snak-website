@@ -47,7 +47,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
             ref={commandRef}
             className="text-gray-200 font-mono text-sm truncate max-w-[300px]"
           >
-            curl -sSL https://kasar.io/setup-agent | bash -s -- {configId}
+            curl -sSL https://agent.kasar.io/setup | bash -s -- {configId}
           </span>
           <motion.div
             initial={{ opacity: 0.5 }}
