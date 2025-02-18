@@ -3,7 +3,7 @@ import Image from "next/image";
 import { StepProps } from "../../types/agent";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Info, Plus } from "lucide-react";
+import { Info, Plus, Search } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -17,9 +17,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import CircularSlider from "../CircularSlider";
+import { Input } from "@/components/ui/input";
 
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const togglePlugin = (pluginName: string) => {
     setFormData({
@@ -32,6 +34,10 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
 
   const selectedPlugins = allPlugins.filter((plugin) =>
     formData.plugins.includes(plugin.name),
+  );
+
+  const filteredPlugins = allPlugins.filter((plugin) =>
+    plugin.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -103,12 +109,22 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto mt-4 pr-4 -mr-4">
+          {/* Search Bar */}
+          <div className="relative mt-4 mb-2">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="Search plugins..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-neutral-800 border-neutral-700 text-gray-200 placeholder:text-gray-400 focus:ring-neutral-600 focus:border-neutral-600"
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto mt-2 pr-4 -mr-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
-              {allPlugins.map((plugin) => (
+              {filteredPlugins.map((plugin) => (
                 <div key={plugin.name} className="p-1">
-                  {" "}
-                  {/* Padding container */}
                   <motion.div
                     className={`h-24 p-4 rounded-lg border cursor-pointer ${
                       formData.plugins.includes(plugin.name)
