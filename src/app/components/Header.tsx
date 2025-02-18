@@ -134,6 +134,12 @@ const Header = () => {
             >
               GitHub
             </a>
+            <Link
+                href="/create-agent"
+                className="block bg-white text-black px-4 py-2 rounded-lg font-medium text-lg hover:bg-gray-200 transition-all max-w-[200px]"
+              >
+                Create Agent
+              </Link>
           </div>
         )}
       </nav>
