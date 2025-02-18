@@ -45,7 +45,7 @@ const StepIcon = ({ icon: Icon, isActive, isComplete, tooltip }) => {
   );
 };
 
-const StepperHeader = ({ currentStep, steps }) => {
+const StepperHeader = ({ currentStep }) => {
   const icons = [
     { icon: UserCircle, tooltip: "Basic Info" },
     { icon: Scroll, tooltip: "Lore" },
