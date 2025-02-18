@@ -2,8 +2,4 @@ export const GRID_CONFIG = {
   RADIUS: 60,
   CENTER_ZOOM: 1.3,
   ZOOM_ZONE_SIZE: 500,
-  SPACING: 42, // 60 * 0.7
-  HEX_RATIO: Math.sqrt(3) / 2,
-  COLORS: ["#0A0A0A"],
-  DECORATIVE_CIRCLES: 400,
 };

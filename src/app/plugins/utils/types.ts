@@ -32,3 +32,13 @@ export type GridItem = (Plugin | Placeholder) & {
   y: number;
   color?: string;
 };
+
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface HoneycombConfig {
+  spacing: number;
+  hexRatio: number;
+}

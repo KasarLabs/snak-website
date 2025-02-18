@@ -890,12 +890,14 @@ const fibrousPlugin: Plugin = {
 
 export const allPlugins: Array<Plugin> = [
   corePlugin,
+
   argentxPlugin,
   braavosPlugin,
   openzeppelinPlugin,
   okxPlugin,
   unruggablePlugin,
   vesuPlugin,
+
   avnuPlugin,
   coingeckoPlugin,
   dexscreenerPlugin,
@@ -908,10 +910,10 @@ export const allPlugins: Array<Plugin> = [
   gmailPlugin,
   gcalendarPlugin,
   wikipediaPlugin,
+
   searchapiPlugin,
   atlanticPlugin,
   coinmarketcapPlugin,
-
   pragmaPlugin,
   madaraPlugin,
   fibrousPlugin,
