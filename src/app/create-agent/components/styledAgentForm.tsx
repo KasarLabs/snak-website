@@ -8,6 +8,7 @@ import {
   Target,
   Book,
   Puzzle,
+  LucideIcon,
 } from "lucide-react";
 import {
   Tooltip,
@@ -16,7 +17,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const StepIcon = ({ icon: Icon, isActive, isComplete, tooltip }) => {
+interface StepIconProps {
+  icon: LucideIcon;
+  isActive: boolean;
+  isComplete: boolean;
+  tooltip: string;
+}
+
+const StepIcon: React.FC<StepIconProps> = ({
+  icon: Icon,
+  isActive,
+  isComplete,
+  tooltip,
+}) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={200}>
@@ -45,8 +58,12 @@ const StepIcon = ({ icon: Icon, isActive, isComplete, tooltip }) => {
   );
 };
 
-const StepperHeader = ({ currentStep }) => {
-  const icons = [
+interface StepperHeaderProps {
+  currentStep: number;
+}
+
+const StepperHeader: React.FC<StepperHeaderProps> = ({ currentStep }) => {
+  const icons: Array<{ icon: LucideIcon; tooltip: string }> = [
     { icon: UserCircle, tooltip: "Basic Info" },
     { icon: Scroll, tooltip: "Lore" },
     { icon: Target, tooltip: "Objectives" },
@@ -57,12 +74,8 @@ const StepperHeader = ({ currentStep }) => {
   return (
     <div className="w-full bg-neutral-900 border-b border-neutral-800 p-4">
       <div className="relative flex justify-between items-center">
-        {/* Progress track wrapper with controlled width */}
         <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2">
-          {/* Background track */}
           <div className="absolute inset-0 h-[1px] bg-neutral-800" />
-
-          {/* Progress bar - stops at the current step */}
           <div
             className="absolute h-[1px] bg-white transition-all duration-300"
             style={{
@@ -72,7 +85,6 @@ const StepperHeader = ({ currentStep }) => {
           />
         </div>
 
-        {/* Icons container */}
         <div className="relative flex justify-between w-full z-10">
           {icons.map((iconData, index) => (
             <StepIcon
@@ -89,7 +101,21 @@ const StepperHeader = ({ currentStep }) => {
   );
 };
 
-const StyledAgentForm = ({
+interface Step {
+  title: string;
+  component: React.ReactNode;
+}
+
+interface StyledAgentFormProps {
+  children: React.ReactNode;
+  currentStep: number;
+  steps: Step[];
+  onNext: () => void;
+  onBack: () => void;
+  onSubmit: () => void;
+}
+
+const StyledAgentForm: React.FC<StyledAgentFormProps> = ({
   children,
   currentStep,
   steps,
@@ -100,9 +126,8 @@ const StyledAgentForm = ({
   return (
     <div className="flex items-center justify-center w-full px-4">
       <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[450px]">
-        <StepperHeader currentStep={currentStep} steps={steps} />
+        <StepperHeader currentStep={currentStep} />
 
-        {/* Form Content */}
         <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">
           <motion.div
             key={currentStep}
@@ -116,7 +141,6 @@ const StyledAgentForm = ({
           </motion.div>
         </div>
 
-        {/* Navigation Footer */}
         <div className="px-6 py-4 border-t border-neutral-800">
           <div className="flex justify-between items-center">
             <button
