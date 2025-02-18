@@ -15,8 +15,8 @@ import { useSearch } from "./context/SearchContext";
 import { generateHoneycombPositions } from "./utils/honeycomb";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Circle from "./components/Circle";
+import { Placeholder, Position } from "./utils/types";
 
-const PASTEL_COLORS = ["#0A0A0A"];
 const APPS = allPlugins;
 
 export default function HomePage() {
@@ -62,31 +62,36 @@ export default function HomePage() {
   const circles = useMemo(() => {
     if (!isClient) return [];
 
+    const config = {
+      spacing: 45, // Adjust based on your needs
+      hexRatio: 0.866, // Math.sqrt(3)/2 for regular hexagons
+    };
+
     const grid: GridItem[] = [];
-    const totalApps = APPS.length;
-    const totalDecorativeCircles = 400;
-    const totalItems = totalApps + totalDecorativeCircles;
     const positions = generateHoneycombPositions(
-      totalItems,
+      800,
       windowSize.width,
       windowSize.height,
+      config,
     );
     APPS.forEach((app, index) => {
-      grid.push({
-        ...app,
-        x: positions[index].x,
-        y: positions[index].y,
-      });
+      if (index < positions.length) {
+        grid.push({
+          ...app,
+          x: positions[index].x,
+          y: positions[index].y,
+        });
+      }
     });
-    for (let i = totalApps; i < totalItems; i++) {
-      const position = positions[i];
-      grid.push({
-        id: `decorative-${i}`,
-        name: `App ${i}`,
-        color: PASTEL_COLORS[Math.floor(Math.random() * PASTEL_COLORS.length)],
-        x: position.x,
-        y: position.y,
-      });
+    for (let i = APPS.length; i < positions.length; i++) {
+      const placeholder: Placeholder & Position = {
+        id: `placeholder-${i}`,
+        name: `Placeholder ${i}`,
+        x: positions[i].x,
+        y: positions[i].y,
+        color: "#0A0A0A", // You can adjust this default color
+      };
+      grid.push(placeholder);
     }
     return grid;
   }, [isClient, windowSize]);
