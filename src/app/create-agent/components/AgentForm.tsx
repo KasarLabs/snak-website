@@ -1,3 +1,4 @@
+// AgentForm.tsx
 import {
   BasicInfoStep,
   LoreStep,
@@ -6,14 +7,13 @@ import {
   PluginsStep,
 } from "./steps";
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { AgentData } from "../types/agent";
 import { v4 as uuidv4 } from "uuid";
 import { allPlugins } from "../../../../data/plugins";
 import { supabase } from "@/lib/supabase";
 import SuccessView from "./steps/SuccessView";
+import StyledAgentForm from "./StyledAgentForm";
 
 function getJsonHash(
   obj: Record<string, unknown>,
@@ -47,14 +47,15 @@ function getJsonHash(
   const secondHalf = Math.abs(hash2).toString(16).padStart(8, "0");
   return firstHalf + secondHalf;
 }
+
 const AgentForm = () => {
   const initialFormData: AgentData = {
     name: "",
     bio: "",
     interval: 60,
-    lore: [],
-    objectives: [],
-    knowledge: [],
+    lore: [""], // Start with one empty lore box
+    objectives: [""], // Start with one empty objective box
+    knowledge: [""], // Start with one empty knowledge box
     plugins: [],
   };
 
@@ -180,6 +181,7 @@ const AgentForm = () => {
       });
     }
   };
+
   if (currentStep === steps.length && configId) {
     return (
       <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[400px]">
@@ -193,78 +195,15 @@ const AgentForm = () => {
   }
 
   return (
-    <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[400px]">
-      {/* Fixed Header - Progress Dots */}
-      <div className="p-6 pb-2">
-        <motion.div
-          className="flex justify-center gap-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {steps.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`h-2 w-2 rounded-full ${
-                index === currentStep ? "bg-neutral-400" : "bg-neutral-700"
-              }`}
-              whileHover={{ scale: 1.2 }}
-            />
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto px-6">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          {steps[currentStep].component}
-        </motion.div>
-      </div>
-
-      {/* Fixed Footer - Navigation */}
-      <div className="p-6 pt-2">
-        <motion.div
-          className="flex justify-between"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <motion.button
-            onClick={() => setCurrentStep((prev) => Math.max(0, prev - 1))}
-            className={`flex items-center text-gray-300 px-6 py-2 ${
-              currentStep === 0 ? "invisible" : ""
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Back
-          </motion.button>
-          {currentStep === steps.length - 1 ? (
-            <motion.button
-              onClick={handleSubmit}
-              className="bg-neutral-700 text-white px-6 py-2 rounded-md hover:bg-neutral-600 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Create Agent
-            </motion.button>
-          ) : (
-            <motion.button
-              onClick={handleNext}
-              className="flex items-center text-gray-300 px-6 py-2"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Next
-              <ChevronRight className="w-5 h-5" />
-            </motion.button>
-          )}
-        </motion.div>
-      </div>
-    </div>
+    <StyledAgentForm
+      currentStep={currentStep}
+      steps={steps}
+      onNext={handleNext}
+      onBack={() => setCurrentStep((prev) => Math.max(0, prev - 1))}
+      onSubmit={handleSubmit}
+    >
+      {steps[currentStep].component}
+    </StyledAgentForm>
   );
 };
 
