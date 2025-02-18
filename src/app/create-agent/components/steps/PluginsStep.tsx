@@ -39,7 +39,7 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
       {/* Tooltip */}
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
