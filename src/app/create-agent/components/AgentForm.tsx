@@ -15,7 +15,10 @@ import { supabase } from "@/lib/supabase";
 import SuccessView from "./steps/SuccessView";
 import StyledAgentForm from "./StyledAgentForm";
 
-function getJsonHash(obj: Record<string, unknown>, excludeFields: string[] = []): string {
+function getJsonHash(
+  obj: Record<string, unknown>,
+  excludeFields: string[] = [],
+): string {
   const clone = JSON.parse(JSON.stringify(obj));
   const removeFields = (object: Record<string, unknown>) => {
     for (const key in object) {
@@ -88,7 +91,9 @@ const AgentForm = () => {
     () => [
       {
         title: "Basic Info",
-        component: <BasicInfoStep formData={formData} setFormData={setFormData} />,
+        component: (
+          <BasicInfoStep formData={formData} setFormData={setFormData} />
+        ),
       },
       {
         title: "Lore",
@@ -96,15 +101,21 @@ const AgentForm = () => {
       },
       {
         title: "Objectives",
-        component: <ObjectivesStep formData={formData} setFormData={setFormData} />,
+        component: (
+          <ObjectivesStep formData={formData} setFormData={setFormData} />
+        ),
       },
       {
         title: "Knowledge",
-        component: <KnowledgeStep formData={formData} setFormData={setFormData} />,
+        component: (
+          <KnowledgeStep formData={formData} setFormData={setFormData} />
+        ),
       },
       {
         title: "Plugins",
-        component: <PluginsStep formData={formData} setFormData={setFormData} />,
+        component: (
+          <PluginsStep formData={formData} setFormData={setFormData} />
+        ),
       },
     ],
     [formData, setFormData],

@@ -1,7 +1,20 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, UserCircle, Scroll, Target, Book, Puzzle } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ChevronLeft,
+  ChevronRight,
+  UserCircle,
+  Scroll,
+  Target,
+  Book,
+  Puzzle,
+} from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const StepIcon = ({ icon: Icon, isActive, isComplete, tooltip }) => {
   return (
@@ -10,15 +23,15 @@ const StepIcon = ({ icon: Icon, isActive, isComplete, tooltip }) => {
         <TooltipTrigger>
           <motion.div
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 ${
-              isActive 
-                ? 'bg-white text-black' 
+              isActive
+                ? "bg-white text-black"
                 : isComplete
-                  ? 'bg-neutral-700 text-white'
-                  : 'bg-neutral-800 text-neutral-500'
+                  ? "bg-neutral-700 text-white"
+                  : "bg-neutral-800 text-neutral-500"
             }`}
             initial={false}
-            animate={{ 
-              scale: isActive ? 1.1 : 1
+            animate={{
+              scale: isActive ? 1.1 : 1,
             }}
           >
             <Icon className="w-4 h-4" />
@@ -38,7 +51,7 @@ const StepperHeader = ({ currentStep, steps }) => {
     { icon: Scroll, tooltip: "Lore" },
     { icon: Target, tooltip: "Objectives" },
     { icon: Book, tooltip: "Knowledge" },
-    { icon: Puzzle, tooltip: "Plugins" }
+    { icon: Puzzle, tooltip: "Plugins" },
   ];
 
   return (
@@ -48,13 +61,13 @@ const StepperHeader = ({ currentStep, steps }) => {
         <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2">
           {/* Background track */}
           <div className="absolute inset-0 h-[1px] bg-neutral-800" />
-          
+
           {/* Progress bar - stops at the current step */}
-          <div 
+          <div
             className="absolute h-[1px] bg-white transition-all duration-300"
             style={{
-              width: `${currentStep === 0 ? 0 : (currentStep / (icons.length - 1) * 100)}%`,
-              maxWidth: '100%'
+              width: `${currentStep === 0 ? 0 : (currentStep / (icons.length - 1)) * 100}%`,
+              maxWidth: "100%",
             }}
           />
         </div>
@@ -62,7 +75,7 @@ const StepperHeader = ({ currentStep, steps }) => {
         {/* Icons container */}
         <div className="relative flex justify-between w-full z-10">
           {icons.map((iconData, index) => (
-            <StepIcon 
+            <StepIcon
               key={index}
               icon={iconData.icon}
               isActive={index === currentStep}
@@ -76,12 +89,19 @@ const StepperHeader = ({ currentStep, steps }) => {
   );
 };
 
-const StyledAgentForm = ({ children, currentStep, steps, onNext, onBack, onSubmit }) => {
+const StyledAgentForm = ({
+  children,
+  currentStep,
+  steps,
+  onNext,
+  onBack,
+  onSubmit,
+}) => {
   return (
     <div className="flex items-center justify-center w-full px-4">
       <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[450px]">
         <StepperHeader currentStep={currentStep} steps={steps} />
-        
+
         {/* Form Content */}
         <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">
           <motion.div
@@ -102,12 +122,12 @@ const StyledAgentForm = ({ children, currentStep, steps, onNext, onBack, onSubmi
             <button
               onClick={onBack}
               className={`flex items-center gap-1 text-neutral-400 px-3 py-1.5 rounded hover:text-white transition-colors
-                ${currentStep === 0 ? 'invisible' : ''}`}
+                ${currentStep === 0 ? "invisible" : ""}`}
             >
               <ChevronLeft className="w-4 h-4" />
               Back
             </button>
-            
+
             {currentStep === steps.length - 1 ? (
               <button
                 onClick={onSubmit}
