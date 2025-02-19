@@ -57,6 +57,7 @@ const AgentForm = () => {
     objectives: [""], // Start with one empty objective box
     knowledge: [""], // Start with one empty knowledge box
     plugins: [],
+    memory: false,
   };
 
   const { toast } = useToast();
