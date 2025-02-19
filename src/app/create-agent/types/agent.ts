@@ -6,6 +6,7 @@ export interface AgentData {
   objectives: string[];
   knowledge: string[];
   plugins: string[];
+  memory: boolean;
 }
 
 export interface StepProps {
