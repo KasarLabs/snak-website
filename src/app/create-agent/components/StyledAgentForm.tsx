@@ -128,7 +128,7 @@ const StyledAgentForm: React.FC<StyledAgentFormProps> = ({
       <div className="w-full max-w-2xl bg-neutral-900 rounded-lg shadow-lg border border-neutral-800 flex flex-col h-[450px]">
         <StepperHeader currentStep={currentStep} />
 
-        <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">
+        <div className="flex-1 overflow-hidden px-6 py-6 min-h-0">
           <motion.div
             key={currentStep}
             initial={{ opacity: 0, x: 10 }}

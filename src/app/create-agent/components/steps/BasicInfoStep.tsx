@@ -20,7 +20,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
           <label className="block text-sm font-medium text-gray-300">
             Name*
           </label>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
@@ -45,7 +45,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
           <label className="block text-sm font-medium text-gray-300">
             Bio*
           </label>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />

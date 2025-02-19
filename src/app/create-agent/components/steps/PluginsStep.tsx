@@ -3,7 +3,7 @@ import Image from "next/image";
 import { StepProps } from "../../types/agent";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Info, Plus } from "lucide-react";
+import { Info, Plus, Search } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -17,9 +17,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import CircularSlider from "../CircularSlider";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const togglePlugin = (pluginName: string) => {
     setFormData({
@@ -34,26 +37,48 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
     formData.plugins.includes(plugin.name),
   );
 
+  const filteredPlugins = allPlugins.filter((plugin) =>
+    plugin.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
       {/* Tooltip */}
-      <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                Select the plugins your agent will have access to. The interval
-                in seconds defines how often the agent checks for updates.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  Select the plugins your agent will have access to. The
+                  interval in seconds defines how often the agent checks for
+                  updates.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
 
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-400">Memory</span>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.memory ?? false}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, memory: checked })
+              }
+              className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
+            />
+            <span className="text-xs text-gray-500 w-14">
+              {formData.memory ? "Enabled" : "Disabled"}
+            </span>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-6 items-center">
         {/* Interval Slider */}
         <div className="flex flex-col items-center gap-2">
@@ -103,12 +128,22 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto mt-4 pr-4 -mr-4">
+          {/* Search Bar */}
+          <div className="relative mt-4 mb-2">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="Search plugins..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-neutral-800 border-neutral-700 text-gray-200 placeholder:text-gray-400 focus:ring-neutral-600 focus:border-neutral-600"
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto mt-2 pr-4 -mr-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
-              {allPlugins.map((plugin) => (
+              {filteredPlugins.map((plugin) => (
                 <div key={plugin.name} className="p-1">
-                  {" "}
-                  {/* Padding container */}
                   <motion.div
                     className={`h-24 p-4 rounded-lg border cursor-pointer ${
                       formData.plugins.includes(plugin.name)

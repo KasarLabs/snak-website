@@ -57,6 +57,7 @@ const AgentForm = () => {
     objectives: [""], // Start with one empty objective box
     knowledge: [""], // Start with one empty knowledge box
     plugins: [],
+    memory: false,
   };
 
   const { toast } = useToast();
@@ -148,6 +149,7 @@ const AgentForm = () => {
         chat_id: uuidv4(),
         external_plugins,
         internal_plugins,
+        memory: formData.memory,
       };
       const config_hash = getJsonHash(agentConfig, ["chat_id"]);
       const { data: existingAgent } = await supabase
