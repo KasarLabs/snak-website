@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import CircularSlider from "../CircularSlider";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,23 +44,41 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
       {/* Tooltip */}
-      <div className="flex items-center gap-2 mb-4">
-        <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                Select the plugins your agent will have access to. The interval
-                in seconds defines how often the agent checks for updates.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <h3 className="text-lg font-medium text-gray-200">Plugins</h3>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[1px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  Select the plugins your agent will have access to. The
+                  interval in seconds defines how often the agent checks for
+                  updates.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
 
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-400">Memory</span>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.memory ?? false}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, memory: checked })
+              }
+              className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
+            />
+            <span className="text-xs text-gray-500 w-14">
+              {formData.memory ? "Enabled" : "Disabled"}
+            </span>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-6 items-center">
         {/* Interval Slider */}
         <div className="flex flex-col items-center gap-2">
