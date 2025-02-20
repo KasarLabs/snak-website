@@ -7,11 +7,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
 
 const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   return (
     <motion.div
-      className="space-y-6"
+      className="space-y-3"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
     >
@@ -64,6 +65,31 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
           className="w-full p-2 bg-neutral-800 border border-neutral-700 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none transition-colors h-32"
           placeholder="Enter agent bio"
         />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <label className="block text-sm font-medium text-gray-300">
+          Memory
+        </label>
+        <div className="flex items-center gap-2">
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Whether or not the agent will have a memory.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <Switch
+            checked={formData.memory ?? false}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, memory: checked })
+            }
+            className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
+          />
+        </div>
       </div>
     </motion.div>
   );

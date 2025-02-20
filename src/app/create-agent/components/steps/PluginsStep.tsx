@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import CircularSlider from "../CircularSlider";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 
 const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,22 +60,6 @@ const PluginsStep: React.FC<StepProps> = ({ formData, setFormData }) => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-400">Memory</span>
-          <div className="flex items-center gap-2">
-            <Switch
-              checked={formData.memory ?? false}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, memory: checked })
-              }
-              className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
-            />
-            <span className="text-xs text-gray-500 w-14">
-              {formData.memory ? "Enabled" : "Disabled"}
-            </span>
-          </div>
         </div>
       </div>
       <div className="flex flex-wrap gap-6 items-center">
