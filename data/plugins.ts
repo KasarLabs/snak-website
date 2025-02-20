@@ -888,6 +888,147 @@ const fibrousPlugin: Plugin = {
   ],
 };
 
+const opusPlugin: Plugin = {
+  id: "3b4794c7-0b9a-4d7e-b57e-2683d4a26026",
+  name: "Opus",
+  description:
+    "Interact with the Opus DeFi protocol and borrow CASH, the first native decentralized USD-pegged stablecoin on Starknet",
+  image: "/logos/opus.png",
+
+  actions: [
+    {
+      name: "openTrove",
+      description: "Deposit tokens into Opus protocol and borrow CASH",
+      parameters: [
+        {
+          name: "collaterals",
+          type: "[string, string][]",
+          description: "An array of tuples, each containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
+          required: true,
+        },
+        {
+          name: "borrowAmount",
+          type: "string",
+          description: "Amount of CASH to borrow",
+          required: true,
+        },
+        {
+          name: "maxBorrowFeePct",
+          type: "string",
+          description: "Maximum borrow fee to pay as a percentage of borrow amount",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "depositTrove",
+      description: "Deposit tokens into a Trove on Opus protocol",
+      parameters: [
+        {
+          name: "troveId",
+          type: "number",
+          description: "Trove ID to deposit collateral into",
+          required: true,
+        },
+        {
+          name: "collateral",
+          type: "[string, string]",
+          description: "A tuple containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "withdrawTrove",
+      description: "Withdraw tokens from a Trove on Opus protocol",
+      parameters: [
+        {
+          name: "troveId",
+          type: "number",
+          description: "Trove ID to withdraw collateral from",
+          required: true,
+        },
+        {
+          name: "collateral",
+          type: "[string, string]",
+          description: "A tuple containing the symbol of the token to withdraw (e.g., ETH, STRK) and amount to withdraw",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "borrowTrove",
+      description: "Borrow CASH from a Trove on Opus protocol",
+      parameters: [
+        {
+          name: "troveId",
+          type: "number",
+          description: "Trove ID to borrow CASH with",
+          required: true,
+        },
+        {
+          name: "amount",
+          type: "string",
+          description: "Amount of CASH to borrow",
+          required: true,
+        },
+        {
+          name: "maxBorrowFeePct",
+          type: "string",
+          description: "Maximum borrow fee to pay as a percentage of borrow amount",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "repayTrove",
+      description: "Repay CASH for a Trove on Opus protocol",
+      parameters: [
+        {
+          name: "troveId",
+          type: "number",
+          description: "Trove ID to repay CASH for",
+          required: true,
+        },
+        {
+          name: "amount",
+          type: "string",
+          description: "Amount of CASH to repay",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "getUserTroves",
+      description: "Get a list of Trove IDs for an address on Opus protocol",
+      parameters: [
+        {
+          name: "user",
+          type: "string",
+          description: "Address of the user",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "getTroveHealth",
+      description: "Get a Trove's health on Opus protocol",
+      parameters: [
+        {
+          name: "troveId",
+          type: "number",
+          description: "Trove ID to fetch data for",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "getBorrowFee",
+      description: "Get the current borrow fee on Opus protocol",
+    },
+  ],
+};
+
 export const allPlugins: Array<Plugin> = [
   corePlugin,
 
@@ -897,6 +1038,7 @@ export const allPlugins: Array<Plugin> = [
   okxPlugin,
   unruggablePlugin,
   vesuPlugin,
+  opusPlugin,
 
   avnuPlugin,
   coingeckoPlugin,
