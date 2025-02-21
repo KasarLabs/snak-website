@@ -90,6 +90,28 @@ const BasicInfoStep: React.FC<StepProps> = ({ formData, setFormData }) => {
             className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
           />
         </div>
+        <label className="block text-sm font-medium text-gray-300">
+          Autonomous
+        </label>
+        <div className="flex items-center gap-2">
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-gray-400 cursor-help translate-y-[2px]" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Defines the agent&apos;s mode.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <Switch
+            checked={formData.autonomous ?? false}
+            onCheckedChange={(checked) =>
+              setFormData({ ...formData, autonomous: checked })
+            }
+            className="data-[state=checked]:bg-neutral-600 data-[state=unchecked]:bg-neutral-800"
+          />
+        </div>
       </div>
     </motion.div>
   );

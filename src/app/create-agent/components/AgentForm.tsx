@@ -58,6 +58,7 @@ const AgentForm = () => {
     knowledge: [""], // Start with one empty knowledge box
     plugins: [],
     memory: false,
+    autonomous: false,
   };
 
   const { toast } = useToast();
@@ -150,6 +151,7 @@ const AgentForm = () => {
         external_plugins,
         internal_plugins,
         memory: formData.memory,
+        autonomous: formData.autonomous,
       };
       const config_hash = getJsonHash(agentConfig, ["chat_id"]);
       const { data: existingAgent } = await supabase
