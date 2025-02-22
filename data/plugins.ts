@@ -903,7 +903,8 @@ const opusPlugin: Plugin = {
         {
           name: "collaterals",
           type: "[string, string][]",
-          description: "An array of tuples, each containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
+          description:
+            "An array of tuples, each containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
           required: true,
         },
         {
@@ -915,7 +916,8 @@ const opusPlugin: Plugin = {
         {
           name: "maxBorrowFeePct",
           type: "string",
-          description: "Maximum borrow fee to pay as a percentage of borrow amount",
+          description:
+            "Maximum borrow fee to pay as a percentage of borrow amount",
           required: true,
         },
       ],
@@ -933,7 +935,8 @@ const opusPlugin: Plugin = {
         {
           name: "collateral",
           type: "[string, string]",
-          description: "A tuple containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
+          description:
+            "A tuple containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
           required: true,
         },
       ],
@@ -951,7 +954,8 @@ const opusPlugin: Plugin = {
         {
           name: "collateral",
           type: "[string, string]",
-          description: "A tuple containing the symbol of the token to withdraw (e.g., ETH, STRK) and amount to withdraw",
+          description:
+            "A tuple containing the symbol of the token to withdraw (e.g., ETH, STRK) and amount to withdraw",
           required: true,
         },
       ],
@@ -975,7 +979,8 @@ const opusPlugin: Plugin = {
         {
           name: "maxBorrowFeePct",
           type: "string",
-          description: "Maximum borrow fee to pay as a percentage of borrow amount",
+          description:
+            "Maximum borrow fee to pay as a percentage of borrow amount",
           required: true,
         },
       ],
