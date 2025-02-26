@@ -68,7 +68,7 @@ const Header = () => {
               </Link>
               <Link
                 href="https://docs.starkagent.ai"
-				target="_blank"
+                target="_blank"
                 className="text-gray-300 hover:text-white font-calibre-medium text-2xl hover:scale-105 transition-all"
               >
                 Docs
