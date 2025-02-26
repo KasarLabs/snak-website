@@ -6,11 +6,6 @@ import Link from "next/link";
 import { Menu, X, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useSearch } from "../plugins/context/SearchContext";
-import { Inter } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-});
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,26 +29,19 @@ const Header = () => {
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-3">
               <Image
-                src="/starknetbrand.png"
+                src="/snaklogo-nobg.png"
                 alt="Logo"
-                width={200}
-                height={46}
+                width={80}
+                height={80}
                 className="hidden sm:block object-contain -mt-1	" // Negative margin top to move up
               />
               <Image
-                src="/starknet.png"
+                src="/snaklogo-nobg.png"
                 alt="Logo"
-                width={44}
-                height={44}
-                className="block sm:hidden object-contain" // Hide on mobile, show on desktop
+                width={60}
+                height={60}
+                className="block sm:hidden object-contain"
               />
-              <span className="hidden sm:block object-contain text-white hidden sm:flex items-center text-xl md:text-2xl gap-1">
-                <span
-                  className={`${inter.className} text-gray-200 font-medium`}
-                >
-                  Agent Kit
-                </span>
-              </span>
             </Link>
           </div>
 
@@ -74,13 +62,13 @@ const Header = () => {
             <div className="hidden md:flex items-center gap-8">
               <Link
                 href="/plugins"
-                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+                className="text-gray-300 hover:text-white font-calibre-medium text-2xl hover:scale-105 transition-all"
               >
                 Plugins
               </Link>
               <Link
                 href="https://docs.starkagent.ai"
-                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+                className="text-gray-300 hover:text-white font-calibre-medium text-2xl hover:scale-105 transition-all"
               >
                 Docs
               </Link>
@@ -88,13 +76,13 @@ const Header = () => {
                 href="https://github.com/kasarlabs/starknet-agent-kit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white font-medium text-lg hover:scale-105 transition-all"
+                className="text-gray-300 hover:text-white font-calibre-medium text-2xl hover:scale-105 transition-all"
               >
                 GitHub
               </a>
               <Link
                 href="/create-agent"
-                className="bg-white text-black px-4 py-2 rounded-lg font-medium text-lg hover:bg-gray-200 transition-all"
+                className="bg-white text-black px-4 py-2 rounded-lg font-calibre-medium text-xl hover:bg-gray-200 transition-all"
               >
                 Create Agent
               </Link>
@@ -116,13 +104,13 @@ const Header = () => {
           <div className="md:hidden absolute top-20 left-0 right-0 bg-black/100 backdrop-blur-sm border-b border-neutral-800 py-4 px-6 space-y-4">
             <Link
               href="/plugins"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-calibre-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               Plugins
             </Link>
             <Link
               href="https://docs.starkagent.ai"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-calibre-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               Docs
             </Link>
@@ -130,13 +118,13 @@ const Header = () => {
               href="https://github.com/kasarlabs/starknet-agent-kit"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-gray-300 hover:text-white font-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
+              className="block text-gray-300 hover:text-white font-calibre-medium text-lg hover:bg-black py-2 px-4 rounded-lg transition-all"
             >
               GitHub
             </a>
             <Link
               href="/create-agent"
-              className="block bg-white text-black px-4 py-2 rounded-lg font-medium text-lg hover:bg-gray-200 transition-all max-w-[200px]"
+              className="block bg-white text-black px-4 py-2 rounded-lg font-calibre-medium text-lg hover:bg-gray-200 transition-all max-w-[200px]"
             >
               Create Agent
             </Link>
