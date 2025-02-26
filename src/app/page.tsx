@@ -5,9 +5,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="-mt-20 md:mt-0bg-black text-white flex items-center p-4 md:py-4">
+    <div className=" bg-black text-white flex items-center p-4 md:py-4">
       <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-        {/* Left side - Title and Description */}
         <div className="text-center md:text-left">
           <div className="flex items-center gap-4 md:mb-6 justify-center md:justify-start">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-medium text-white/90">

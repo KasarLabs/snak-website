@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Starknet Agent Kit",
+  title: "Snak",
   description:
     "A powerful and simple toolkit for creating AI agents that can interact with the Starknet blockchain. Build autonomous agents for DeFi, NFTs, and more.",
   keywords: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   robots: "index, follow",
   openGraph: {
-    title: "Starknet Agent Kit | AI Agents for Starknet Blockchain",
+    title: "Snak",
     description: "Build powerful and secure AI Agents on Starknet.",
     images: [
       {
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Starknet Agent Kit | AI Agents for Starknet Blockchain",
+    title: "Snak",
     description: "Build powerful and secure AI Agents on Starknet.",
     creator: "@kasarlabs",
     images: ["/og-image.png"],
