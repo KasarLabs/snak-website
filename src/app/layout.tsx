@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      type: "image/png",
-      url: "/favicon-dark.png",
+      type: "image/x-icon",
+      url: "/favicon-dark.ico",
       media: "(prefers-color-scheme: dark)",
     },
     {
