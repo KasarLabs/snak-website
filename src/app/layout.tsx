@@ -8,17 +8,17 @@ import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: "Snak",
   icons: [
-	{
-		rel: 'icon',
-		type: 'image/png',
-		url: '/favicon-dark.ico',
-		media: '(prefers-color-scheme: dark)',
-	  },
     {
-      rel: 'icon',
-      type: 'image/x-icon',
-      url: '/favicon-light.ico',
-      media: '(prefers-color-scheme: light)',
+      rel: "icon",
+      type: "image/png",
+      url: "/favicon-dark.png",
+      media: "(prefers-color-scheme: dark)",
+    },
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      url: "/favicon-light.ico",
+      media: "(prefers-color-scheme: light)",
     },
   ],
   description:
