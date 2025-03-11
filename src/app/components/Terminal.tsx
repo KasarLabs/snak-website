@@ -1,147 +1,217 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 
-const Terminal = () => {
+const AiAgentTerminal = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [text, setText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const terminalRef = useRef<HTMLDivElement>(null);
+  const terminalRef = useRef(null);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
+  const [speed, setSpeed] = useState(1);
 
   const spinnerFrames = useMemo(
-    () => ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+    () => ["⠈", "⠐", "⠠", "⢀", "⡀", "⠄", "⠂", "⠁"],
     [],
   );
 
   const steps = useMemo(
     () => [
-      { text: "pnpm run local", delay: 1000, loading: true },
+      { text: "$ pnpm run start", delay: 1000 / speed, loading: true },
       {
-        text: "╭──────────────────────────────────────────────╮\n│ Starknet-Agent-Kit v0.0.1                    │\n╰──────────────────────────────────────────────╯",
-        delay: 800,
+        text: `   _____             __  
+  / ___/____  ____ _/ /__
+  \\__ \\/ __ \\/ __ \`/ //_/
+ ___/ / / / / /_/ / ,<   
+/____/_/ /_/\\__,_/_/|_|  
+v0.0.11 by Kasar`,
+        delay: 1200 / speed,
         loading: false,
-        class: "text-gray-300",
-      },
-      {
-        text: "? Select operation mode:",
-        delay: 1000,
-        loading: false,
-        class: "text-blue-400",
-      },
-      {
-        text: "  > Interactive Mode\n❯ > Autonomous Mode",
-        delay: 500,
-        loading: false,
-        class: "text-white",
+        highlight: true,
+        sentHighlight: true,
       },
       {
         text: "✔ Agent initialized successfully",
-        delay: 1200,
+        delay: 800 / speed,
         loading: false,
-        class: "text-green-400",
+        success: true,
       },
       {
-        text: "✔ Character config loaded successfully",
-        delay: 800,
+        text: `=== AGENT CONFIGURATION ===`,
+        delay: 700 / speed,
         loading: false,
-        class: "text-green-400",
       },
       {
-        text: "🤖 Starting autonomous session...",
-        delay: 1000,
+        text: `┌──────────────────────────────────────────────────┐
+│ IDENTITY                                         │
+├──────────────────────────────────────────────────┤
+│ Name: Snak Guide Agent                           │
+│ Mode: Autonomous                                 │
+└──────────────────────────────────────────────────┘`,
+        delay: 1000 / speed,
+        loading: false,
+        box: true,
+      },
+      {
+        text: `┌──────────────────────────────────────────────────┐
+│ OBJECTIVES                                       │
+├──────────────────────────────────────────────────┤
+│ • Guide users through Starknet Agent Kit         │
+│ • Demonstrate blockchain interactions            │
+│ • Explain plugins capabilities                   │
+└──────────────────────────────────────────────────┘`,
+        delay: 1000 / speed,
+        loading: false,
+        box: true,
+      },
+      {
+        text: "Starting interactive session...",
+        delay: 800 / speed,
         loading: true,
-        class: "text-blue-400",
       },
       {
-        text: "📊 Analyzing market conditions...",
-        delay: 1200,
-        loading: true,
-        class: "text-blue-400",
-      },
-      {
-        text: `Market Analysis:
-- ETH/USDC Price: $3,245.67
-- 24h Volume: $2.1B
-- Market Direction: Bullish
-- Volatility Index: Medium
-- Optimal Entry Point: Current`,
-        delay: 1500,
+        text: "[SYS] Agent status: OPERATIONAL",
+        delay: 800 / speed,
         loading: false,
-        class: "text-green-400",
       },
       {
-        text: `Route information: {
-  "name": "Ekubo",
-  "address": "0x5dd3d2f4429af886cd1a3b08289dbcea99a294197e9eb43b0e0325b4b",
-  "routeInfo": {
-    "token0": "0x3fe2b97c1fd336e750087d68b9b867997fd64a2661ff3ca5a7c771641e8e7ac",
-    "token1": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-    "fee": "0x20c49ba5e353f80000000000000000",
-    "tickSpacing": "0x3e8",
-    "extension": "0x0"
-  }
+        text: "[SYS] Autonomous mode: ACTIVE",
+        delay: 700 / speed,
+        loading: false,
+      },
+      {
+        text: "[NET] Connecting to Starknet",
+        delay: 900 / speed,
+        loading: true,
+      },
+      {
+        text: "[NET] Connected: SN_MAIN",
+        delay: 800 / speed,
+        loading: false,
+      },
+      {
+        text: "[AI] Processing blockchain data",
+        delay: 1200 / speed,
+        loading: true,
+      },
+      {
+        text: "[AI] Analyzing network activity",
+        delay: 1100 / speed,
+        loading: true,
+      },
+      {
+        text: "[AI] Scanning for opportunities",
+        delay: 1000 / speed,
+        loading: true,
+      },
+      {
+        text: `[DATA] Network Analysis:
+{
+  "status": "ACTIVE",
+  "tps": "42.3",
+  "block_time": "1.5s",
+  "gas_price": "0.00021 ETH"
 }`,
-        delay: 1500,
+        delay: 1500 / speed,
         loading: false,
-        class: "text-blue-300",
+        code: true,
       },
       {
-        text: "✔ Allowance verification successful",
-        delay: 800,
+        text: "[AI] Opportunity identified",
+        delay: 900 / speed,
         loading: false,
-        class: "text-green-400",
       },
       {
-        text: "🔄 Executing swap transaction...",
-        delay: 1000,
+        text: `[TOKEN] Token Analysis:
+{
+  "symbol": "EKB",
+  "price": "$1.24",
+  "24h_change": "+8.2%",
+  "7d_change": "+14.5%",
+  "volume_24h": "$12.8M",
+  "market_cap": "$30M",
+  "risk_level": "MEDIUM"
+}`,
+        delay: 1600 / speed,
+        loading: false,
+        code: true,
+      },
+      {
+        text: "[SEC] Validating contract security",
+        delay: 1100 / speed,
         loading: true,
-        class: "text-blue-400",
       },
       {
-        text: "✔ Transaction executed: 0x7da3ae0b687f45a56079b58d3e8abc841d0326e14783f65b346a19f9d965741d",
-        delay: 800,
+        text: "[SEC] Security verification complete",
+        delay: 900 / speed,
         loading: false,
-        class: "text-green-400",
       },
       {
-        text: '✔ Swap completed successfully { execution_status: "SUCCEEDED", finality_status: "ACCEPTED_ON_L2" }',
-        delay: 1200,
-        loading: false,
-        class: "text-green-400",
-      },
-      {
-        text: "📢 Preparing social media update...",
-        delay: 800,
+        text: "[EXEC] Optimizing execution parameters",
+        delay: 1000 / speed,
         loading: true,
-        class: "text-blue-400",
       },
       {
-        text: `🐦 Posted to Twitter:
-"$ekb sitting at $30m mcap. protocol putting in work - privacy pools + onchain dca + native account abstraction. real defi still exists in 2025"`,
-        delay: 1500,
-        loading: false,
-        class: "text-green-400",
+        text: "[EXEC] Preparing transaction",
+        delay: 800 / speed,
+        loading: true,
       },
       {
-        text: "✨ Looking for next opportunity...",
-        delay: 1000,
+        text: `[TX] Transaction details:
+0x7da3ae0b687f45a56079b58d3e8abc841d0326e14783f65b346a19f9d965741d`,
+        delay: 1200 / speed,
         loading: false,
-        class: "text-green-400",
+        code: true,
+      },
+      {
+        text: `[STATUS] Transaction status:
+{
+  "status": "CONFIRMED",
+  "block": "14392651",
+  "gas_used": "142,387",
+  "time": "0.8s"
+}`,
+        delay: 1300 / speed,
+        loading: false,
+        code: true,
+      },
+      {
+        text: "[PORTFOLIO] Position successfully opened",
+        delay: 900 / speed,
+        loading: false,
+      },
+      {
+        text: "[MONITOR] Setting price alerts",
+        delay: 800 / speed,
+        loading: true,
+      },
+      {
+        text: "[MONITOR] Position tracking active",
+        delay: 900 / speed,
+        loading: false,
+      },
+      {
+        text: "[SYS] Scanning for next opportunity",
+        delay: 1200 / speed,
+        loading: true,
       },
     ],
-    [],
+    [speed],
   );
 
   // Spinner animation
   useEffect(() => {
-    const spinnerLength = spinnerFrames.length;
-    const interval = setInterval(() => {
-      setSpinnerFrame((prev) => (prev + 1) % spinnerLength);
-    }, 80);
-    return () => clearInterval(interval);
-  }, [spinnerFrames]);
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setSpinnerFrame((prev) => (prev + 1) % spinnerFrames.length);
+      }, 100);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [spinnerFrames, isLoading]);
 
   // Cursor blink effect
   useEffect(() => {
@@ -178,51 +248,108 @@ const Terminal = () => {
     }
   }, [currentStep, steps]);
 
-  return (
-    <div className="relative w-full">
-      <div className="bg-black rounded-lg shadow-xl border border-gray-800">
-        {/* Terminal window controls */}
-        <div className="flex items-center p-2 bg-gray-900 rounded-t-lg border-b border-gray-800">
-          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-500 mr-2"></div>
-          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-500 mr-2"></div>
-          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-500"></div>
+  // Format text with AI styling
+  const formatLine = (text, options = {}) => {
+    const { highlight, code, success, box, sentHighlight } = options;
+
+    if (sentHighlight)
+      return <span className="text-purple-400 font-mono">{text}</span>;
+    if (highlight)
+      return <span className="text-blue-400 font-mono">{text}</span>;
+    if (success) return <span className="text-green-400">{text}</span>;
+    if (box) return <pre className="text-gray-300">{text}</pre>;
+    if (code) {
+      const lines = text.split("\n");
+      const firstLine = lines[0];
+      const restLines = lines.slice(1).join("\n");
+
+      return (
+        <div>
+          <span className="font-bold">{firstLine}</span>
+          <pre className="bg-black-900 bg-opacity-40 px-2 py-1 mt-1 rounded text-gray-300 font-mono">
+            {restLines}
+          </pre>
         </div>
+      );
+    }
+
+    // Find the first bracket closing position to style only the prefix
+    const closingBracketPos = text.indexOf("]");
+    if (closingBracketPos === -1) return <span>{text}</span>;
+
+    return (
+      <span>
+        <span className="font-bold">
+          {text.substring(0, closingBracketPos + 1)}
+        </span>
+        <span>{text.substring(closingBracketPos + 1)}</span>
+      </span>
+    );
+  };
+
+  return (
+    <div className="w-full flex justify-center">
+      <div className="w-[650px] bg-black rounded-lg shadow-lg border border-gray-800 overflow-hidden">
+        {/* Terminal header */}
+        <div className="flex items-center p-2 bg-black-900 border-b border-gray-800">
+          <div className="flex space-x-1.5 mr-4">
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+          </div>
+          <div className="text-xs text-gray-400">Snak v0.0.11</div>
+        </div>
+
         {/* Terminal content */}
         <div
           ref={terminalRef}
-          className="font-mono text-xs sm:text-sm p-2 sm:p-4 h-[280px] sm:h-[340px] overflow-y-auto"
+          className="font-mono text-xs p-4 h-[360px] overflow-y-auto text-gray-300"
           style={{
             scrollbarWidth: "thin",
-            scrollbarColor: "#4A5568 #1A202C",
+            scrollbarColor: "#4A5568 #000",
           }}
         >
-          <div className="text-gray-300 whitespace-pre-wrap break-words">
-            {steps.slice(0, currentStep).map((step, index) => (
-              <div
-                key={index}
-                className={`mb-2 ${step.class || "text-gray-300"}`}
-              >
-                {step.loading && (
-                  <span className="text-blue-400 mr-2">
-                    {spinnerFrames[spinnerFrame]}
-                  </span>
-                )}
-                {step.text}
-              </div>
-            ))}
-            {isLoading && (
-              <span className="text-blue-400">
-                {spinnerFrames[spinnerFrame]}
-              </span>
-            )}
+          <div className="whitespace-pre-wrap break-words">
+            {steps.slice(0, currentStep).map((step, index) => {
+              const isLastLoadingStep =
+                index === currentStep - 1 && step.loading && isLoading;
+
+              return (
+                <div key={index} className="mb-2">
+                  {isLastLoadingStep && (
+                    <span className="mr-2">{spinnerFrames[spinnerFrame]}</span>
+                  )}
+                  {formatLine(step.text, {
+                    highlight: step.highlight,
+                    code: step.code,
+                    success: step.success,
+                    box: step.box,
+                    sentHighlight: step.sentHighlight,
+                  })}
+                </div>
+              );
+            })}
             {!isLoading && showCursor && (
-              <span className="text-gray-300 ml-1 animate-blink">▊</span>
+              <span className="ml-1 animate-blink">_</span>
             )}
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-2 bg-black-900 border-t border-gray-800 flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="w-2 h-2 rounded-full bg-green-400 mr-2"></div>
+            <span className="text-xs text-gray-400">Active</span>
+          </div>
+          {/* <div className="flex items-center space-x-1">
+            <button onClick={() => setSpeed(0.5)} className={`px-2 py-1 rounded text-xs ${speed === 0.5 ? "bg-gray-700 text-gray-300" : "bg-gray-800 text-gray-400"}`}>0.5x</button>
+            <button onClick={() => setSpeed(1)} className={`px-2 py-1 rounded text-xs ${speed === 1 ? "bg-gray-700 text-gray-300" : "bg-gray-800 text-gray-400"}`}>1x</button>
+            <button onClick={() => setSpeed(2)} className={`px-2 py-1 rounded text-xs ${speed === 2 ? "bg-gray-700 text-gray-300" : "bg-gray-800 text-gray-400"}`}>2x</button>
+          </div> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default Terminal;
+export default AiAgentTerminal;
