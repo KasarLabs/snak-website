@@ -7,8 +7,9 @@ const AiAgentTerminal = () => {
   const [text, setText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const terminalRef = useRef(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [speed, setSpeed] = useState(1);
 
   const spinnerFrames = useMemo(
@@ -202,7 +203,7 @@ v0.0.11 by Kasar`,
 
   // Spinner animation
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | undefined;
     if (isLoading) {
       interval = setInterval(() => {
         setSpinnerFrame((prev) => (prev + 1) % spinnerFrames.length);
@@ -249,7 +250,15 @@ v0.0.11 by Kasar`,
   }, [currentStep, steps]);
 
   // Format text with AI styling
-  const formatLine = (text, options = {}) => {
+  interface FormatOptions {
+    highlight?: boolean;
+    code?: boolean;
+    success?: boolean;
+    box?: boolean;
+    sentHighlight?: boolean;
+  }
+
+  const formatLine = (text: string, options: FormatOptions = {}) => {
     const { highlight, code, success, box, sentHighlight } = options;
 
     if (sentHighlight)
