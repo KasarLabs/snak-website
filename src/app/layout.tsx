@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     },
   ],
   description:
-    "A powerful and simple toolkit for creating AI agents that can interact with the Starknet blockchain. Build autonomous agents for DeFi, NFTs, and more.",
+    "Snak is a toolkit for creating AI agents powered by Starknet.",
   keywords: [
     "Starknet",
     "blockchain",
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     "smart contracts",
     "web3",
     "cryptocurrency",
+    "Snak",
   ],
   robots: "index, follow",
   openGraph: {
