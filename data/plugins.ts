@@ -1,1038 +1,5 @@
 import { Plugin } from "../src/app/plugins/utils/types";
-
-const corePlugin: Plugin = {
-  id: "a5dcf686-50ee-41f5-bdcb-44eaacbeaf81",
-  name: "Core",
-  description: "",
-  image: "/logos/starknet.png",
-  actions: [],
-};
-
-const unruggablePlugin: Plugin = {
-  id: "8d3e05ef-c85a-43cc-8e57-486e94fcf39e",
-  name: "Unruggable",
-  description:
-    "Create secure, transparent memecoins with built-in protections against common exploits and rug pulls",
-  image: "/logos/unruggable.png",
-
-  actions: [
-    {
-      name: "Create Memecoin",
-      description:
-        "Deploy a new memecoin contract with built-in security features and customizable parameters",
-      parameters: [
-        {
-          name: "owner",
-          type: "string",
-          description: "Owner address of the memecoin",
-          required: true,
-        },
-        {
-          name: "name",
-          type: "string",
-          description: "Name of the memecoin",
-          required: true,
-        },
-        {
-          name: "symbol",
-          type: "string",
-          description: "Symbol of the memecoin",
-          required: true,
-        },
-        {
-          name: "initialSupply",
-          type: "string",
-          description:
-            "Initial supply of tokens (will be scaled by 18 decimals)",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Verify Memecoin",
-      description:
-        "Check if a contract is a legitimate memecoin created by the Unruggable Factory",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "Address of the contract to verify",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Launch on Ekubo",
-      description:
-        "Launch memecoin on Ekubo DEX with concentrated liquidity and trading restrictions",
-      parameters: [
-        {
-          name: "memecoinAddress",
-          type: "string",
-          description: "Address of the memecoin to launch",
-          required: true,
-        },
-        {
-          name: "transferRestrictionDelay",
-          type: "number",
-          description: "Delay in seconds before transfers are allowed",
-          required: true,
-        },
-        {
-          name: "maxPercentageBuyLaunch",
-          type: "number",
-          description:
-            "Maximum percentage of tokens that can be bought at launch",
-          required: true,
-        },
-        {
-          name: "startingPrice",
-          type: "string",
-          description: "Initial trading price of the token",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Check Locked Liquidity",
-      description:
-        "Verify if a memecoin has locked liquidity and get detailed information about the liquidity lock",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "Address of the memecoin contract to check",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const vesuPlugin: Plugin = {
-  id: "9d3e05ef-c85a-43cc-8e57-486e94fcf40f",
-  name: "Vesu",
-  description:
-    "Deposit and withdraw tokens to earn yield in the Vesu DeFi protocol",
-  image: "/logos/vesu.png",
-
-  actions: [
-    {
-      name: "Deposit Earn",
-      description: "Deposit tokens into Vesu protocol to earn yield",
-      parameters: [
-        {
-          name: "depositTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to deposit (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "depositAmount",
-          type: "string",
-          description: "Amount of tokens to deposit",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Withdraw Earn",
-      description: "Withdraw tokens and earned yield from Vesu protocol",
-      parameters: [
-        {
-          name: "withdrawTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to withdraw",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const avnuPlugin: Plugin = {
-  id: "7d3e05ef-c85a-43cc-8e57-486e94fcf38e",
-  name: "AVNU",
-  description:
-    "Decentralized exchange aggregator for swapping tokens on Starknet with the best rates",
-  image: "/logos/avnu.png",
-
-  actions: [
-    {
-      name: "Swap Tokens",
-      description: "Swap tokens using the best available routes and rates",
-      parameters: [
-        {
-          name: "sellTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to sell (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "buyTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to buy (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "sellAmount",
-          type: "string",
-          description: "Amount of tokens to sell",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Fetch Route",
-      description:
-        "Get the best route and quote for a token swap without executing it",
-      parameters: [
-        {
-          name: "sellTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to sell (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "buyTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to buy (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "sellAmount",
-          type: "number",
-          description: "Amount of tokens to sell",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const coingeckoPlugin: Plugin = {
-  id: "6d3e05ef-c85a-43cc-8e57-486e94fcf37e",
-  name: "CoinGecko",
-  description:
-    "Get real-time cryptocurrency prices, market data, and trends using CoinGecko API",
-  image: "/logos/coingecko.png",
-
-  actions: [
-    {
-      name: "Check Server Status",
-      description: "Check if the CoinGecko API server is operational",
-    },
-    {
-      name: "Check Token Price",
-      description: "Get current price for specified tokens in USD",
-      parameters: [
-        {
-          name: "tokenNames",
-          type: "string",
-          description:
-            'Comma-separated list of token names (e.g., "bitcoin,ethereum")',
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "List Supported Tokens",
-      description: "Get a list of all supported tokens/currencies on CoinGecko",
-    },
-    {
-      name: "Trending Search List",
-      description: "Get list of trending cryptocurrency searches",
-    },
-  ],
-};
-
-const dexscreenerPlugin: Plugin = {
-  id: "5d3e05ef-c85a-43cc-8e57-486e94fcf36e",
-  name: "Dexscreener",
-  description: "",
-  image: "/logos/dexscreener.png",
-  actions: [],
-};
-
-const artpeacePlugin: Plugin = {
-  id: "4d3e05ef-c85a-43cc-8e57-486e94fcf35e",
-  name: "Artpeace",
-  description: "",
-  image: "/logos/artpeace.png",
-  actions: [],
-};
-
-const twitterPlugin: Plugin = {
-  id: "3d3e05ef-c85a-43cc-8e57-486e94fcf34e",
-  name: "Twitter",
-  description:
-    "Interact with Twitter/X platform - post tweets, manage threads, follow users, and retrieve information",
-  image: "/logos/twitter.png",
-  actions: [
-    {
-      name: "createTwitterPost",
-      description: "Create and publish a new tweet",
-      parameters: [
-        {
-          name: "post",
-          type: "string",
-          description: "Content of the tweet to be posted",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "replyTweet",
-      description: "Reply to an existing tweet",
-      parameters: [
-        {
-          name: "tweet_id",
-          type: "string",
-          description: "ID of the tweet to reply to",
-          required: true,
-        },
-        {
-          name: "response_text",
-          type: "string",
-          description: "Content of the reply tweet",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "createAndPostTwitterThread",
-      description: "Create and post a thread of multiple tweets",
-      parameters: [
-        {
-          name: "thread",
-          type: "string[]",
-          description: "Array of tweet contents that will form the thread",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "followXUserFromUsername",
-      description: "Follow a Twitter user by their username",
-      parameters: [
-        {
-          name: "username",
-          type: "string",
-          description: "Username of the account to follow",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getLastUserTweet",
-      description: "Retrieve the most recent tweet from a specified user",
-      parameters: [
-        {
-          name: "account_name",
-          type: "string",
-          description: "Username of the account to get the latest tweet from",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getLastTweetsOptions",
-      description: "Search and retrieve tweets based on a query",
-      parameters: [
-        {
-          name: "query",
-          type: "string",
-          description: "Search query for finding tweets",
-          required: true,
-        },
-        {
-          name: "maxTweets",
-          type: "number",
-          description: "Maximum number of tweets to retrieve",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getLastTweetsFromUser",
-      description: "Retrieve recent tweets from a specified user",
-      parameters: [
-        {
-          name: "username",
-          type: "string",
-          description: "Username of the account to get tweets from",
-          required: true,
-        },
-        {
-          name: "maxTweets",
-          type: "number",
-          description: "Maximum number of tweets to retrieve",
-          required: false,
-        },
-      ],
-    },
-    {
-      name: "getLastTweetsAndRepliesFromUser",
-      description: "Retrieve recent tweets and replies from a specified user",
-      parameters: [
-        {
-          name: "username",
-          type: "string",
-          description: "Username of the account to get tweets and replies from",
-          required: true,
-        },
-        {
-          name: "maxTweets",
-          type: "number",
-          description: "Maximum number of tweets and replies to retrieve",
-          required: false,
-        },
-      ],
-    },
-    {
-      name: "getTwitterUserIdFromUsername",
-      description: "Get the Twitter user ID for a given username",
-      parameters: [
-        {
-          name: "username",
-          type: "string",
-          description: "Username to get the ID for",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getTwitterProfileFromUsername",
-      description: "Get the Twitter profile information for a given username",
-      parameters: [
-        {
-          name: "username",
-          type: "string",
-          description: "Username to get the profile information for",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const discordPlugin: Plugin = {
-  id: "1e489b06-d538-4e29-8412-2e4724a777e3",
-  name: "Discord",
-  description: "Interact with Discord",
-  image: "/logos/discord.png",
-  actions: [
-    {
-      name: "DiscordChannelSearchTool",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "DiscordGetGuildsTool",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "DiscordGetMessagesTool",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "DiscordGetTextChannelsTool",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "DiscordSendMessagesTool",
-      description: "",
-      parameters: [],
-    },
-  ],
-};
-
-const telegramPlugin: Plugin = {
-  id: "297bf546-ba26-4556-a65c-2317ba710d32",
-  name: "Telegram",
-  description: "",
-  image: "/logos/telegram.png",
-  actions: [],
-};
-
-const duckduckgoPlugin: Plugin = {
-  id: "544bb4dd-4c2f-42da-95be-cbbc86f0585e",
-  name: "Duckduckgo",
-  description:
-    "A plugin that performs web searches using DuckDuckGo's search engine, as part of LangChain tools.",
-  image: "/logos/duckduckgo.png",
-  actions: [
-    {
-      name: "Invoke",
-      description: "Perform a search query using DuckDuckGo",
-      parameters: [
-        {
-          name: "input",
-          type: "string",
-          description: "The search query to execute",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const dallEPlugin: Plugin = {
-  id: "68290790-695f-4aaa-bb8c-95583899b47a",
-  name: "Dall-E",
-  description:
-    "A powerful AI image generation plugin that creates unique images from textual description, as part of LangChain tools.",
-  image: "/logos/dallE.png",
-  actions: [
-    {
-      name: "Invoke",
-      description:
-        "Generate an image based on a text prompt and return its URL",
-      parameters: [
-        {
-          name: "input",
-          type: "string",
-          description: "Text description of the image you want to generate",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const gmailPlugin: Plugin = {
-  id: "0a463a27-f236-4f2a-88f5-ab6c4a4da9a9",
-  name: "Gmail",
-  description:
-    "Interact with Gmail to manage emails, drafts, and threads, as part of LangChain tools.",
-  image: "/logos/gmail.png",
-  actions: [
-    {
-      name: "GmailCreateDraft",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "GmailGetMessage",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "GmailGetThread",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "GmailSearch",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "GmailSendMessage",
-      description: "",
-      parameters: [],
-    },
-  ],
-};
-
-const gcalendarPlugin: Plugin = {
-  id: "3a15ea40-0211-48c9-a3a8-1b9c92502ab6",
-  name: "Google Calendar",
-  description:
-    "Manage Google Calendar events, schedules, and calendars with features for creating, updating, and querying calendar data, as part of LangChain tools.",
-  image: "/logos/gcalendar.png",
-  actions: [
-    {
-      name: "GoogleCalendarCreateTool",
-      description: "",
-      parameters: [],
-    },
-    {
-      name: "GoogleCalendarViewTool",
-      description: "",
-      parameters: [],
-    },
-  ],
-};
-
-const searchapiPlugin: Plugin = {
-  id: "fe276fc9-3b3d-438d-bb4f-b613aef97531",
-  name: "Search API",
-  description:
-    "Search and retrieve current news articles from various sources using Google News engine, with support for filtering, sorting, and customized results, as part of LangChain tools.",
-  image: "/logos/searchapi.png",
-  actions: [],
-};
-
-const wikipediaPlugin: Plugin = {
-  id: "c36dd777-e209-4c7d-b60c-57003c53d9de",
-  name: "Wikipedia",
-  description:
-    "Search and retrieve information from Wikipedia, including articles, summaries, and related content, as part of LangChain tools.",
-  image: "/logos/wikipedia.png",
-  internal: false,
-  actions: [],
-};
-
-const coinmarketcapPlugin: Plugin = {
-  id: "22caebb4-27ec-425a-9868-bbf15e381249",
-  name: "CoinMarketCap",
-  description: "",
-  image: "/logos/coinmarketcap.png",
-  actions: [],
-};
-
-const atlanticPlugin: Plugin = {
-  id: "abd3235d-67d0-4a33-a506-00fd5811481f",
-  name: "Atlantic",
-  description:
-    "A plugin for interacting with Atlantic's proof generation and verification services",
-  image: "/logos/atlantic.png",
-  actions: [
-    {
-      name: "getProof",
-      description: "Generate a proof by uploading a ZIP file to Atlantic",
-      parameters: [
-        {
-          name: "agent",
-          type: "StarknetAgentInterface",
-          description: "The Starknet agent interface",
-          required: true,
-        },
-        {
-          name: "param",
-          type: "AtlanticParam",
-          description: "The Atlantic parameters, including the filename",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "verifyProof",
-      description: "Verify a proof using the Atlantic service",
-      parameters: [
-        {
-          name: "agent",
-          type: "StarknetAgentInterface",
-          description: "The Starknet agent interface",
-          required: true,
-        },
-        {
-          name: "param",
-          type: "AtlanticParam",
-          description: "The Atlantic parameters, including the filename",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const argentxPlugin: Plugin = {
-  id: "4d3e0dc1-c027-491c-8d50-a337a38ec10d",
-  name: "Argent X",
-  description: "Interact with Argent X accounts on Starknet",
-  image: "/logos/argentx.png",
-  actions: [
-    {
-      name: "createNewArgentAccount",
-      description: "Creates a new Argent account and returns credentials",
-      parameters: [],
-    },
-    {
-      name: "deployExistingArgentAccount",
-      description:
-        "Deploy an existing Argent X Account and returns the deploy transaction address",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "The address of the account's contract",
-          required: true,
-        },
-        {
-          name: "publicKey",
-          type: "string",
-          description: "The public key of the account",
-          required: true,
-        },
-        {
-          name: "privateKey",
-          type: "string",
-          description: "The private key of the account",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const openzeppelinPlugin: Plugin = {
-  id: "0a0d8122-0fa7-4278-b207-1ea0277e99ed",
-  name: "OpenZeppelin",
-  description: "Interact with OpenZeppelin accounts on Starknet",
-  image: "/logos/openzeppelin.png",
-  actions: [
-    {
-      name: "createNewOpenzeppelinAccount",
-      description: "Creates a new OpenZeppelin account and returns credentials",
-      parameters: [],
-    },
-    {
-      name: "deployExistingOpenzeppelinAccount",
-      description:
-        "Deploy an existing OpenZeppelin Account and returns the deploy transaction address",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "The address of the account's contract",
-          required: true,
-        },
-        {
-          name: "publicKey",
-          type: "string",
-          description: "The public key of the account",
-          required: true,
-        },
-        {
-          name: "privateKey",
-          type: "string",
-          description: "The private key of the account",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const okxPlugin: Plugin = {
-  id: "e9e7054e-e3b1-4b9a-ae69-53371e9b4a02",
-  name: "OKX",
-  description: "Interact with OKX accounts on Starknet",
-  image: "/logos/okx.png",
-  actions: [
-    {
-      name: "createNewOkxAccount",
-      description: "Creates a new OKX account and returns credentials",
-      parameters: [],
-    },
-    {
-      name: "deployExistingOkxAccount",
-      description:
-        "Deploy an existing OKX Account and returns the deploy transaction address",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "The address of the account's contract",
-          required: true,
-        },
-        {
-          name: "publicKey",
-          type: "string",
-          description: "The public key of the account",
-          required: true,
-        },
-        {
-          name: "privateKey",
-          type: "string",
-          description: "The private key of the account",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const braavosPlugin: Plugin = {
-  id: "ae0057b0-e6e7-40bc-a22f-6afa5addb57a",
-  name: "Braavos",
-  description: "Interact with Braavos accounts on Starknet",
-  image: "/logos/braavos.png",
-  actions: [
-    {
-      name: "createNewBraavosAccount",
-      description: "Creates a new Braavos account and returns credentials",
-      parameters: [],
-    },
-    {
-      name: "deployExistingBraavosAccount",
-      description:
-        "Deploy an existing Braavos Account and returns the deploy transaction address",
-      parameters: [
-        {
-          name: "contractAddress",
-          type: "string",
-          description: "The address of the account's contract",
-          required: true,
-        },
-        {
-          name: "publicKey",
-          type: "string",
-          description: "The public key of the account",
-          required: true,
-        },
-        {
-          name: "privateKey",
-          type: "string",
-          description: "The private key of the account",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const pragmaPlugin: Plugin = {
-  id: "f5ed5517-267b-4d4e-b4ba-1dab110d6dbd",
-  name: "Pragma",
-  description: "",
-  image: "/logos/pragma.png",
-  actions: [],
-};
-
-const madaraPlugin: Plugin = {
-  id: "62121657-9286-4002-ab6d-5c984232477a",
-  name: "Madara",
-  description: "",
-  image: "/logos/madara.png",
-  actions: [],
-};
-
-const fibrousPlugin: Plugin = {
-  id: "cc0f610c-29c4-4377-a51c-20f31838df71",
-  name: "Fibrous",
-  description:
-    "The best decentralized liquidity platform on Starknet for swapping tokens",
-  image: "/logos/fibrous.png",
-  actions: [
-    {
-      name: "Swap Tokens on Fibrous",
-      description: "Swap tokens using the best available routes and rates",
-      parameters: [
-        {
-          name: "sellTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to sell (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "buyTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to buy (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "sellAmount",
-          type: "string",
-          description: "Amount of tokens to sell",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Fetch Route on Fibrous",
-      description:
-        "Get the best route and quote for a token swap without executing it",
-      parameters: [
-        {
-          name: "sellTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to sell (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "buyTokenSymbol",
-          type: "string",
-          description: "Symbol of the token to buy (e.g., ETH, USDC)",
-          required: true,
-        },
-        {
-          name: "sellAmount",
-          type: "number",
-          description: "Amount of tokens to sell",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "Batch Swap on Fibrous",
-      description:
-        "Swap multiple tokens using the best available routes and rates in a single transaction",
-      parameters: [
-        {
-          name: "sellTokenSymbols",
-          type: "string array",
-          description:
-            "Symbols of the tokens to sell (e.g., [ETH, USDT, STRK], USDC)",
-          required: true,
-        },
-        {
-          name: "buyTokenSymbol",
-          type: "string array",
-          description: "Symbol of the token to buy (e.g., [ETH], [USDC])",
-          required: true,
-        },
-        {
-          name: "sellAmount",
-          type: "number array",
-          description: "Amounts of tokens to sell",
-          required: true,
-        },
-      ],
-    },
-  ],
-};
-
-const opusPlugin: Plugin = {
-  id: "3b4794c7-0b9a-4d7e-b57e-2683d4a26026",
-  name: "Opus",
-  description:
-    "Interact with the Opus DeFi protocol and borrow CASH, the first native decentralized USD-pegged stablecoin on Starknet",
-  image: "/logos/opus.png",
-
-  actions: [
-    {
-      name: "openTrove",
-      description: "Deposit tokens into Opus protocol and borrow CASH",
-      parameters: [
-        {
-          name: "collaterals",
-          type: "[string, string][]",
-          description:
-            "An array of tuples, each containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
-          required: true,
-        },
-        {
-          name: "borrowAmount",
-          type: "string",
-          description: "Amount of CASH to borrow",
-          required: true,
-        },
-        {
-          name: "maxBorrowFeePct",
-          type: "string",
-          description:
-            "Maximum borrow fee to pay as a percentage of borrow amount",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "depositTrove",
-      description: "Deposit tokens into a Trove on Opus protocol",
-      parameters: [
-        {
-          name: "troveId",
-          type: "number",
-          description: "Trove ID to deposit collateral into",
-          required: true,
-        },
-        {
-          name: "collateral",
-          type: "[string, string]",
-          description:
-            "A tuple containing the symbol of the token to deposit (e.g., ETH, STRK) and amount to deposit",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "withdrawTrove",
-      description: "Withdraw tokens from a Trove on Opus protocol",
-      parameters: [
-        {
-          name: "troveId",
-          type: "number",
-          description: "Trove ID to withdraw collateral from",
-          required: true,
-        },
-        {
-          name: "collateral",
-          type: "[string, string]",
-          description:
-            "A tuple containing the symbol of the token to withdraw (e.g., ETH, STRK) and amount to withdraw",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "borrowTrove",
-      description: "Borrow CASH from a Trove on Opus protocol",
-      parameters: [
-        {
-          name: "troveId",
-          type: "number",
-          description: "Trove ID to borrow CASH with",
-          required: true,
-        },
-        {
-          name: "amount",
-          type: "string",
-          description: "Amount of CASH to borrow",
-          required: true,
-        },
-        {
-          name: "maxBorrowFeePct",
-          type: "string",
-          description:
-            "Maximum borrow fee to pay as a percentage of borrow amount",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "repayTrove",
-      description: "Repay CASH for a Trove on Opus protocol",
-      parameters: [
-        {
-          name: "troveId",
-          type: "number",
-          description: "Trove ID to repay CASH for",
-          required: true,
-        },
-        {
-          name: "amount",
-          type: "string",
-          description: "Amount of CASH to repay",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getUserTroves",
-      description: "Get a list of Trove IDs for an address on Opus protocol",
-      parameters: [
-        {
-          name: "user",
-          type: "string",
-          description: "Address of the user",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getTroveHealth",
-      description: "Get a Trove's health on Opus protocol",
-      parameters: [
-        {
-          name: "troveId",
-          type: "number",
-          description: "Trove ID to fetch data for",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "getBorrowFee",
-      description: "Get the current borrow fee on Opus protocol",
-    },
-  ],
-};
+import { allPlugins as corePlugins } from "./core-plugins";
 
 const odooMcpServerPlugin: Plugin = {
   id: "xmb120fapj",
@@ -1041,6 +8,7 @@ const odooMcpServerPlugin: Plugin = {
     "An MCP server implementation that integrates with Odoo ERP systems, enabling AI assistants to interact with Odoo data and functionality through the Model Context Protocol.",
   image: "https://github.com/tuanle96.png",
   actions: [],
+  githubUrl: "https://github.com/tuanle96/mcp-odoo",
   _varName: "odooMcpServerPlugin",
 };
 
@@ -1051,6 +19,7 @@ const mcpmymacPlugin: Plugin = {
     "Stop Package Chaos: Unveil Your Mac’s Setup for Targeted ML Debugging",
   image: "https://github.com/zhongmingyuan.png",
   actions: [],
+  githubUrl: "https://github.com/zhongmingyuan/mcp-my-mac",
   _varName: "mcpmymacPlugin",
 };
 
@@ -1061,6 +30,7 @@ const viteMcpServerPlugin: Plugin = {
     "Integrates Cursor AI with Vite Dev server, allowing AI agents to modify code and observe live updates through the Hot Module Replacement system in real-time.",
   image: "https://github.com/ESnark.png",
   actions: [],
+  githubUrl: "https://github.com/ESnark/vite-mcp-server",
   _varName: "viteMcpServerPlugin",
 };
 
@@ -1071,6 +41,7 @@ const mcpdbsPlugin: Plugin = {
     "A Model Context Protocol (MCP) implementation for connecting to and working with various database systems.",
   image: "https://github.com/cuongtl1992.png",
   actions: [],
+  githubUrl: "https://github.com/cuongtl1992/mcp-dbs",
   _varName: "mcpdbsPlugin",
 };
 
@@ -1081,6 +52,7 @@ const codeindexmcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that helps large language models index, search, and analyze code repositories with minimal setup",
   image: "https://github.com/johnhuang316.png",
   actions: [],
+  githubUrl: "https://github.com/johnhuang316/code-index-mcp",
   _varName: "codeindexmcpPlugin",
 };
 
@@ -1090,6 +62,7 @@ const zoomeyeMcpServerPlugin: Plugin = {
   description: "MCP server for querying the ZoomEye API",
   image: "https://github.com/zoomeye-ai.png",
   actions: [],
+  githubUrl: "https://github.com/zoomeye-ai/mcp_zoomeye",
   _varName: "zoomeyeMcpServerPlugin",
 };
 
@@ -1100,6 +73,7 @@ const citeassistMcpPlugin: Plugin = {
     "Retrieve citation data effortlessly from CiteAs and Google Scholar. Get BibTeX-formatted citations for your resources with just a few commands. Enhance your research workflow by integrating citation retrieval directly into your applications.",
   image: "https://github.com/ndchikin.png",
   actions: [],
+  githubUrl: "https://github.com/ndchikin/reference-mcp",
   _varName: "citeassistMcpPlugin",
 };
 
@@ -1109,6 +83,7 @@ const mcpjetbrainsPlugin: Plugin = {
   description: "idea",
   image: "https://github.com/JetBrains.png",
   actions: [],
+  githubUrl: "https://github.com/JetBrains/mcp-jetbrains",
   _varName: "mcpjetbrainsPlugin",
 };
 
@@ -1119,6 +94,7 @@ const citemcpPlugin: Plugin = {
     "Retrieve citation data effortlessly from CiteAs and Google Scholar. Get BibTeX-formatted citations for your resources with just a few commands. Enhance your research workflow by integrating citation retrieval directly into your applications.",
   image: "https://github.com/ndchikin.png",
   actions: [],
+  githubUrl: "https://github.com/ndchikin/reference-mcp",
   _varName: "citemcpPlugin",
 };
 
@@ -1129,6 +105,7 @@ const eventcatalogMcpServerPlugin: Plugin = {
     "A server that connects MCP clients (Claude, Cursor, Windsurf, etc.) to EventCatalog instances, allowing users to ask questions about their event-driven architecture and get insights about domains, services, and message schemas directly within their development tools.",
   image: "https://github.com/event-catalog.png",
   actions: [],
+  githubUrl: "https://github.com/event-catalog/mcp-server",
   _varName: "eventcatalogMcpServerPlugin",
 };
 
@@ -1139,6 +116,7 @@ const difyAsMcpServerPlugin: Plugin = {
     "Exposes Dify applications (both Chatflow and Workflow) as MCP (Model Context Protocol) servers, allowing Claude and other MCP clients to directly interact with Dify apps through a standardized protocol.",
   image: "https://github.com/Yevanchen.png",
   actions: [],
+  githubUrl: "https://github.com/Yevanchen/difyapp_as_mcp_server",
   _varName: "difyAsMcpServerPlugin",
 };
 
@@ -1149,6 +127,7 @@ const clickhousemcpserverPlugin: Plugin = {
     "An MCP server implementation that enables Claude AI to interact with Clickhouse databases. Features include secure database connections, query execution, read-only mode support, and multi-query capabilities.",
   image: "https://github.com/burakdirin.png",
   actions: [],
+  githubUrl: "https://github.com/burakdirin/clickhouse-mcp-server",
   _varName: "clickhousemcpserverPlugin",
 };
 
@@ -1159,6 +138,7 @@ const yetanotherunitymcpPlugin: Plugin = {
     "A Unity Master Control Protocol implementation that allows AI agents to control and interact with Unity, enabling them to execute code, query editor state, modify GameObjects, and capture screenshots through a WebSocket-based communication system.",
   image: "https://github.com/Azreal42.png",
   actions: [],
+  githubUrl: "https://github.com/Azreal42/YetAnotherUnityMcp",
   _varName: "yetanotherunitymcpPlugin",
 };
 
@@ -1169,6 +149,7 @@ const agentConstructPlugin: Plugin = {
     "An MCP server implementation that standardizes how AI applications access tools and context, providing a central hub that manages tool discovery, execution, and context management with a simplified configuration system.",
   image: "https://github.com/batteryshark.png",
   actions: [],
+  githubUrl: "https://github.com/batteryshark/agent_construct",
   _varName: "agentConstructPlugin",
 };
 
@@ -1179,6 +160,7 @@ const gameAssetGeneratorPlugin: Plugin = {
     "An MCP server that generates 2D and 3D game assets from text prompts using AI models from Hugging Face Spaces, allowing developers to easily create game art through Claude Desktop or other MCP clients.",
   image: "https://github.com/MubarakHAlketbi.png",
   actions: [],
+  githubUrl: "https://github.com/MubarakHAlketbi/game-asset-mcp",
   _varName: "gameAssetGeneratorPlugin",
 };
 
@@ -1189,6 +171,7 @@ const autocadMcpServerPlugin: Plugin = {
     "A server that enables natural language interaction with AutoCAD through large language models like Claude, allowing users to create and modify drawings using conversational commands.",
   image: "https://github.com/zh19980811.png",
   actions: [],
+  githubUrl: "https://github.com/zh19980811/Easy-MCP-AutoCad",
   _varName: "autocadMcpServerPlugin",
 };
 
@@ -1199,6 +182,7 @@ const semgrepMcpServerPlugin: Plugin = {
     "An MCP server that provides a comprehensive interface to Semgrep, enabling users to scan code for security vulnerabilities, create custom rules, and analyze scan results through the Model Context Protocol.",
   image: "https://github.com/semgrep.png",
   actions: [],
+  githubUrl: "https://github.com/semgrep/mcp",
   _varName: "semgrepMcpServerPlugin",
 };
 
@@ -1209,6 +193,7 @@ const powerplatformMcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that provides intelligent access to PowerPlatform/Dataverse entities and records. This tool offers context-aware assistance, entity exploration and metadata access.",
   image: "https://github.com/michsob.png",
   actions: [],
+  githubUrl: "https://github.com/michsob/powerplatform-mcp",
   _varName: "powerplatformMcpPlugin",
 };
 
@@ -1218,6 +203,7 @@ const mcpForItsmPlugin: Plugin = {
   description: "MCP FOR ITSM TOOL INTEGRATION",
   image: "https://github.com/madosh.png",
   actions: [],
+  githubUrl: "https://github.com/madosh/MCP-ITSM",
   _varName: "mcpForItsmPlugin",
 };
 
@@ -1228,6 +214,7 @@ const mysqldbmcpserverPlugin: Plugin = {
     "An MCP server that enables MySQL database integration with Claude. You can execute SQL queries and manage database connections.",
   image: "https://github.com/burakdirin.png",
   actions: [],
+  githubUrl: "https://github.com/burakdirin/mysqldb-mcp-server",
   _varName: "mysqldbmcpserverPlugin",
 };
 
@@ -1238,6 +225,7 @@ const devhubCmsMcpPlugin: Plugin = {
     "Model Context Protocol (MCP) integration for managing content in the DevHub CMS system (blog posts, content, location administration)",
   image: "https://github.com/devhub.png",
   actions: [],
+  githubUrl: "https://github.com/devhub/devhub-cms-mcp",
   _varName: "devhubCmsMcpPlugin",
 };
 
@@ -1248,6 +236,7 @@ const mcpserversemgrepPlugin: Plugin = {
     "Allows the model to understand the codebase of the project thoroughly by static semantic code analysis. Very powerful tool! Tested on Claude Desktop so waiting for the improvements applied for other clients",
   image: "https://github.com/Szowesgad.png",
   actions: [],
+  githubUrl: "https://github.com/Szowesgad/mcp-server-semgrep",
   _varName: "mcpserversemgrepPlugin",
 };
 
@@ -1258,6 +247,7 @@ const cloverMcpServerPlugin: Plugin = {
     "Enables AI agents to access and interact with Clover merchant data, inventory, and orders through a secure OAuth-authenticated MCP server.",
   image: "https://github.com/ibraheem4.png",
   actions: [],
+  githubUrl: "https://github.com/ibraheem4/clover-mcp",
   _varName: "cloverMcpServerPlugin",
 };
 
@@ -1268,6 +258,7 @@ const houdinimcpPlugin: Plugin = {
     "Connects Houdini to Claude AI through Model Context Protocol, enabling AI-assisted 3D modeling, scene creation, simulation setup, and rendering through natural language commands.",
   image: "https://github.com/capoom.png",
   actions: [],
+  githubUrl: "https://github.com/capoom/houdini-mcp",
   _varName: "houdinimcpPlugin",
 };
 
@@ -1278,6 +269,7 @@ const linkedinprofileanalyzerPlugin: Plugin = {
     "A powerful LinkedIn Profile Analyzer that seamlessly integrates with Claude AI to fetch and analyze public LinkedIn profiles, enabling users to extract, search, and analyze posts data through RapidAPI's LinkedIn Data API.",
   image: "https://github.com/rugvedp.png",
   actions: [],
+  githubUrl: "https://github.com/rugvedp/linkedin-mcp",
   _varName: "linkedinprofileanalyzerPlugin",
 };
 
@@ -1288,6 +280,7 @@ const withseismicMcpPlugin: Plugin = {
     "A TypeScript implementation of a Model Context Protocol server that provides a frictionless framework for developers to build and deploy AI tools and prompts, focusing on developer experience with zero boilerplate and automatic tool registration.",
   image: "https://github.com/dougwithseismic.png",
   actions: [],
+  githubUrl: "https://github.com/dougwithseismic/withseismic-mcp",
   _varName: "withseismicMcpPlugin",
 };
 
@@ -1298,6 +291,7 @@ const hassmcpPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants like Claude to interact directly with Home Assistant, allowing them to query device states, control smart home entities, and perform automation tasks.",
   image: "https://github.com/voska.png",
   actions: [],
+  githubUrl: "https://github.com/voska/hass-mcp",
   _varName: "hassmcpPlugin",
 };
 
@@ -1307,6 +301,7 @@ const mcpcrawlerPlugin: Plugin = {
   description: "It crawls website",
   image: "https://github.com/orange-fruit01.png",
   actions: [],
+  githubUrl: "https://github.com/orange-fruit01/MCP-Test-Run",
   _varName: "mcpcrawlerPlugin",
 };
 
@@ -1317,6 +312,7 @@ const kafkaMcpServerPlugin: Plugin = {
     "Enables AI models to publish and consume messages from Apache Kafka topics through a standardized interface, making it easy to integrate Kafka messaging with LLM and agent applications.",
   image: "https://github.com/pavanjava.png",
   actions: [],
+  githubUrl: "https://github.com/pavanjava/kafka_mcp_server",
   _varName: "kafkaMcpServerPlugin",
 };
 
@@ -1327,6 +323,7 @@ const mcpfluxschnellPlugin: Plugin = {
     "A TypeScript-based MCP server that enables text-to-image generation using Cloudflare's Flux Schnell model API.",
   image: "https://github.com/bytefer.png",
   actions: [],
+  githubUrl: "https://github.com/bytefer/mcp-flux-schnell",
   _varName: "mcpfluxschnellPlugin",
 };
 
@@ -1337,6 +334,7 @@ const argocdmcpPlugin: Plugin = {
     "An MCP (Model Context Protocol) server that integrates with the ArgoCD API, enabling AI assistants and large language models to manage ArgoCD applications and resources through natural language interactions.",
   image: "https://github.com/severity1.png",
   actions: [],
+  githubUrl: "https://github.com/severity1/argocd-mcp",
   _varName: "argocdmcpPlugin",
 };
 
@@ -1347,6 +345,7 @@ const excalidrawMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to create, modify, and manipulate Excalidraw diagrams through a structured API.",
   image: "https://github.com/yctimlin.png",
   actions: [],
+  githubUrl: "https://github.com/yctimlin/mcp_excalidraw",
   _varName: "excalidrawMcpServerPlugin",
 };
 
@@ -1357,6 +356,7 @@ const pancakeswappoolspymcpPlugin: Plugin = {
     "An MCP server that tracks newly created liquidity pools on Pancake Swap.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/pancakeswap-poolspy-mcp",
   _varName: "pancakeswappoolspymcpPlugin",
 };
 
@@ -1367,6 +367,7 @@ const mcpNotifyServerPlugin: Plugin = {
     "A Model Context Protocol service that sends desktop notifications and alert sounds when AI agent tasks are completed, integrating with various LLM clients like Claude Desktop and Cursor.",
   image: "https://github.com/Cactusinhand.png",
   actions: [],
+  githubUrl: "https://github.com/Cactusinhand/mcp_server_notify",
   _varName: "mcpNotifyServerPlugin",
 };
 
@@ -1377,6 +378,7 @@ const memoryBankMcpServerPlugin: Plugin = {
     "A server for managing project documentation and context across Claude AI sessions through global and branch-specific memory banks, enabling consistent knowledge management with structured JSON document storage.",
   image: "https://github.com/t3ta.png",
   actions: [],
+  githubUrl: "https://github.com/t3ta/memory-bank-mcp-server",
   _varName: "memoryBankMcpServerPlugin",
 };
 
@@ -1387,6 +389,7 @@ const lokkaMicrosoft365McpServerPlugin: Plugin = {
     "Lokka ia an MCP server for the Microsoft Graph API and can be used to query and update all resources in your Microsoft 365 tenant.\n\nThis MCP server supports all Microsoft Graph APIs including update operations (limited by the permissions you grant to the app).",
   image: "https://github.com/merill.png",
   actions: [],
+  githubUrl: "https://github.com/merill/lokka",
   _varName: "lokkaMicrosoft365McpServerPlugin",
 };
 
@@ -1397,6 +400,7 @@ const imfDataMcpServerPlugin: Plugin = {
     "The server integrates with the free IMF data API and provides various features to facilitate data retrieval and analysis. The server is built using the FastMCP framework and offers the following functionalities:",
   image: "https://github.com/c-cf.png",
   actions: [],
+  githubUrl: "https://github.com/c-cf/imf-data-mcp",
   _varName: "imfDataMcpServerPlugin",
 };
 
@@ -1407,6 +411,7 @@ const freecadMcpPlugin: Plugin = {
     "This repository is a FreeCAD MCP that allows you to control FreeCAD from Claude Desktop.",
   image: "https://github.com/neka-nat.png",
   actions: [],
+  githubUrl: "https://github.com/neka-nat/freecad-mcp",
   _varName: "freecadMcpPlugin",
 };
 
@@ -1417,6 +422,7 @@ const veyraxPlugin: Plugin = {
     "Single MCP tool to connect all your favorite tools: Gmail, Calendar and 40 more.",
   image: "https://github.com/VeyraX.png",
   actions: [],
+  githubUrl: "https://github.com/VeyraX/veyrax-mcp",
   _varName: "veyraxPlugin",
 };
 
@@ -1427,6 +433,7 @@ const mcpservertreesitterPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that provides code analysis capabilities using tree-sitter, designed to give Claude intelligent access to codebases with appropriate context management.",
   image: "https://github.com/wrale.png",
   actions: [],
+  githubUrl: "https://github.com/wrale/mcp-server-tree-sitter",
   _varName: "mcpservertreesitterPlugin",
 };
 
@@ -1436,6 +443,7 @@ const nearMcpPlugin: Plugin = {
   description: "Interact with the NEAR blockchain through MCP calls",
   image: "https://github.com/nearai.png",
   actions: [],
+  githubUrl: "https://github.com/nearai/near-mcp",
   _varName: "nearMcpPlugin",
 };
 
@@ -1446,6 +454,7 @@ const docdocxmcpPlugin: Plugin = {
     "A powerful Word document processing service based on FastMCP, enabling AI assistants to create, edit, and manage docx files with full formatting support. Preserves original styles when editing content.",
   image: "https://github.com/MeterLong.png",
   actions: [],
+  githubUrl: "https://github.com/MeterLong/MCP-Doc",
   _varName: "docdocxmcpPlugin",
 };
 
@@ -1456,6 +465,7 @@ const mysqlMcpServerPlugin: Plugin = {
     "A server that enables AI models to interact with MySQL databases through a Model Control Protocol, providing tools for table creation, schema inspection, query execution, and data retrieval.",
   image: "https://github.com/Mineru98.png",
   actions: [],
+  githubUrl: "https://github.com/Mineru98/mysql-mcp-server",
   _varName: "mysqlMcpServerPlugin",
 };
 
@@ -1466,6 +476,7 @@ const dbcodePlugin: Plugin = {
     "DBCode is a Visual Studio Code extension that allows you to manage many databases, including PostgreSQL, MySQL, SQL Server, DuckDB, Redis, MongoDB, and more.\n\nDBCode offers the option to run an MCP server, providing access to those databases, their schemas, and the ability to execute queries.",
   image: "https://github.com/dbcodeio.png",
   actions: [],
+  githubUrl: "https://github.com/dbcodeio/public",
   _varName: "dbcodePlugin",
 };
 
@@ -1476,6 +487,7 @@ const mcpdingdingbotPlugin: Plugin = {
     "MCP Server for send text/markdown message via dingding (aka dingtalk) group custom robot",
   image: "https://github.com/Shawyeok.png",
   actions: [],
+  githubUrl: "https://github.com/Shawyeok/mcp-dingding-bot",
   _varName: "mcpdingdingbotPlugin",
 };
 
@@ -1486,6 +498,7 @@ const mcpcoincapjjPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that provides comprehensive cryptocurrency analysis using the CoinCap API. This server offers real-time price data, market analysis, and historical trends through an easy-to-use interface. Updated to use Coin Cap API v3",
   image: "https://github.com/wazzan.png",
   actions: [],
+  githubUrl: "https://github.com/wazzan/mcp-coincap-jj",
   _varName: "mcpcoincapjjPlugin",
 };
 
@@ -1496,6 +509,7 @@ const nearbysearchmcpPlugin: Plugin = {
     "An MCP server for nearby place searches with IP-based location detection.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/nearby-search-mcp",
   _varName: "nearbysearchmcpPlugin",
 };
 
@@ -1506,6 +520,7 @@ const algorandMcpPlugin: Plugin = {
     "A comprehensive MCP server for tooling interactions(40+) and resource accessibility(60+) with Algorand blockchain, plus many useful prompts.",
   image: "https://github.com/GoPlausible.png",
   actions: [],
+  githubUrl: "https://github.com/GoPlausible/algorand-mcp",
   _varName: "algorandMcpPlugin",
 };
 
@@ -1515,6 +530,7 @@ const whoamimcpPlugin: Plugin = {
   description: "A lightweight MCP server that tells you exactly who you are.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/whoami-mcp",
   _varName: "whoamimcpPlugin",
 };
 
@@ -1525,6 +541,7 @@ const quantmcpPlugin: Plugin = {
     "A Model Context Protocol server that integrates with Amazon Braket, allowing AI assistants to access, control, and interpret results from quantum computing resources.",
   image: "https://github.com/dougdotcon.png",
   actions: [],
+  githubUrl: "https://github.com/dougdotcon/QuantMCP",
   _varName: "quantmcpPlugin",
 };
 
@@ -1535,6 +552,7 @@ const whattimeisitmcpPlugin: Plugin = {
     "A lightweight mcp server that tells you exactly what time is it based on your IP.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/whattimeisit-mcp",
   _varName: "whattimeisitmcpPlugin",
 };
 
@@ -1544,6 +562,7 @@ const mcpmusicanalysisPlugin: Plugin = {
   description: "Integrate libraries to LLM to analyze music audio.",
   image: "https://github.com/hugohow.png",
   actions: [],
+  githubUrl: "https://github.com/hugohow/mcp-music-analysis",
   _varName: "mcpmusicanalysisPlugin",
 };
 
@@ -1553,6 +572,7 @@ const whereamimcpPlugin: Plugin = {
   description: "A lightweight mcp server that tells you exactly where you are.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/whereami-mcp",
   _varName: "whereamimcpPlugin",
 };
 
@@ -1562,6 +582,7 @@ const mcpaudioanalysisPlugin: Plugin = {
   description: "MCP to analyse local audio file.",
   image: "https://github.com/hugohow.png",
   actions: [],
+  githubUrl: "https://github.com/hugohow/mcp-music-analysis",
   _varName: "mcpaudioanalysisPlugin",
 };
 
@@ -1572,6 +593,7 @@ const freecadMcp1Plugin: Plugin = {
     "A FreeCAD addon that implements the Model Context Protocol (MCP) to enable communication between FreeCAD and Claude AI through Claude Desktop.",
   image: "https://github.com/bonninr.png",
   actions: [],
+  githubUrl: "https://github.com/bonninr/freecad_mcp",
   _varName: "freecadMcp1Plugin",
 };
 
@@ -1582,6 +604,7 @@ const vueMcpServerPlugin: Plugin = {
     "Provides application insights for Vue apps by exposing component trees, state, routes, and Pinia data through a Model Context Protocol server.",
   image: "https://github.com/webfansplz.png",
   actions: [],
+  githubUrl: "https://github.com/webfansplz/vite-plugin-vue-mcp",
   _varName: "vueMcpServerPlugin",
 };
 
@@ -1592,6 +615,7 @@ const rendermcpPlugin: Plugin = {
     "Interact with Render (https://render.com) and easily deploy your services",
   image: "https://github.com/niyogi.png",
   actions: [],
+  githubUrl: "https://github.com/niyogi/render-mcp",
   _varName: "rendermcpPlugin",
 };
 
@@ -1602,6 +626,7 @@ const fantasyPremierLeagueMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides access to Fantasy Premier League data, allowing users to compare players, find team information, view gameweek data, and get FPL-related advice through Claude for Desktop and other MCP-compatible clients.",
   image: "https://github.com/rishijatia.png",
   actions: [],
+  githubUrl: "https://github.com/rishijatia/fantasy-pl-mcp",
   _varName: "fantasyPremierLeagueMcpServerPlugin",
 };
 
@@ -1612,6 +637,7 @@ const homeAssistantMcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) integration that allows AI assistants to control Home Assistant devices by searching for entities and controlling devices through natural language commands.",
   image: "https://github.com/hpohlmann.png",
   actions: [],
+  githubUrl: "https://github.com/hpohlmann/home-assistant-mcp",
   _varName: "homeAssistantMcpPlugin",
 };
 
@@ -1622,6 +648,7 @@ const bingSearchMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that integrates with Microsoft Bing Search API, allowing AI assistants to perform web, news, and image searches.",
   image: "https://github.com/leehanchung.png",
   actions: [],
+  githubUrl: "https://github.com/leehanchung/bing-search-mcp",
   _varName: "bingSearchMcpServerPlugin",
 };
 
@@ -1632,6 +659,7 @@ const mcpServerPlugin: Plugin = {
     "Implements the Model Context Protocol (MCP) to provide AI models with a standardized interface for connecting to external data sources and tools like file systems, databases, or APIs.",
   image: "https://github.com/GobinFan.png",
   actions: [],
+  githubUrl: "https://github.com/GobinFan/python-mcp-server-client",
   _varName: "mcpServerPlugin",
 };
 
@@ -1641,6 +669,7 @@ const duneanalyticsmcpPlugin: Plugin = {
   description: "A mcp server that bridges Dune Analytics data to AI agents.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/dune-analytics-mcp",
   _varName: "duneanalyticsmcpPlugin",
 };
 
@@ -1651,6 +680,7 @@ const thoughtSpaceMcpAdvancedBranchthinkingToolPlugin: Plugin = {
     "An MCP tool enabling structured thinking and analysis across multiple AI platforms through branch management, semantic analysis, and cognitive enhancement.",
   image: "https://github.com/ssdeanx.png",
   actions: [],
+  githubUrl: "https://github.com/ssdeanx/branch-thinking",
   _varName: "thoughtSpaceMcpAdvancedBranchthinkingToolPlugin",
 };
 
@@ -1661,6 +691,7 @@ const solanaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling AI agents to interact with the Solana blockchain for DeFi operations like checking balances, transferring tokens, executing swaps, and fetching price data.",
   image: "https://github.com/caiovicentino.png",
   actions: [],
+  githubUrl: "https://github.com/caiovicentino/Solana-MCP",
   _varName: "solanaMcpServerPlugin",
 };
 
@@ -1671,6 +702,7 @@ const mcpUnityPlugin: Plugin = {
     "MCP Unity Server to integrate Unity Editor game engine with different AI Model clients (e.g. Claude Desktop, Windsurf, Cursor)",
   image: "https://github.com/CoderGamester.png",
   actions: [],
+  githubUrl: "https://github.com/CoderGamester/mcp-unity",
   _varName: "mcpUnityPlugin",
 };
 
@@ -1681,6 +713,7 @@ const reactmcpWebSearchPlugin: Plugin = {
     "An MCP server that integrates real-time web search capabilities into AI assistants using the Exa API, providing both basic and advanced search functionality with formatted markdown results.",
   image: "https://github.com/mshojaei77.png",
   actions: [],
+  githubUrl: "https://github.com/mshojaei77/ReActMCP",
   _varName: "reactmcpWebSearchPlugin",
 };
 
@@ -1691,6 +724,7 @@ const playwrightmcpPlugin: Plugin = {
     "Playwright MCP server enables AI-driven Playwright test generation by allowing interaction with web pages and element inspection. Integrated with IDEs like Cursor, it provides real-time context to enhance test accuracy and efficiency.",
   image: "https://github.com/Ashish-Bansal.png",
   actions: [],
+  githubUrl: "https://github.com/Ashish-Bansal/playwright-mcp",
   _varName: "playwrightmcpPlugin",
 };
 
@@ -1701,6 +735,7 @@ const mcpbrowserusePlugin: Plugin = {
     "An MCP server that connects any MCP client (like Claude or Cursor) with the browser using browser-use, allowing clients to utilize existing LLMs without requiring additional API keys.",
   image: "https://github.com/vinayak-mehta.png",
   actions: [],
+  githubUrl: "https://github.com/vinayak-mehta/mcp-browser-use",
   _varName: "mcpbrowserusePlugin",
 };
 
@@ -1711,6 +746,7 @@ const mysqlmcpserverPlugin: Plugin = {
     "An MCP server that provides read-only access to MySQL databases.",
   image: "https://github.com/dpflucas.png",
   actions: [],
+  githubUrl: "https://github.com/dpflucas/mysql-mcp-server",
   _varName: "mysqlmcpserverPlugin",
 };
 
@@ -1721,6 +757,7 @@ const azureAiSearchMcpServerPlugin: Plugin = {
     "Integrates Claude Desktop with Azure AI Search, allowing users to query search indexes using keyword, vector, or hybrid search methods.",
   image: "https://github.com/farzad528.png",
   actions: [],
+  githubUrl: "https://github.com/farzad528/mcp-server-azure-ai-search",
   _varName: "azureAiSearchMcpServerPlugin",
 };
 
@@ -1731,6 +768,7 @@ const promptshopmcpPlugin: Plugin = {
     "PromptShopMCP is an AI-powered image editing server that generates or transforms photos using natural language commands. It allows you to modify images by simply describing what you want.",
   image: "https://github.com/Kira-Pgr.png",
   actions: [],
+  githubUrl: "https://github.com/Kira-Pgr/PromptShopMCP",
   _varName: "promptshopmcpPlugin",
 };
 
@@ -1740,6 +778,7 @@ const mcpimagegeneratorPlugin: Plugin = {
   description: "Generates and returns and image using Together.ai",
   image: "https://github.com/GMKR.png",
   actions: [],
+  githubUrl: "https://github.com/GMKR/mcp-imagegen",
   _varName: "mcpimagegeneratorPlugin",
 };
 
@@ -1750,6 +789,7 @@ const gemsuitemcpPlugin: Plugin = {
     "The ultimate Gemini API interface for MCP hosts, intelligently selecting models for the task at hand—delivering optimal performance, minimal token cost, and seamless integration.",
   image: "https://github.com/PV-Bhat.png",
   actions: [],
+  githubUrl: "https://github.com/PV-Bhat/gemsuite-mcp",
   _varName: "gemsuitemcpPlugin",
 };
 
@@ -1760,6 +800,7 @@ const mcpHttpWithSseTransportToolsPlugin: Plugin = {
     "A plugin that allows Dify to connect to multiple MCP (Model Control Protocol) servers using HTTP with Server-Sent Events transport, supporting custom configurations for URLs, headers, and timeouts.",
   image: "https://github.com/junjiem.png",
   actions: [],
+  githubUrl: "https://github.com/junjiem/dify-plugin-tools-mcp_sse",
   _varName: "mcpHttpWithSseTransportToolsPlugin",
 };
 
@@ -1770,6 +811,7 @@ const query_tablePlugin: Plugin = {
     "A web scraper for financial table data that implements the Model Context Protocol, allowing users to query stock data from multiple Chinese financial websites including THS, TDX, and EastMoney.",
   image: "https://github.com/wukan1986.png",
   actions: [],
+  githubUrl: "https://github.com/wukan1986/query_table",
   _varName: "query_tablePlugin",
 };
 
@@ -1780,6 +822,7 @@ const cryptofeargreedmcpPlugin: Plugin = {
     "A mcp server that provides real-time and historical Crypto Fear & Greed Index data.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/crypto-feargreed-mcp",
   _varName: "cryptofeargreedmcpPlugin",
 };
 
@@ -1790,6 +833,7 @@ const sketchupmcpPlugin: Plugin = {
     "Connects Sketchup to Claude AI through the Model Context Protocol, allowing Claude to directly interact with and control Sketchup for prompt-assisted 3D modeling and scene manipulation.",
   image: "https://github.com/mhyrr.png",
   actions: [],
+  githubUrl: "https://github.com/mhyrr/sketchup-mcp",
   _varName: "sketchupmcpPlugin",
 };
 
@@ -1800,6 +844,7 @@ const idamcpserverPlugin: Plugin = {
     "A Model Context Protocol server for IDA interaction and automation. This server provides tools to read IDA database via Large Language Models.",
   image: "https://github.com/MxIris-Reverse-Engineering.png",
   actions: [],
+  githubUrl: "https://github.com/MxIris-Reverse-Engineering/ida-mcp-server",
   _varName: "idamcpserverPlugin",
 };
 
@@ -1810,6 +855,7 @@ const imageToolkitMcpServerPlugin: Plugin = {
     "A server that provides AI-powered image generation, modification, and processing capabilities through the Model Context Protocol, leveraging Google Gemini models and other image services.",
   image: "https://github.com/Kira-Pgr.png",
   actions: [],
+  githubUrl: "https://github.com/Kira-Pgr/PromptShopMCP",
   _varName: "imageToolkitMcpServerPlugin",
 };
 
@@ -1820,6 +866,7 @@ const vrchatMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows AI assistants to interact with the VRChat API, enabling retrieval of user information, friends lists, and other VRChat data through a standardized interface.",
   image: "https://github.com/sawa-zen.png",
   actions: [],
+  githubUrl: "https://github.com/sawa-zen/vrchat-mcp",
   _varName: "vrchatMcpServerPlugin",
 };
 
@@ -1830,6 +877,7 @@ const claudeTypescriptMcpServersPlugin: Plugin = {
     "A collection of Model Context Protocol servers that enable Claude Desktop to provide development assistance capabilities with filesystem, Git, shell command, and web search functionality without incurring API usage costs.",
   image: "https://github.com/ukkz.png",
   actions: [],
+  githubUrl: "https://github.com/ukkz/claude-ts-mcps",
   _varName: "claudeTypescriptMcpServersPlugin",
 };
 
@@ -1840,6 +888,7 @@ const pumpfunMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling AI assistants to create, buy, and sell tokens on the Pump.fun platform on Solana.",
   image: "https://github.com/noahgsolomon.png",
   actions: [],
+  githubUrl: "https://github.com/noahgsolomon/pumpfun-mcp-server",
   _varName: "pumpfunMcpServerPlugin",
 };
 
@@ -1850,6 +899,7 @@ const erickWendelContributionsMcpPlugin: Plugin = {
     "A Model Context Protocol server that enables AI agents to query Erick Wendel's talks, blog posts, and videos across different platforms using natural language.",
   image: "https://github.com/ErickWendel.png",
   actions: [],
+  githubUrl: "https://github.com/ErickWendel/erickwendel-contributions-mcp",
   _varName: "erickWendelContributionsMcpPlugin",
 };
 
@@ -1860,6 +910,7 @@ const aiderMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that connects Claude and other MCP clients to Aider, enabling AI assistants to efficiently edit files, create new files, and interact with git repositories through natural language.",
   image: "https://github.com/sengokudaikon.png",
   actions: [],
+  githubUrl: "https://github.com/sengokudaikon/aider-mcp-server",
   _varName: "aiderMcpServerPlugin",
 };
 
@@ -1870,6 +921,7 @@ const discordmcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) server for the Discord integration with MCP-compatible applications like Claude Desktop.",
   image: "https://github.com/SaseQ.png",
   actions: [],
+  githubUrl: "https://github.com/SaseQ/discord-mcp",
   _varName: "discordmcpPlugin",
 };
 
@@ -1880,6 +932,7 @@ const cryptomcpPlugin: Plugin = {
     "Real-time access to cryptocurrency data from the CoinMarketCap API",
   image: "https://github.com/szcharlesji.png",
   actions: [],
+  githubUrl: "https://github.com/szcharlesji/crypto-mcp",
   _varName: "cryptomcpPlugin",
 };
 
@@ -1890,6 +943,7 @@ const mcpservertexteditorPlugin: Plugin = {
     "An open source implementation of the Claude built-in text editor tool versions:\n\ntext\\_editor\\_20241022 (Claude 3.5 Sonnet)\ntext\\_editor\\_20250124 (Claude 3.7 Sonnet)",
   image: "https://github.com/bhouston.png",
   actions: [],
+  githubUrl: "https://github.com/bhouston/mcp-server-text-editor",
   _varName: "mcpservertexteditorPlugin",
 };
 
@@ -1900,6 +954,7 @@ const coinmarketcapMcpServerPlugin: Plugin = {
     "Real-time access to cryptocurrency data from the CoinMarketCap API.",
   image: "https://github.com/szcharlesji.png",
   actions: [],
+  githubUrl: "https://github.com/szcharlesji/crypto-mcp",
   _varName: "coinmarketcapMcpServerPlugin",
 };
 
@@ -1910,6 +965,7 @@ const terraformcloudmcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that integrates Claude with the Terraform Cloud API, allowing Claude to manage your Terraform infrastructure through natural conversation.",
   image: "https://github.com/severity1.png",
   actions: [],
+  githubUrl: "https://github.com/severity1/terraform-cloud-mcp",
   _varName: "terraformcloudmcpPlugin",
 };
 
@@ -1920,6 +976,7 @@ const qgisMcpServerPlugin: Plugin = {
     "Connects Claude AI to QGIS through the Model Context Protocol, allowing Claude to directly interact with and control QGIS for tasks like project creation, layer manipulation, and code execution.",
   image: "https://github.com/jjsantos01.png",
   actions: [],
+  githubUrl: "https://github.com/jjsantos01/qgis_mcp",
   _varName: "qgisMcpServerPlugin",
 };
 
@@ -1930,6 +987,7 @@ const swaggerMcpServerPlugin: Plugin = {
     "A server that enables interaction with any API that has a Swagger/OpenAPI specification through Model Context Protocol (MCP), automatically generating tools from API endpoints and supporting multiple authentication methods.",
   image: "https://github.com/dcolley.png",
   actions: [],
+  githubUrl: "https://github.com/dcolley/swagger-mcp",
   _varName: "swaggerMcpServerPlugin",
 };
 
@@ -1940,6 +998,7 @@ const openaiWebsearchMcpServerPlugin: Plugin = {
     "One click installation & Configuration，access to OpenAI's websearch functionality through the Model Context Protocol。",
   image: "https://github.com/ConechoAI.png",
   actions: [],
+  githubUrl: "https://github.com/ConechoAI/openai-websearch-mcp",
   _varName: "openaiWebsearchMcpServerPlugin",
 };
 
@@ -1950,6 +1009,7 @@ const payloadCmsMcpServerPlugin: Plugin = {
     "Enables management of Payload CMS projects through natural language commands, allowing developers to create, configure, and deploy content models with conversational AI.",
   image: "https://github.com/Matmax-Worldwide.png",
   actions: [],
+  githubUrl: "https://github.com/Matmax-Worldwide/payloadcmsmcp",
   _varName: "payloadCmsMcpServerPlugin",
 };
 
@@ -1960,6 +1020,7 @@ const mcpdbutilsPlugin: Plugin = {
     "DButils is an all-in-one MCP service that enables your AI to do data analysis by accessing versatile types of database (sqlite, mysql, postgres, and more) within a unified connection configuration in a safe way.",
   image: "https://github.com/donghao1393.png",
   actions: [],
+  githubUrl: "https://github.com/donghao1393/mcp-dbutils",
   _varName: "mcpdbutilsPlugin",
 };
 
@@ -1970,6 +1031,7 @@ const hyperbrowserPlugin: Plugin = {
     "Welcome to Hyperbrowser, the Internet for AI. Hyperbrowser is the next-generation platform empowering AI agents and enabling effortless, scalable browser automation. Built specifically for AI developers, it eliminates the headaches of local infrastructure and performance bottlenecks, allowing you to",
   image: "https://github.com/hyperbrowserai.png",
   actions: [],
+  githubUrl: "https://github.com/hyperbrowserai/mcp",
   _varName: "hyperbrowserPlugin",
 };
 
@@ -1980,6 +1042,7 @@ const openaitool2mcpPlugin: Plugin = {
     "A lightweight bridge that wraps OpenAI's built-in tools (like web search and code interpreter) as Model Context Protocol servers, enabling their use with Claude and other MCP-compatible models.",
   image: "https://github.com/alohays.png",
   actions: [],
+  githubUrl: "https://github.com/alohays/openai-tool2mcp",
   _varName: "openaitool2mcpPlugin",
 };
 
@@ -1990,6 +1053,7 @@ const mem0MemorySystemPlugin: Plugin = {
     "A flexible memory system for AI applications that supports multiple LLM providers and can be used either as an MCP server or as a direct library integration, enabling autonomous memory management without explicit commands.",
   image: "https://github.com/pinkpixel-dev.png",
   actions: [],
+  githubUrl: "https://github.com/pinkpixel-dev/mem0-mcp",
   _varName: "mem0MemorySystemPlugin",
 };
 
@@ -2000,6 +1064,7 @@ const cursorSoundMcpPlugin: Plugin = {
     "Provides audio feedback by playing sound effects when Cursor AI completes code generation, creating a more interactive coding experience.",
   image: "https://github.com/ericlistin.png",
   actions: [],
+  githubUrl: "https://github.com/ericlistin/sound-mcp",
   _varName: "cursorSoundMcpPlugin",
 };
 
@@ -2010,6 +1075,7 @@ const hdwMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides comprehensive access to LinkedIn data and functionality, enabling data retrieval and user account management through the HorizonDataWave API.",
   image: "https://github.com/horizondatawave.png",
   actions: [],
+  githubUrl: "https://github.com/horizondatawave/hdw-mcp-server",
   _varName: "hdwMcpServerPlugin",
 };
 
@@ -2020,6 +1086,7 @@ const mcpBasePlugin: Plugin = {
     "A generic Model Context Protocol framework for building AI-powered applications that provides standardized ways to create MCP servers and clients for integrating LLMs with support for Ollama and Supabase.",
   image: "https://github.com/jsmiff.png",
   actions: [],
+  githubUrl: "https://github.com/jsmiff/mcp",
   _varName: "mcpBasePlugin",
 };
 
@@ -2030,6 +1097,7 @@ const codeMcpServerPlugin: Plugin = {
     "Enables AI agents and assistants like Goose or Claude to interact with VS Code through the Model Context Protocol.",
   image: "https://github.com/block.png",
   actions: [],
+  githubUrl: "https://github.com/block/vscode-mcp",
   _varName: "codeMcpServerPlugin",
 };
 
@@ -2040,6 +1108,7 @@ const unstructuredApiMcpServerPlugin: Plugin = {
     "An MCP server implementation that enables interaction with the Unstructured API, providing tools to list, create, update, and manage sources, destinations, and workflows.",
   image: "https://github.com/Unstructured-IO.png",
   actions: [],
+  githubUrl: "https://github.com/Unstructured-IO/UNS-MCP",
   _varName: "unstructuredApiMcpServerPlugin",
 };
 
@@ -2050,6 +1119,7 @@ const xiyanMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables natural language queries to MySQL databases, powered by XiYanSQL text-to-SQL technology.",
   image: "https://github.com/XGenerationLab.png",
   actions: [],
+  githubUrl: "https://github.com/XGenerationLab/xiyan_mcp_server",
   _varName: "xiyanMcpServerPlugin",
 };
 
@@ -2060,6 +1130,7 @@ const mcpServerForMlModelIntegrationPlugin: Plugin = {
     "A server that integrates trained Random Forest models with Bee Framework, enabling ReAct interactivity for AI tools and agents.",
   image: "https://github.com/nicknochnack.png",
   actions: [],
+  githubUrl: "https://github.com/nicknochnack/BuildMCPServer",
   _varName: "mcpServerForMlModelIntegrationPlugin",
 };
 
@@ -2427,6 +1498,7 @@ const replicatefluxmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/awkoy/replicate-flux-mcp",
   _varName: "replicatefluxmcpPlugin",
 };
 
@@ -2437,6 +1509,7 @@ const macmessagesmcpPlugin: Plugin = {
     "A Python bridge for interacting with the macOS Messages app using MCP (Multiple Context Protocol).\nSimple install using uvx mac-messages-mcp",
   image: "https://github.com/carterlasalle.png",
   actions: [],
+  githubUrl: "https://github.com/carterlasalle/mac_messages_mcp",
   _varName: "macmessagesmcpPlugin",
 };
 
@@ -2446,6 +1519,7 @@ const whaletrackermcpPlugin: Plugin = {
   description: "A mcp server for tracking cryptocurrency whale transactions.",
   image: "https://github.com/kukapay.png",
   actions: [],
+  githubUrl: "https://github.com/kukapay/whale-tracker-mcp",
   _varName: "whaletrackermcpPlugin",
 };
 
@@ -2456,6 +1530,7 @@ const mcphistfilePlugin: Plugin = {
     "A powerful tool for exploring, searching, and managing your shell command history through the MCP (Model Control Protocol) interface. This project allows you to easily access, search, and retrieve your previously executed shell commands.",
   image: "https://github.com/rajpdus.png",
   actions: [],
+  githubUrl: "https://github.com/rajpdus/mcp-histfile",
   _varName: "mcphistfilePlugin",
 };
 
@@ -2466,6 +1541,7 @@ const chainOfDraftThinkingPlugin: Plugin = {
     "Chain of Draft Server is a powerful AI-driven tool that helps developers make better decisions through systematic, iterative refinement of thoughts and designs. It integrates seamlessly with popular AI agents and provides a structured approach to reasoning, API design, architecture decisions, code r",
   image: "https://github.com/bsmi021.png",
   actions: [],
+  githubUrl: "https://github.com/bsmi021/mcp-chain-of-draft-server",
   _varName: "chainOfDraftThinkingPlugin",
 };
 
@@ -2476,6 +1552,7 @@ const agentqlMcpServerPlugin: Plugin = {
     "A server that provides AgentQL's data extraction capabilities enabling AI agents to get structured data from unstructured web",
   image: "https://github.com/tinyfish-io.png",
   actions: [],
+  githubUrl: "https://github.com/tinyfish-io/agentql-mcp",
   _varName: "agentqlMcpServerPlugin",
 };
 
@@ -2486,6 +1563,7 @@ const mcpopenapischemaPlugin: Plugin = {
     "A MCP server that exposes OpenAPI schema information to LLMs like Claude. This server allows an LLM to explore and understand large OpenAPI schemas through a set of specialized tools, without needing to load the whole schema into the context",
   image: "https://github.com/hannesj.png",
   actions: [],
+  githubUrl: "https://github.com/hannesj/mcp-openapi-schema",
   _varName: "mcpopenapischemaPlugin",
 };
 
@@ -2496,6 +1574,7 @@ const mcpgraphqlschemaPlugin: Plugin = {
     "A MCP server that exposes GraphQL schema information to LLMs like Claude. This server allows an LLM to explore and understand large GraphQL schemas through a set of specialized tools, without needing to load the whole schema into the context",
   image: "https://github.com/hannesj.png",
   actions: [],
+  githubUrl: "https://github.com/hannesj/mcp-graphql-schema",
   _varName: "mcpgraphqlschemaPlugin",
 };
 
@@ -2506,6 +1585,7 @@ const tiktokMcpPlugin: Plugin = {
     "A MCP Server for TikTok videos that allows you to get video subtitles and post details, such as the number of likes, hashtags, and publishing time.",
   image: "https://github.com/Seym0n.png",
   actions: [],
+  githubUrl: "https://github.com/Seym0n/tiktok-mcp",
   _varName: "tiktokMcpPlugin",
 };
 
@@ -2516,6 +1596,7 @@ const mcpServerExamplePlugin: Plugin = {
     "An educational implementation of a Model Context Protocol server that demonstrates how to build a functional MCP server for integrating with various LLM clients like Claude Desktop.",
   image: "https://github.com/alejandro-ao.png",
   actions: [],
+  githubUrl: "https://github.com/alejandro-ao/mcp-server-example",
   _varName: "mcpServerExamplePlugin",
 };
 
@@ -2526,15 +1607,17 @@ const mcplocalragPlugin: Plugin = {
     '"primitive" RAG-like web search model context protocol server that runs locally. ✨ no APIs ✨',
   image: "https://github.com/nkapila6.png",
   actions: [],
+  githubUrl: "https://github.com/nkapila6/mcp-local-rag",
   _varName: "mcplocalragPlugin",
 };
 
 const qubaominggstockmcpPlugin: Plugin = {
   id: "nyboo0dnfy",
   name: "@qubaomingg/stock-mcp",
-  description: "一个 Alpha Vantage API 查询 股票信息��� MCP server.",
+  description: "一个 Alpha Vantage API 查询 股票信息的 MCP server.",
   image: "https://github.com/qubaomingg.png",
   actions: [],
+  githubUrl: "https://github.com/qubaomingg/stock-analysis-mcp",
   _varName: "qubaominggstockmcpPlugin",
 };
 
@@ -2545,6 +1628,7 @@ const dbhubPlugin: Plugin = {
     "Universal database MCP server connecting to MySQL, PostgreSQL, SQLite, DuckDB and etc.",
   image: "https://github.com/bytebase.png",
   actions: [],
+  githubUrl: "https://github.com/bytebase/dbhub",
   _varName: "dbhubPlugin",
 };
 
@@ -2555,6 +1639,7 @@ const obsidianMcpPlugin: Plugin = {
     "This project implements a Model Context Protocol (MCP) server for connecting AI models with Obsidian knowledge bases. Through this server, AI models can directly access and manipulate Obsidian notes, including reading, creating, updating, and deleting notes, as well as managing folder structures.",
   image: "https://github.com/newtype-01.png",
   actions: [],
+  githubUrl: "https://github.com/newtype-01/obsidian-mcp",
   _varName: "obsidianMcpPlugin",
 };
 
@@ -2565,6 +1650,7 @@ const aVmwareEsxivcenterManagementServerPlugin: Plugin = {
     "A VMware ESXi/vCenter management server based on MCP (Machine Control Protocol), providing simple REST API interfaces for virtual machine management.",
   image: "https://github.com/bright8192.png",
   actions: [],
+  githubUrl: "https://github.com/bright8192/esxi-mcp-server",
   _varName: "aVmwareEsxivcenterManagementServerPlugin",
 };
 
@@ -2575,6 +1661,7 @@ const mssqlMcpServerPlugin: Plugin = {
     "Provides database interaction and business intelligence capabilities, enabling users to run SQL queries, analyze business data, and automatically generate business insight memos for Microsoft SQL Server databases.",
   image: "https://github.com/daobataotie.png",
   actions: [],
+  githubUrl: "https://github.com/daobataotie/mssql-mcp",
   _varName: "mssqlMcpServerPlugin",
 };
 
@@ -2585,6 +1672,7 @@ const cvesearch_mcpPlugin: Plugin = {
     "A Model Context Protocol (MCP) server for querying the CVE-Search API. This server provides comprehensive access to CVE-Search, browse vendor and product、get CVE per CVE-ID、get the last updated CVEs.",
   image: "https://github.com/roadwy.png",
   actions: [],
+  githubUrl: "https://github.com/roadwy/cve-search_mcp",
   _varName: "cvesearch_mcpPlugin",
 };
 
@@ -2595,6 +1683,7 @@ const mcpmistralocrPlugin: Plugin = {
     "OCR images or pdfs, locally or by URLs by using Mistral OCR API (paid)",
   image: "https://github.com/everaldo.png",
   actions: [],
+  githubUrl: "https://github.com/everaldo/mcp-mistral-ocr",
   _varName: "mcpmistralocrPlugin",
 };
 
@@ -2605,6 +1694,7 @@ const logseqMcpToolsPlugin: Plugin = {
     "A Model Context Protocol server that provides AI assistants with structured access to your Logseq knowledge graph, enabling retrieval, searching, analysis, and creation of content within your personal knowledge base.",
   image: "https://github.com/joelhooks.png",
   actions: [],
+  githubUrl: "https://github.com/joelhooks/logseq-mcp-tools",
   _varName: "logseqMcpToolsPlugin",
 };
 
@@ -2615,6 +1705,7 @@ const repomixPlugin: Plugin = {
     "Repomix MCP Server enables AI models to efficiently analyze codebases by packaging local or remote repositories into optimized single files, with intelligent compression via Tree-sitter to significantly reduce token usage while preserving code structure and essential signatures.",
   image: "https://github.com/yamadashy.png",
   actions: [],
+  githubUrl: "https://github.com/yamadashy/repomix",
   _varName: "repomixPlugin",
 };
 
@@ -2625,6 +1716,7 @@ const mcpetPlugin: Plugin = {
     "A nostalgic virtual pet experience for the AI age that lets you adopt, nurture, and play with your own digital companion that evolves based on your care.",
   image: "https://github.com/shreyaskarnik.png",
   actions: [],
+  githubUrl: "https://github.com/shreyaskarnik/mcpet",
   _varName: "mcpetPlugin",
 };
 
@@ -2635,6 +1727,7 @@ const bitrefillSearchAndShopPlugin: Plugin = {
     "This MCP wraps Bitrefill public API to allow agents to search for products and shop using cryptocurrencies like Bitcoin, Ethereum, Solana, and many more.",
   image: "https://github.com/bitrefill.png",
   actions: [],
+  githubUrl: "https://github.com/bitrefill/bitrefill-mcp-server",
   _varName: "bitrefillSearchAndShopPlugin",
 };
 
@@ -2645,6 +1738,7 @@ const unstructuredDocumentProcessorMcpPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to extract and use content from unstructured documents across a wide variety of file formats.",
   image: "https://github.com/MKhalusova.png",
   actions: [],
+  githubUrl: "https://github.com/MKhalusova/unstructured-mcp",
   _varName: "unstructuredDocumentProcessorMcpPlugin",
 };
 
@@ -2655,6 +1749,7 @@ const sqlMcpServerForClaudeDesktopPlugin: Plugin = {
     "A natural language interface that allows Claude to execute SQL queries on your local MySQL databases, enabling database interaction using natural language.",
   image: "https://github.com/meanands.png",
   actions: [],
+  githubUrl: "https://github.com/meanands/mysql-mcp",
   _varName: "sqlMcpServerForClaudeDesktopPlugin",
 };
 
@@ -2665,6 +1760,7 @@ const xanoMcpServerPlugin: Plugin = {
     "Enables AI assistants to manage Xano databases through the Model Context Protocol, allowing users to create, modify, and delete tables, edit schemas, and extract API documentation.",
   image: "https://github.com/lowcodelocky2.png",
   actions: [],
+  githubUrl: "https://github.com/lowcodelocky2/xano-mcp",
   _varName: "xanoMcpServerPlugin",
 };
 
@@ -2675,6 +1771,7 @@ const greptimedbMcpServerPlugin: Plugin = {
     "A Model Context Protocol server implementation that enables AI assistants to securely interact with GreptimeDB, allowing them to explore database schema, read data, and execute SQL queries through a controlled interface.",
   image: "https://github.com/GreptimeTeam.png",
   actions: [],
+  githubUrl: "https://github.com/GreptimeTeam/greptimedb-mcp-server",
   _varName: "greptimedbMcpServerPlugin",
 };
 
@@ -2685,6 +1782,7 @@ const genericmcpserverPlugin: Plugin = {
     "A framework to use with AI to easily create a server for any service. Just drop the API Documentation in it and ask to create the MCP.",
   image: "https://github.com/v4lheru.png",
   actions: [],
+  githubUrl: "https://github.com/v4lheru/generic-mcp-template",
   _varName: "genericmcpserverPlugin",
 };
 
@@ -2695,6 +1793,7 @@ const trellomcpserverPlugin: Plugin = {
     "Connects to Trello with all the tools available that I was able to find in API reference",
   image: "https://github.com/v4lheru.png",
   actions: [],
+  githubUrl: "https://github.com/v4lheru/trello-mcp-server",
   _varName: "trellomcpserverPlugin",
 };
 
@@ -2705,6 +1804,7 @@ const apifoxMcpServerPlugin: Plugin = {
     "A server that connects AI coding assistants like Cursor and Cline to Apifox API definitions, allowing developers to implement API interfaces through natural language commands.",
   image: "https://github.com/apifox.png",
   actions: [],
+  githubUrl: "https://github.com/apifox/apifox-mcp-server",
   _varName: "apifoxMcpServerPlugin",
 };
 
@@ -2715,6 +1815,7 @@ const thingspanelMcpPlugin: Plugin = {
     "An integration server that connects AI models with ThingsPanel IoT platform, allowing AI assistants to interact with IoT devices through natural language for device control, data retrieval, and management operations.",
   image: "https://github.com/ThingsPanel.png",
   actions: [],
+  githubUrl: "https://github.com/ThingsPanel/thingspanel-mcp",
   _varName: "thingspanelMcpPlugin",
 };
 
@@ -2725,6 +1826,7 @@ const blahmcpPlugin: Plugin = {
     "BLAH - Barely Local Agent Host\n\nA new public registry that assists in ochestration of MCP servers and their tools",
   image: "https://github.com/thomasdavis.png",
   actions: [],
+  githubUrl: "https://github.com/thomasdavis/blah",
   _varName: "blahmcpPlugin",
 };
 
@@ -2735,6 +1837,7 @@ const metasearchmcpPlugin: Plugin = {
     "MCP server for using various search tools like Tavily API.\nPlanning to support various search tools (i.e. wiki search, searxng, etc)",
   image: "https://github.com/YeonwooSung.png",
   actions: [],
+  githubUrl: "https://github.com/YeonwooSung/metasearch-mcp",
   _varName: "metasearchmcpPlugin",
 };
 
@@ -2745,6 +1848,7 @@ const ensMcpServerPlugin: Plugin = {
     "Enables Claude to interact with the Ethereum Name Service (ENS) system to resolve names, check availability, retrieve records, and perform other ENS-related operations through natural language.",
   image: "https://github.com/JustaName-id.png",
   actions: [],
+  githubUrl: "https://github.com/JustaName-id/ens-mcp-server",
   _varName: "ensMcpServerPlugin",
 };
 
@@ -2755,6 +1859,7 @@ const rizamcpPlugin: Plugin = {
     "An MCP server that wraps the Riza Code Interpreter API and presents endpoints as individual tools.",
   image: "https://github.com/riza-io.png",
   actions: [],
+  githubUrl: "https://github.com/riza-io/riza-mcp",
   _varName: "rizamcpPlugin",
 };
 
@@ -2765,6 +1870,7 @@ const olostepmcpPlugin: Plugin = {
     "Searching google, individual websites and scraping their content. Fast and cost-effective. ⚡️",
   image: "https://github.com/olostep.png",
   actions: [],
+  githubUrl: "https://github.com/olostep/olostep-mcp-server",
   _varName: "olostepmcpPlugin",
 };
 
@@ -2775,6 +1881,7 @@ const jvmMcpServerPlugin: Plugin = {
     "A JVM monitoring and control platform server based on Arthas that provides a Python interface for monitoring and analyzing Java processes with capabilities for thread analysis, memory monitoring, and performance diagnostics.",
   image: "https://github.com/xzq-xu.png",
   actions: [],
+  githubUrl: "https://github.com/xzq-xu/jvm-mcp-server",
   _varName: "jvmMcpServerPlugin",
 };
 
@@ -2785,6 +1892,7 @@ const mcphelpertoolsPlugin: Plugin = {
     "Fork of @cyanheads toolkit MCP server. Added encoding functions, removed system network functions.",
   image: "https://github.com/MissionSquad.png",
   actions: [],
+  githubUrl: "https://github.com/MissionSquad/mcp-helper-tools",
   _varName: "mcphelpertoolsPlugin",
 };
 
@@ -2795,6 +1903,7 @@ const mcpgithubPlugin: Plugin = {
     "Anthropic's github MCP server, but better. Support for more endpoints. Including releases and tags, pull request reviews, statuses, rate limit, gists, projects, packages, and even pull request diffs. Indented to be used with MissionSquad's MCP API for secret management (aka your access token).",
   image: "https://github.com/MissionSquad.png",
   actions: [],
+  githubUrl: "https://github.com/MissionSquad/mcp-github",
   _varName: "mcpgithubPlugin",
 };
 
@@ -2805,6 +1914,7 @@ const mcptursoPlugin: Plugin = {
     "A Model Context Protocol server that provides Claude access to Turso-hosted LibSQL databases, enabling database table listing, schema retrieval, and SELECT query execution.",
   image: "https://github.com/nbbaier.png",
   actions: [],
+  githubUrl: "https://github.com/nbbaier/mcp-turso",
   _varName: "mcptursoPlugin",
 };
 
@@ -2815,6 +1925,7 @@ const opikMcpServerPlugin: Plugin = {
     "An implementation of the Model Context Protocol for the Opik platform that provides a unified interface for accessing Opik's capabilities, supporting multiple transport mechanisms for flexible integration with IDEs and other environments.",
   image: "https://github.com/comet-ml.png",
   actions: [],
+  githubUrl: "https://github.com/comet-ml/opik-mcp",
   _varName: "opikMcpServerPlugin",
 };
 
@@ -2824,6 +1935,7 @@ const mcpbravesearchPlugin: Plugin = {
   description: "brave search",
   image: "https://github.com/w-jeon.png",
   actions: [],
+  githubUrl: "https://github.com/w-jeon/mcp-brave-search",
   _varName: "mcpbravesearchPlugin",
 };
 
@@ -2834,6 +1946,7 @@ const autumnMcpServerPlugin: Plugin = {
     "An unofficial MCP server that provides an interface to access the Autumn pricing API for managing customers, entitlements, invoices, and generating billing portal links.",
   image: "https://github.com/SirTenzin.png",
   actions: [],
+  githubUrl: "https://github.com/SirTenzin/autumn-mcp-server",
   _varName: "autumnMcpServerPlugin",
 };
 
@@ -2951,6 +2064,7 @@ const cloudflarebrowserrenderingmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/amotivv/cloudflare-browser-rendering-mcp",
   _varName: "cloudflarebrowserrenderingmcpPlugin",
 };
 
@@ -3489,6 +2603,7 @@ const educhainAgentKitPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SailFish-Finance/educhain-ai-agent-kit",
   _varName: "educhainAgentKitPlugin",
 };
 
@@ -3595,6 +2710,7 @@ const transcriptiontoolsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MushroomFleet/TranscriptionTools-MCP",
   _varName: "transcriptiontoolsMcpServerPlugin",
 };
 
@@ -3833,6 +2949,7 @@ const basicmemoryPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/basicmachines-co/basic-memory",
   _varName: "basicmemoryPlugin",
 };
 
@@ -3843,6 +2960,7 @@ const awsCostExplorerMcpServerPlugin: Plugin = {
     "A command-line interface and API that allows users to analyze and visualize AWS cloud spending data by enabling Claude to query AWS Cost Explorer through natural language conversations.",
   image: "https://github.com/aarora79.png",
   actions: [],
+  githubUrl: "https://github.com/aarora79/aws-cost-explorer-mcp-server",
   _varName: "awsCostExplorerMcpServerPlugin",
 };
 
@@ -3853,6 +2971,7 @@ const makeMcpServerPlugin: Plugin = {
     "Transform your Make scenarios into callable tools for AI assistants. Leverage your existing automation workflows while enabling AI systems to trigger and interact with them seamlessly.",
   image: "https://github.com/integromat.png",
   actions: [],
+  githubUrl: "https://github.com/integromat/make-mcp-server",
   _varName: "makeMcpServerPlugin",
 };
 
@@ -4760,6 +3879,7 @@ const githubProjectManagerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Monsoft-Solutions/model-context-protocols",
   _varName: "githubProjectManagerPlugin",
 };
 
@@ -4770,6 +3890,7 @@ const solanaModelContextProtocolMcpDemoPlugin: Plugin = {
     "A simple MCP server implementation that provides AI models with basic Solana RPC methods and helpful development prompts.",
   image: "https://github.com/solana-foundation.png",
   actions: [],
+  githubUrl: "https://github.com/solana-foundation/solana-dev-mcp",
   _varName: "solanaModelContextProtocolMcpDemoPlugin",
 };
 
@@ -4780,6 +3901,7 @@ const claudecodemcpPlugin: Plugin = {
     "This project aims to build a Claude Code MCP server and implement its associated tools (explain\\_code, review\\_code, fix\\_code, edit\\_code, test\\_code, simulate\\_command, your\\_own\\_query). The server is implemented using Node.js and the MCP SDK. It receives tool requests from clients via Stdio, dynamically",
   image: "https://github.com/KunihiroS.png",
   actions: [],
+  githubUrl: "https://github.com/KunihiroS/claude-code-mcp",
   _varName: "claudecodemcpPlugin",
 };
 
@@ -4790,6 +3912,7 @@ const protonmailmcpPlugin: Plugin = {
     "This MCP server provides email sending functionality using Protonmail's SMTP service. It allows both Claude Desktop and Cline VSCode extension to send emails on your behalf using your Protonmail credentials.",
   image: "https://github.com/amotivv.png",
   actions: [],
+  githubUrl: "https://github.com/amotivv/protonmail-mcp",
   _varName: "protonmailmcpPlugin",
 };
 
@@ -4800,6 +3923,7 @@ const trinoMcpServerPlugin: Plugin = {
     "An MCP server that enables listing and querying Trino tables using Python, providing access to data resources through the Model-Control-Protocol.",
   image: "https://github.com/Dataring-engineering.png",
   actions: [],
+  githubUrl: "https://github.com/Dataring-engineering/mcp-server-trino",
   _varName: "trinoMcpServerPlugin",
 };
 
@@ -4858,6 +3982,7 @@ const glifPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/glifxyz/glif-mcp-server",
   _varName: "glifPlugin",
 };
 
@@ -4868,6 +3993,7 @@ const settlemintPlugin: Plugin = {
     "Leverage SettleMint's Model Context Protocol server to seamlessly interact with enterprise blockchain infrastructure. Build, deploy, and manage smart contracts through AI-powered assistants, streamlining your blockchain development workflow for maximum efficiency.",
   image: "https://github.com/settlemint.png",
   actions: [],
+  githubUrl: "https://github.com/settlemint/sdk",
   _varName: "settlemintPlugin",
 };
 
@@ -4878,6 +4004,7 @@ const splunkmcpPlugin: Plugin = {
     "A FastMCP-based tool for interacting with Splunk Enterprise/Cloud through natural language. This tool provides a set of capabilities for searching Splunk data, managing KV stores, and accessing Splunk resources",
   image: "https://github.com/livehybrid.png",
   actions: [],
+  githubUrl: "https://github.com/livehybrid/splunk-mcp",
   _varName: "splunkmcpPlugin",
 };
 
@@ -5087,6 +4214,7 @@ const xtquantaiPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dfkai/xtquantai",
   _varName: "xtquantaiPlugin",
 };
 
@@ -5164,6 +4292,7 @@ const vectorizePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/vectorize-io/vectorize-mcp-server",
   _varName: "vectorizePlugin",
 };
 
@@ -5173,6 +4302,7 @@ const mcpdingdingbotserverPlugin: Plugin = {
   description: "dingding webhook mcp server",
   image: "https://github.com/HundunOnline.png",
   actions: [],
+  githubUrl: "https://github.com/HundunOnline/mcp-dingdingbot-server",
   _varName: "mcpdingdingbotserverPlugin",
 };
 
@@ -5183,6 +4313,7 @@ const mcpServer1Plugin: Plugin = {
     "A server that helps AI models better understand Vite/Nuxt applications, providing enhanced context awareness for development support.",
   image: "https://github.com/antfu.png",
   actions: [],
+  githubUrl: "https://github.com/antfu/nuxt-mcp",
   _varName: "mcpServer1Plugin",
 };
 
@@ -5193,6 +4324,7 @@ const kbmcpserverPlugin: Plugin = {
     'An MCP server aimed to be portable, local, easy and convenient to support semantic/graph based retrieval of txtai "all in one" embeddings database. Any txtai embeddings db in tar.gz form can be loaded',
   image: "https://github.com/Geeksfino.png",
   actions: [],
+  githubUrl: "https://github.com/Geeksfino/kb-mcp-server",
   _varName: "kbmcpserverPlugin",
 };
 
@@ -5203,6 +4335,7 @@ const nebulagraphMcpServerPlugin: Plugin = {
     "A Model Context Protocol server implementation that enables LLMs to interact with NebulaGraph database for graph exploration, supporting schema understanding, queries, and graph algorithms.",
   image: "https://github.com/PsiACE.png",
   actions: [],
+  githubUrl: "https://github.com/PsiACE/nebulagraph-mcp-server",
   _varName: "nebulagraphMcpServerPlugin",
 };
 
@@ -5264,6 +4397,7 @@ const imagetoolsmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kshern/image-tools-mcp",
   _varName: "imagetoolsmcpPlugin",
 };
 
@@ -5274,6 +4408,7 @@ const stormMcpServerPlugin: Plugin = {
     "An open protocol server that implements Anthropic's Model Context Protocol to enable seamless integration between LLM applications and RAG data sources using Sionic AI's Storm Platform.",
   image: "https://github.com/sionic-ai.png",
   actions: [],
+  githubUrl: "https://github.com/sionic-ai/serverless-rag-mcp-server",
   _varName: "stormMcpServerPlugin",
 };
 
@@ -5284,6 +4419,7 @@ const neo4jMcpServerPlugin: Plugin = {
     "An MCP server that enables graph database interactions with Neo4j, allowing users to access and manipulate graph data through natural language commands.",
   image: "https://github.com/ujjalcal.png",
   actions: [],
+  githubUrl: "https://github.com/ujjalcal/mcp",
   _varName: "neo4jMcpServerPlugin",
 };
 
@@ -5397,6 +4533,7 @@ const beyondMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Beyond-Network-AI/beyond-mcp-server",
   _varName: "beyondMcpServerPlugin",
 };
 
@@ -5407,6 +4544,7 @@ const mcpDevelopmentFrameworkPlugin: Plugin = {
     "A powerful Model Context Protocol framework that extends Cursor IDE with tools for web content retrieval, PDF processing, and Word document parsing.",
   image: "https://github.com/aigo666.png",
   actions: [],
+  githubUrl: "https://github.com/aigo666/mcp-framework",
   _varName: "mcpDevelopmentFrameworkPlugin",
 };
 
@@ -5435,6 +4573,7 @@ const cryptopanicmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kukapay/cryptopanic-mcp-server",
   _varName: "cryptopanicmcpserverPlugin",
 };
 
@@ -5445,6 +4584,7 @@ const mcpslopAdapterPlugin: Plugin = {
     "A proxy server that converts Model Context Protocol (MCP) messages to Simple Language Open Protocol (SLOP) messages, allowing MCP clients like Claude Desktop to interact with SLOP-compatible servers.",
   image: "https://github.com/kortexa-ai.png",
   actions: [],
+  githubUrl: "https://github.com/kortexa-ai/mcp-slop-adapter",
   _varName: "mcpslopAdapterPlugin",
 };
 
@@ -5455,6 +4595,7 @@ const adxmcpserverPlugin: Plugin = {
     "AI assistants to query and analyze Azure Data Explorer databases through standardized interfaces.",
   image: "https://github.com/pab1it0.png",
   actions: [],
+  githubUrl: "https://github.com/pab1it0/adx-mcp-server",
   _varName: "adxmcpserverPlugin",
 };
 
@@ -5465,6 +4606,7 @@ const solanaAgentKitMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude AI to interact with the Solana blockchain through a standardized interface, providing tools for transactions, account queries, and wallet management.",
   image: "https://github.com/sendaifun.png",
   actions: [],
+  githubUrl: "https://github.com/sendaifun/solana-mcp",
   _varName: "solanaAgentKitMcpServerPlugin",
 };
 
@@ -5475,6 +4617,7 @@ const nilemcpPlugin: Plugin = {
     "MCP server for Nile Database - Manage and query databases, tenants, users, auth using LLMs",
   image: "https://github.com/niledatabase.png",
   actions: [],
+  githubUrl: "https://github.com/niledatabase/nile-mcp-server",
   _varName: "nilemcpPlugin",
 };
 
@@ -5485,6 +4628,7 @@ const mcpCommandProxyPlugin: Plugin = {
     "A proxy server that enables AI assistants to run and interact with command-line applications like Expo through the Model Context Protocol (MCP), capturing logs and allowing keypress forwarding.",
   image: "https://github.com/Hormold.png",
   actions: [],
+  githubUrl: "https://github.com/Hormold/mcp-command-proxy",
   _varName: "mcpCommandProxyPlugin",
 };
 
@@ -5720,6 +4864,7 @@ const memoryBankMcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/movibe/memory-bank-mcp",
   _varName: "memoryBankMcpPlugin",
 };
 
@@ -5730,6 +4875,7 @@ const fastapimcpPlugin: Plugin = {
     "A zero-configuration tool that automatically exposes FastAPI endpoints as Model Context Protocol (MCP) tools, allowing LLM systems like Claude to interact with your API without additional coding.",
   image: "https://github.com/tadata-org.png",
   actions: [],
+  githubUrl: "https://github.com/tadata-org/fastapi_mcp",
   _varName: "fastapimcpPlugin",
 };
 
@@ -5740,6 +4886,7 @@ const fastapiMcpSsePlugin: Plugin = {
     "A Server-Sent Events implementation using FastAPI framework that integrates Model Context Protocol (MCP), allowing AI models to access external tools and data sources like weather information.",
   image: "https://github.com/panz2018.png",
   actions: [],
+  githubUrl: "https://github.com/panz2018/fastapi_mcp_sse",
   _varName: "fastapiMcpSsePlugin",
 };
 
@@ -5832,6 +4979,7 @@ const gitingestmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/puravparab/Gitingest-MCP",
   _varName: "gitingestmcpPlugin",
 };
 
@@ -5842,6 +4990,7 @@ const tfmcpPlugin: Plugin = {
     "🌍 Terraform Model Context Protocol (MCP) Tool - An experimental CLI tool that enables AI assistants to manage and operate Terraform environments. Supports reading Terraform configurations, analyzing plans, applying configurations, and managing state with Claude Desktop integration. ⚡️",
   image: "https://github.com/nwiizo.png",
   actions: [],
+  githubUrl: "https://github.com/nwiizo/tfmcp",
   _varName: "tfmcpPlugin",
 };
 
@@ -5878,6 +5027,7 @@ const duckduckgoMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zhsama/duckduckgo-mcp-server",
   _varName: "duckduckgoMcpServerPlugin",
 };
 
@@ -5901,6 +5051,7 @@ const gitAutoCommitMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jatinsandilya/mcp-server-auto-commit",
   _varName: "gitAutoCommitMcpServerPlugin",
 };
 
@@ -5911,6 +5062,7 @@ const mcpserverairbnbPlugin: Plugin = {
     "Search for Airbnb listings and get detailed information about specific properties. Effortlessly plan your next trip with structured data and no API key required, while respecting Airbnb's guidelines.",
   image: "https://github.com/openbnb-org.png",
   actions: [],
+  githubUrl: "https://github.com/openbnb-org/mcp-server-airbnb",
   _varName: "mcpserverairbnbPlugin",
 };
 
@@ -5921,6 +5073,7 @@ const mcpDatabricksServerPlugin: Plugin = {
     "This is a Model Context Protocol (MCP) server for executing SQL queries against Databricks using the Statement Execution API.\nIt enables AI assistants to directly query Databricks data warehouses, analyze database schemas, and retrieve query results in a structured format",
   image: "https://github.com/RafaelCartenet.png",
   actions: [],
+  githubUrl: "https://github.com/RafaelCartenet/mcp-databricks-server",
   _varName: "mcpDatabricksServerPlugin",
 };
 
@@ -5931,6 +5084,7 @@ const codeMcpPlugin: Plugin = {
     "A multi-purpose MCP for coding with Claude Sonnet that enables reading/writing files with git integration, requiring explicit repository opt-in for safety.",
   image: "https://github.com/ezyang.png",
   actions: [],
+  githubUrl: "https://github.com/ezyang/codemcp",
   _varName: "codeMcpPlugin",
 };
 
@@ -5941,6 +5095,7 @@ const modelControlPlaneMcpServerPlugin: Plugin = {
     "A server implementation that provides a unified interface for OpenAI services, Git repository analysis, and local filesystem operations through REST API endpoints.",
   image: "https://github.com/dvladimirov.png",
   actions: [],
+  githubUrl: "https://github.com/dvladimirov/MCP",
   _varName: "modelControlPlaneMcpServerPlugin",
 };
 
@@ -6032,6 +5187,7 @@ const mcpCreateServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/tesla0225/mcp-create",
   _varName: "mcpCreateServerPlugin",
 };
 
@@ -6042,6 +5198,7 @@ const microsoftSqlServerMcpServerMssqlPlugin: Plugin = {
     "An easy-to-use bridge that lets AI assistants like Claude and Cursor IDE directly query and explore Microsoft SQL Server databases. No coding experience required!",
   image: "https://github.com/dperussina.png",
   actions: [],
+  githubUrl: "https://github.com/dperussina/mssql-mcp-server",
   _varName: "microsoftSqlServerMcpServerMssqlPlugin",
 };
 
@@ -6052,6 +5209,7 @@ const mcpNodeFetchPlugin: Plugin = {
     "An MCP server that enables fetching web content using the Node.js undici library, supporting various HTTP methods, content formats, and request configurations.",
   image: "https://github.com/mcollina.png",
   actions: [],
+  githubUrl: "https://github.com/mcollina/mcp-node-fetch",
   _varName: "mcpNodeFetchPlugin",
 };
 
@@ -6061,6 +5219,7 @@ const mongodbLensPlugin: Plugin = {
   description: "Full featured MCP Server for MongoDB database analysis.",
   image: "https://github.com/furey.png",
   actions: [],
+  githubUrl: "https://github.com/furey/mongodb-lens",
   _varName: "mongodbLensPlugin",
 };
 
@@ -6293,6 +5452,7 @@ const redashMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/suthio/redash-mcp",
   _varName: "redashMcpServerPlugin",
 };
 
@@ -6329,6 +5489,7 @@ const memeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/haltakov/meme-mcp",
   _varName: "memeMcpServerPlugin",
 };
 
@@ -6339,6 +5500,7 @@ const mcpomnisearchPlugin: Plugin = {
     "🔍 A Model Context Protocol (MCP) server providing unified access to multiple search engines (Tavily, Brave, Kagi), AI tools (Perplexity, FastGPT), and content processing services (Jina AI, Kagi). Combines search, AI responses, content processing, and enhancement features through a single interface.",
   image: "https://github.com/spences10.png",
   actions: [],
+  githubUrl: "https://github.com/spences10/mcp-omnisearch",
   _varName: "mcpomnisearchPlugin",
 };
 
@@ -6349,6 +5511,7 @@ const exploriumAgentsourceMcpServerPlugin: Plugin = {
     "Explorium AgentSource MCP Server empowers every agent to become an AI-driven, Go-To-Market specialized agent! With over 20 specialized endpoints designed for prospecting, sales, and lead generation, agents can effortlessly generate and enrich accounts and prospects, access deep business insights, an",
   image: "https://github.com/explorium-ai.png",
   actions: [],
+  githubUrl: "https://github.com/explorium-ai/mcp-explorium",
   _varName: "exploriumAgentsourceMcpServerPlugin",
 };
 
@@ -6372,6 +5535,7 @@ const mcpServerTemplatePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jatinsandilya/mcp-server-template",
   _varName: "mcpServerTemplatePlugin",
 };
 
@@ -6407,6 +5571,7 @@ const databuttonMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/databutton/databutton-mcp",
   _varName: "databuttonMcpServerPlugin",
 };
 
@@ -6493,6 +5658,7 @@ const unofficialDubcomcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Gitmaxd/dubco-mcp-server-npm",
   _varName: "unofficialDubcomcpserverPlugin",
 };
 
@@ -6553,6 +5719,7 @@ const deskaidPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ezyang/codemcp",
   _varName: "deskaidPlugin",
 };
 
@@ -6706,6 +5873,7 @@ const claudeCodeMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/auchenberg/claude-code-mcp",
   _varName: "claudeCodeMcpPlugin",
 };
 
@@ -6845,6 +6013,7 @@ const cryoMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/z80dev/cryo-mcp",
   _varName: "cryoMcpServerPlugin",
 };
 
@@ -6855,6 +6024,7 @@ const androidMcpServerPlugin: Plugin = {
     "A server enabling programmatic control over Android devices through ADB, providing capabilities like screenshot capture, UI layout analysis, and package management that can be accessed by MCP clients like Claude Desktop.",
   image: "https://github.com/minhalvp.png",
   actions: [],
+  githubUrl: "https://github.com/minhalvp/android-mcp-server",
   _varName: "androidMcpServerPlugin",
 };
 
@@ -6865,6 +6035,7 @@ const xtbapiserverPlugin: Plugin = {
     "An MCP server that exposes the XTB trading API, allowing users to interact with their XTB trading accounts through the Model Context Protocol to perform operations like account management, market data retrieval, and trade execution.",
   image: "https://github.com/sharplygroup.png",
   actions: [],
+  githubUrl: "https://github.com/sharplygroup/xtb-mcp-server",
   _varName: "xtbapiserverPlugin",
 };
 
@@ -6918,6 +6089,7 @@ const webglmcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/grokadegames/webgl-mcp",
   _varName: "webglmcpServerPlugin",
 };
 
@@ -7093,6 +6265,7 @@ const targetprocessMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aaronsb/apptio-target-process-mcp",
   _varName: "targetprocessMcpServerPlugin",
 };
 
@@ -7140,6 +6313,7 @@ const okxMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/esshka/okx-mcp",
   _varName: "okxMcpServerPlugin",
 };
 
@@ -7150,6 +6324,7 @@ const mcpPythonToolboxPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants like Claude to perform Python development tasks through file operations, code analysis, project management, and safe code execution.",
   image: "https://github.com/gianlucamazza.png",
   actions: [],
+  githubUrl: "https://github.com/gianlucamazza/mcp_python_toolbox",
   _varName: "mcpPythonToolboxPlugin",
 };
 
@@ -7256,6 +6431,7 @@ const mcpMemoryLibsqlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/joleyline/mcp-memory-libsql",
   _varName: "mcpMemoryLibsqlPlugin",
 };
 
@@ -7266,6 +6442,7 @@ const shortcutMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables interaction with Shortcut (formerly Clubhouse) project management tool, allowing users to view and search projects, stories, epics, and objectives, as well as create new items through natural language.",
   image: "https://github.com/zekus.png",
   actions: [],
+  githubUrl: "https://github.com/zekus/shortcut-mcp",
   _varName: "shortcutMcpServerPlugin",
 };
 
@@ -7276,6 +6453,7 @@ const mcpXmindServerPlugin: Plugin = {
     "A Model Context Protocol server that allows intelligent analysis and querying of XMind mind maps, providing capabilities for searching, extracting, and analyzing content across XMind files.",
   image: "https://github.com/apeyroux.png",
   actions: [],
+  githubUrl: "https://github.com/apeyroux/mcp-xmind",
   _varName: "mcpXmindServerPlugin",
 };
 
@@ -7300,6 +6478,7 @@ const higressAisearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cr7258/higress-ai-search-mcp-server",
   _varName: "higressAisearchMcpServerPlugin",
 };
 
@@ -7310,6 +6489,7 @@ const obsidianMcpRestServerPlugin: Plugin = {
     "Provides a standardized interface for AI assistants to interact with Obsidian vaults through a local REST API, enabling reading, writing, searching, and managing notes.",
   image: "https://github.com/PublikPrinciple.png",
   actions: [],
+  githubUrl: "https://github.com/PublikPrinciple/obsidian-mcp-rest",
   _varName: "obsidianMcpRestServerPlugin",
 };
 
@@ -7320,6 +6500,7 @@ const wordwareMcpServerPlugin: Plugin = {
     "A Model Context Protocol server implementation that integrates Wordware flows as tools directly within Claude conversations, supporting features like founder research, lead enrichment, Notion integration, and task solving with Google search.",
   image: "https://github.com/hugobiais.png",
   actions: [],
+  githubUrl: "https://github.com/hugobiais/wordware-mcp",
   _varName: "wordwareMcpServerPlugin",
 };
 
@@ -7330,6 +6511,7 @@ const googleCalendarMcpServerPlugin: Plugin = {
     "Allows interaction with Google Calendar through Claude Desktop using the Model Context Protocol, enabling calendar event management and schedule analysis.",
   image: "https://github.com/thisnick.png",
   actions: [],
+  githubUrl: "https://github.com/thisnick/google-calendar-mcp",
   _varName: "googleCalendarMcpServerPlugin",
 };
 
@@ -7412,6 +6594,8 @@ const keycloakMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/ChristophEnglisch/keycloak-model-context-protocol",
   _varName: "keycloakMcpServerPlugin",
 };
 
@@ -7422,6 +6606,7 @@ const geoapifyMcpServerPlugin: Plugin = {
     "Converts addresses to GPS coordinates and creates map visualizations using the Geoapify API, allowing Claude users to generate GeoJSON data and map images from location lists.",
   image: "https://github.com/burningion.png",
   actions: [],
+  githubUrl: "https://github.com/burningion/geoapify-mcp",
   _varName: "geoapifyMcpServerPlugin",
 };
 
@@ -7432,6 +6617,7 @@ const privategptMcpServerPlugin: Plugin = {
     "A server implementation that allows secure communication between MCP clients and privateGPT, enabling users to chat with privateGPT using knowledge bases and manage sources, groups, and users through a standardized Model Context Protocol.",
   image: "https://github.com/Fujitsu-AI.png",
   actions: [],
+  githubUrl: "https://github.com/Fujitsu-AI/MCP-Server-for-MAS-Developments",
   _varName: "privategptMcpServerPlugin",
 };
 
@@ -7554,6 +6740,7 @@ const gitFileForensicsMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/davidorex/git-file-forensics",
   _varName: "gitFileForensicsMcpPlugin",
 };
 
@@ -7564,6 +6751,7 @@ const twitterMcpServerPlugin: Plugin = {
     "Provides tools for interacting with Twitter to retrieve tweets by ID and post new tweets using the agent-twitter-client library.",
   image: "https://github.com/takiAA.png",
   actions: [],
+  githubUrl: "https://github.com/takiAA/twitter-scraper-mcp",
   _varName: "twitterMcpServerPlugin",
 };
 
@@ -7784,6 +6972,7 @@ const fileOperationsMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/bsmi021/mcp-file-operations-server",
   _varName: "fileOperationsMcpServerPlugin",
 };
 
@@ -7808,6 +6997,7 @@ const documindMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/documind-mcp-server",
   _varName: "documindMcpServerPlugin",
 };
 
@@ -7831,6 +7021,7 @@ const mcpSubstackServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/michalnaka/mcp-substack",
   _varName: "mcpSubstackServerPlugin",
 };
 
@@ -7978,6 +7169,7 @@ const gcpMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/eniayomi/gcp-mcp",
   _varName: "gcpMcpPlugin",
 };
 
@@ -8283,6 +7475,7 @@ const vercelMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zueai/vercel-api-mcp",
   _varName: "vercelMcpPlugin",
 };
 
@@ -8293,6 +7486,7 @@ const mcpEmbeddingSearchPlugin: Plugin = {
     "A Model Context Protocol server that searches transcript segments in a Turso database using vector similarity, allowing users to find relevant content by asking questions without generating new embeddings.",
   image: "https://github.com/spences10.png",
   actions: [],
+  githubUrl: "https://github.com/spences10/mcp-embedding-search",
   _varName: "mcpEmbeddingSearchPlugin",
 };
 
@@ -8543,6 +7737,7 @@ const claudeDesktopCommanderMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wonderwhy-er/ClaudeComputerCommander",
   _varName: "claudeDesktopCommanderMcpPlugin",
 };
 
@@ -8585,6 +7780,7 @@ const stealthBrowserMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/newbeb/stealth-browser-mcp",
   _varName: "stealthBrowserMcpServerPlugin",
 };
 
@@ -8595,6 +7791,7 @@ const strapiMcpServerPlugin: Plugin = {
     "Provides access to Strapi CMS content through the MCP protocol, allowing users to create, read, update, and delete content entries via Claude.",
   image: "https://github.com/l33tdawg.png",
   actions: [],
+  githubUrl: "https://github.com/l33tdawg/strapi-mcp",
   _varName: "strapiMcpServerPlugin",
 };
 
@@ -8605,6 +7802,7 @@ const gmailMcpServerPlugin: Plugin = {
     "An integration server that provides Claude Desktop access to Gmail, enabling users to view recent emails and search their Gmail inbox using natural language commands.",
   image: "https://github.com/ajbr0wn.png",
   actions: [],
+  githubUrl: "https://github.com/ajbr0wn/gmail-mcp-server",
   _varName: "gmailMcpServerPlugin",
 };
 
@@ -8615,6 +7813,7 @@ const resourceHubServerPlugin: Plugin = {
     "An MCP server that connects to the Resource Hub, allowing centralized configuration and management of tools and resources across different MCP environments.",
   image: "https://github.com/adamwattis.png",
   actions: [],
+  githubUrl: "https://github.com/adamwattis/resource-hub-server",
   _varName: "resourceHubServerPlugin",
 };
 
@@ -8651,6 +7850,7 @@ const biomcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/acashmoney/bio-mcp",
   _varName: "biomcpPlugin",
 };
 
@@ -8661,6 +7861,7 @@ const linkedinMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables seamless interaction with LinkedIn for job applications, profile retrieval, feed browsing, and resume analysis through natural language commands.",
   image: "https://github.com/Hritik003.png",
   actions: [],
+  githubUrl: "https://github.com/Hritik003/linkedin-mcp",
   _varName: "linkedinMcpServerPlugin",
 };
 
@@ -8691,6 +7892,7 @@ const pdfExtractionMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/xraywu/mcp-pdf-extraction-server",
   _varName: "pdfExtractionMcpServerPlugin",
 };
 
@@ -8701,6 +7903,7 @@ const workersMcpDemoPlugin: Plugin = {
     "A demonstration project that uses Cloudflare Workers MCP to create custom AI tools that can be integrated with Claude, Cursor, and other AI assistants supporting the Model Context Protocol.",
   image: "https://github.com/akazwz.png",
   actions: [],
+  githubUrl: "https://github.com/akazwz/workers-mcp-demo",
   _varName: "workersMcpDemoPlugin",
 };
 
@@ -8818,6 +8021,7 @@ const inkdropMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/inkdropapp/mcp-server",
   _varName: "inkdropMcpServerPlugin",
 };
 
@@ -8828,6 +8032,7 @@ const mcpUnifiedServerPlugin: Plugin = {
     "A modular server implementation for Claude AI assistants with integrated tools, enabling Claude to perform actions and access external resources like file systems, web searches, browser automation, financial data, and document generation.",
   image: "https://github.com/getfounded.png",
   actions: [],
+  githubUrl: "https://github.com/getfounded/mcp-tool-kit",
   _varName: "mcpUnifiedServerPlugin",
 };
 
@@ -8918,6 +8123,7 @@ const imageGeneratorMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/rmcendarfer2017/MCP-image-gen",
   _varName: "imageGeneratorMcpServerPlugin",
 };
 
@@ -8928,6 +8134,7 @@ const serpapiMcpServerPlugin: Plugin = {
     "An MCP server that integrates with SerpApi to retrieve search results from multiple search engines including Google, Bing, Yahoo, and others, enabling fast access to both live and archived search data.",
   image: "https://github.com/ilyazub.png",
   actions: [],
+  githubUrl: "https://github.com/ilyazub/serpapi-mcp-server",
   _varName: "serpapiMcpServerPlugin",
 };
 
@@ -9232,6 +8439,7 @@ const notionMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sjotie/notionMCP",
   _varName: "notionMcpServerPlugin",
 };
 
@@ -9242,6 +8450,7 @@ const gatheringsMcpServerPlugin: Plugin = {
     "An MCP server that helps AI assistants manage expense-sharing for social events, enabling the creation of gatherings, tracking of expenses, and calculation of fair reimbursements among participants.",
   image: "https://github.com/abutbul.png",
   actions: [],
+  githubUrl: "https://github.com/abutbul/gatherings-mcp-python",
   _varName: "gatheringsMcpServerPlugin",
 };
 
@@ -9252,6 +8461,7 @@ const metabaseMcpServerPlugin: Plugin = {
     "Enables AI assistants to interact with Metabase databases and dashboards, allowing users to list and execute queries, access data visualizations, and interact with database resources through natural language.",
   image: "https://github.com/imlewc.png",
   actions: [],
+  githubUrl: "https://github.com/imlewc/metabase-server",
   _varName: "metabaseMcpServerPlugin",
 };
 
@@ -9262,6 +8472,7 @@ const slimMcpPlugin: Plugin = {
     "A lightweight, modular API service that provides useful tools like weather, date/time, calculator, search, email, and task management through a RESTful interface, designed for integration with AI agents and automated workflows.",
   image: "https://github.com/webdevtodayjason.png",
   actions: [],
+  githubUrl: "https://github.com/webdevtodayjason/slim-MCP",
   _varName: "slimMcpPlugin",
 };
 
@@ -9285,6 +8496,7 @@ const youtubeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sparfenyuk/mcp-youtube",
   _varName: "youtubeMcpServerPlugin",
 };
 
@@ -9295,6 +8507,7 @@ const obsidianOmnisearchMcpServerPlugin: Plugin = {
     "Provides programmatic search functionality for Obsidian vaults through a REST API interface, allowing external applications to search through notes and retrieve absolute paths to matching documents.",
   image: "https://github.com/anpigon.png",
   actions: [],
+  githubUrl: "https://github.com/anpigon/mcp-server-obsidian-omnisearch",
   _varName: "obsidianOmnisearchMcpServerPlugin",
 };
 
@@ -9305,6 +8518,7 @@ const nashMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables seamless execution of commands, Python code, web content fetching, and reusable task management with secure credentials handling.",
   image: "https://github.com/nash-app.png",
   actions: [],
+  githubUrl: "https://github.com/nash-app/nash-mcp",
   _varName: "nashMcpServerPlugin",
 };
 
@@ -9315,6 +8529,7 @@ const tinyCryptographyMcpServerPlugin: Plugin = {
     "A Model Context Protocol server built with Express.js that provides cryptographic tools including key pair generation, shared secret derivation, and message encryption/decryption.",
   image: "https://github.com/anton10xr.png",
   actions: [],
+  githubUrl: "https://github.com/anton10xr/gibber-mcp",
   _varName: "tinyCryptographyMcpServerPlugin",
 };
 
@@ -9764,6 +8979,7 @@ const manifoldMarketsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/manifold-mcp-server",
   _varName: "manifoldMarketsMcpServerPlugin",
 };
 
@@ -9870,6 +9086,7 @@ const nuancedMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MattMorgis/nuanced-mcp",
   _varName: "nuancedMcpServerPlugin",
 };
 
@@ -10404,6 +9621,7 @@ const stabilityAiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tadasant/mcp-server-stability-ai",
   _varName: "stabilityAiMcpServerPlugin",
 };
 
@@ -10487,6 +9705,7 @@ const arxivMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/huanongfish/arxiv-mcp",
   _varName: "arxivMcpServerPlugin",
 };
 
@@ -10510,6 +9729,7 @@ const shellMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hdresearch/mcp-shell",
   _varName: "shellMcpServerPlugin",
 };
 
@@ -10837,6 +10057,7 @@ const notionMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ramidecodes/mcp-server-notion",
   _varName: "notionMcpServer1Plugin",
 };
 
@@ -10847,6 +10068,7 @@ const mcpServerForReplicatePlugin: Plugin = {
     "A FastMCP server implementation that provides a standardized interface for accessing AI models hosted on Replicate's API, currently supporting image generation with customizable parameters.",
   image: "https://github.com/tzafrir.png",
   actions: [],
+  githubUrl: "https://github.com/tzafrir/mcp-server-replicate",
   _varName: "mcpServerForReplicatePlugin",
 };
 
@@ -10857,6 +10079,7 @@ const trivySecurityScannerMcpServerPlugin: Plugin = {
     "Provides Trivy security scanning capabilities through a standardized interface, allowing users to scan projects for vulnerabilities and automatically fix them by updating dependencies.",
   image: "https://github.com/norbinsh.png",
   actions: [],
+  githubUrl: "https://github.com/norbinsh/cursor-mcp-trivy",
   _varName: "trivySecurityScannerMcpServerPlugin",
 };
 
@@ -10867,6 +10090,7 @@ const rustDocsMcpServerPlugin: Plugin = {
     "An MCP server that provides AI tools with access to Rust documentation from docs.rs, enabling search for crates, documentation, type information, feature flags, version information, and source code.",
   image: "https://github.com/laptou.png",
   actions: [],
+  githubUrl: "https://github.com/laptou/rust-docs-mcp-server",
   _varName: "rustDocsMcpServerPlugin",
 };
 
@@ -10877,6 +10101,7 @@ const mcpServerForMysqlPlugin: Plugin = {
     "A Model Context Protocol server that provides read-only access to MySQL databases, enabling LLMs to inspect database schemas and execute read-only queries.",
   image: "https://github.com/benborla.png",
   actions: [],
+  githubUrl: "https://github.com/benborla/mcp-server-mysql",
   _varName: "mcpServerForMysqlPlugin",
 };
 
@@ -11111,6 +10336,7 @@ const productboardMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kenjihikmatullah/productboard-mcp",
   _varName: "productboardMcpServerPlugin",
 };
 
@@ -11121,6 +10347,7 @@ const zoteroMcpServerPlugin: Plugin = {
     "A server that enables MCP clients like Anthropic Claude App to interact with local Zotero libraries, allowing users to search papers, manage notes, and access research materials through natural language.",
   image: "https://github.com/swairshah.png",
   actions: [],
+  githubUrl: "https://github.com/swairshah/zotero-mcp-server",
   _varName: "zoteroMcpServerPlugin",
 };
 
@@ -11372,6 +10599,7 @@ const coinMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/longmans/coin_api_mcp",
   _varName: "coinMcpServerPlugin",
 };
 
@@ -11382,6 +10610,7 @@ const uberEatsMcpServerPlugin: Plugin = {
     "A proof-of-concept Model Context Protocol server that enables LLM applications to interact with Uber Eats, allowing AI agents to browse and order food through natural language.",
   image: "https://github.com/ericzakariasson.png",
   actions: [],
+  githubUrl: "https://github.com/ericzakariasson/uber-eats-mcp-server",
   _varName: "uberEatsMcpServerPlugin",
 };
 
@@ -11405,6 +10634,7 @@ const sleepMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Garoth/sleep-mcp",
   _varName: "sleepMcpServerPlugin",
 };
 
@@ -11446,6 +10676,7 @@ const posthogMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PostHog/posthog-mcp",
   _varName: "posthogMcpServerPlugin",
 };
 
@@ -11999,6 +11230,7 @@ const kintoneMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r3-yamauchi/kintone-mcp-server",
   _varName: "kintoneMcpServerPlugin",
 };
 
@@ -12009,6 +11241,7 @@ const djangoMigrationsMcpServicePlugin: Plugin = {
     "A Model Context Protocol service that wraps Django's migration commands as MCP endpoints, making it easy to manage migrations across multiple services and integrate with CI/CD pipelines.",
   image: "https://github.com/mrrobotke.png",
   actions: [],
+  githubUrl: "https://github.com/mrrobotke/django-migrations-mcp",
   _varName: "djangoMigrationsMcpServicePlugin",
 };
 
@@ -12019,6 +11252,7 @@ const systempromptmcpinterviewPlugin: Plugin = {
     "A specialized Model Context Protocol (MCP) server that enables AI-powered interview roleplay scenarios for practice with realistic conversational feedback.",
   image: "https://github.com/Ejb503.png",
   actions: [],
+  githubUrl: "https://github.com/Ejb503/systemprompt-mcp-interview",
   _varName: "systempromptmcpinterviewPlugin",
 };
 
@@ -12029,6 +11263,7 @@ const gelDatabaseMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that enables LLM agents to interact with Gel databases through natural language, providing tools to learn database schemas, validate and execute EdgeQL queries.",
   image: "https://github.com/christian561.png",
   actions: [],
+  githubUrl: "https://github.com/christian561/gel-mcp-server",
   _varName: "gelDatabaseMcpServerPlugin",
 };
 
@@ -12039,6 +11274,7 @@ const mcpQrCodeServerPlugin: Plugin = {
     "A server that connects large language models to QR code generation capabilities via Model Context Protocol, supporting multiple content types (URLs, WiFi credentials, contacts, text), output formats, and customization options.",
   image: "https://github.com/jwalsh.png",
   actions: [],
+  githubUrl: "https://github.com/jwalsh/mcp-server-qrcode",
   _varName: "mcpQrCodeServerPlugin",
 };
 
@@ -12259,6 +11495,7 @@ const mcpNotionServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gabornyergesX/mcp-notion-server",
   _varName: "mcpNotionServerPlugin",
 };
 
@@ -12342,6 +11579,7 @@ const solanaMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/akc2267/solana-mcp-server",
   _varName: "solanaMcpServer1Plugin",
 };
 
@@ -12363,6 +11601,7 @@ const derivApiMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/raju-deriv/mcp-deriv-api-server",
   _varName: "derivApiMcpServerPlugin",
 };
 
@@ -12373,6 +11612,7 @@ const ankiMcpServerPlugin: Plugin = {
     "A TypeScript-based server that integrates with Anki via the AnkiConnect plugin, allowing you to manage flashcard decks, note models, and create Anki notes using natural language.",
   image: "https://github.com/CamdenClark.png",
   actions: [],
+  githubUrl: "https://github.com/CamdenClark/anki-mcp-server",
   _varName: "ankiMcpServerPlugin",
 };
 
@@ -12383,6 +11623,7 @@ const codeExplainerMcpPlugin: Plugin = {
     "A Cloudflare Worker that analyzes source code to provide comprehensive explanations including architecture diagrams, core functionality analysis, and component breakdowns across multiple programming languages.",
   image: "https://github.com/BillDuke13.png",
   actions: [],
+  githubUrl: "https://github.com/BillDuke13/code-explainer-mcp",
   _varName: "codeExplainerMcpPlugin",
 };
 
@@ -14782,6 +14023,7 @@ const appwriteMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/appwrite/mcp",
   _varName: "appwriteMcpServerPlugin",
 };
 
@@ -14854,6 +14096,7 @@ const retrievalaugmentedThinkingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stat-guy/retrieval-augmented-thinking",
   _varName: "retrievalaugmentedThinkingMcpServerPlugin",
 };
 
@@ -14864,6 +14107,7 @@ const filesystemMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides file system operations, analysis, and manipulation capabilities through a standardized tool interface.",
   image: "https://github.com/bsmi021.png",
   actions: [],
+  githubUrl: "https://github.com/bsmi021/mcp-filesystem-server",
   _varName: "filesystemMcpServerPlugin",
 };
 
@@ -14874,6 +14118,7 @@ const triplewhaleMcpServerPlugin: Plugin = {
     "An implementation of Model Context Protocol (MCP) that allows users to interact with TripleWhale's e-commerce analytics platform using natural language queries through Claude Desktop.",
   image: "https://github.com/Triple-Whale.png",
   actions: [],
+  githubUrl: "https://github.com/Triple-Whale/mcp-server-triplewhale",
   _varName: "triplewhaleMcpServerPlugin",
 };
 
@@ -14927,6 +14172,7 @@ const geminiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/georgejeffers/gemini-mcp-server",
   _varName: "geminiMcpServerPlugin",
 };
 
@@ -14980,6 +14226,7 @@ const mcpFileServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/codyde/mcp-file-tool",
   _varName: "mcpFileServerPlugin",
 };
 
@@ -15011,6 +14258,7 @@ const worldBankMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/anshumax/world_bank_mcp_server",
   _varName: "worldBankMcpServerPlugin",
 };
 
@@ -15046,6 +14294,7 @@ const javascriptSandboxMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/garc33/js-sandbox-mcp-server",
   _varName: "javascriptSandboxMcpServerPlugin",
 };
 
@@ -15081,6 +14330,7 @@ const imageGenerationMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sarthakkimtani/mcp-image-gen",
   _varName: "imageGenerationMcpServerPlugin",
 };
 
@@ -15091,6 +14341,7 @@ const coderToolboxMcpServerPlugin: Plugin = {
     "A utility toolkit that enhances Claude's code interaction capabilities by providing seamless tools for Java code analysis, manipulation, and testing workflows.",
   image: "https://github.com/lamemind.png",
   actions: [],
+  githubUrl: "https://github.com/lamemind/coder-toolbox-mcp-server",
   _varName: "coderToolboxMcpServerPlugin",
 };
 
@@ -15101,6 +14352,7 @@ const arangodbMcpServerPlugin: Plugin = {
     "An implementation of the Model Context Protocol that enables interaction with ArangoDB databases, allowing users to perform queries, list databases and collections through natural language.",
   image: "https://github.com/lucas-deangelis.png",
   actions: [],
+  githubUrl: "https://github.com/lucas-deangelis/arango-mcp-server",
   _varName: "arangodbMcpServerPlugin",
 };
 
@@ -15111,6 +14363,7 @@ const devenvinfoserverPlugin: Plugin = {
     "An MCP server that provides detailed information about your development environment to the Cursor code editor, enabling more context-aware assistance.",
   image: "https://github.com/carterlasalle.png",
   actions: [],
+  githubUrl: "https://github.com/carterlasalle/system_information_mcp",
   _varName: "devenvinfoserverPlugin",
 };
 
@@ -15135,6 +14388,7 @@ const screenshotoneMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/screenshotone/mcp",
   _varName: "screenshotoneMcpServerPlugin",
 };
 
@@ -15145,6 +14399,7 @@ const businessCentralMcpServerPlugin: Plugin = {
     "A server that provides standardized development rules and context for Business Central projects, optimized for use with Cursor editor.",
   image: "https://github.com/vanachterjacob.png",
   actions: [],
+  githubUrl: "https://github.com/vanachterjacob/BC-MCP",
   _varName: "businessCentralMcpServerPlugin",
 };
 
@@ -15155,6 +14410,7 @@ const crawlabMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows AI applications to interact with Crawlab's functionality through natural language, enabling spider management, task execution, and file operations.",
   image: "https://github.com/crawlab-team.png",
   actions: [],
+  githubUrl: "https://github.com/crawlab-team/crawlab-mcp",
   _varName: "crawlabMcpServerPlugin",
 };
 
@@ -15353,6 +14609,7 @@ const astraDbMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/datastax/astra-db-mcp",
   _varName: "astraDbMcpServerPlugin",
 };
 
@@ -15363,6 +14620,7 @@ const makeMcpServer1Plugin: Plugin = {
     "An integration server that allows Claude Desktop to communicate with Make (formerly Integromat) automation platform through the Model Context Protocol, enabling scenario management and execution via natural language.",
   image: "https://github.com/3rzy.png",
   actions: [],
+  githubUrl: "https://github.com/3rzy/make-mcp-integration-issue",
   _varName: "makeMcpServer1Plugin",
 };
 
@@ -15373,6 +14631,7 @@ const mcpTasksOrganizerPlugin: Plugin = {
     "An MCP server that converts Cursor agent plans into structured markdown task lists and organizes them in your repository, helping you track AI-generated plans and recommendations as actionable specifications.",
   image: "https://github.com/huntsyea.png",
   actions: [],
+  githubUrl: "https://github.com/huntsyea/mcp-tasks-organizer",
   _varName: "mcpTasksOrganizerPlugin",
 };
 
@@ -15383,6 +14642,7 @@ const clickupOperatorPlugin: Plugin = {
     "A Claude-compatible MCP server that enables storing and summarizing notes through a simple note storage system with custom URI scheme.",
   image: "https://github.com/noahvanhart.png",
   actions: [],
+  githubUrl: "https://github.com/noahvanhart/mcp-server-clickup",
   _varName: "clickupOperatorPlugin",
 };
 
@@ -15393,6 +14653,7 @@ const imagegenserverPlugin: Plugin = {
     "A MCP server that integrates with Cursor IDE to generate images based on text descriptions using JiMeng AI, allowing users to create and save custom images directly within their development environment.",
   image: "https://github.com/fengin.png",
   actions: [],
+  githubUrl: "https://github.com/fengin/image-gen-server",
   _varName: "imagegenserverPlugin",
 };
 
@@ -15446,6 +14707,7 @@ const perplexityMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/laodev1/perplexity-mcp-server",
   _varName: "perplexityMcpServerPlugin",
 };
 
@@ -15508,6 +14770,7 @@ const bloomyMcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/franccesco/bloomy-mcp",
   _varName: "bloomyMcpPlugin",
 };
 
@@ -15518,6 +14781,7 @@ const dbtSemanticLayerMcpServerPlugin: Plugin = {
     "A server that enables querying the dbt Semantic Layer through natural language conversations with Claude Desktop and other AI assistants, allowing users to discover metrics, create queries, analyze data, and visualize results.",
   image: "https://github.com/TommyBez.png",
   actions: [],
+  githubUrl: "https://github.com/TommyBez/dbt-semantic-layer-mcp-server",
   _varName: "dbtSemanticLayerMcpServerPlugin",
 };
 
@@ -15528,6 +14792,7 @@ const devMemoryMcpServerPlugin: Plugin = {
     "Persistent development memory server that automatically captures and organizes development context, code changes, and user interactions across projects.",
   image: "https://github.com/TrackerXXX23.png",
   actions: [],
+  githubUrl: "https://github.com/TrackerXXX23/dev_memory_mcp",
   _varName: "devMemoryMcpServerPlugin",
 };
 
@@ -15766,6 +15031,7 @@ const temboMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tembo-io/mcp-server-tembo",
   _varName: "temboMcpServerPlugin",
 };
 
@@ -15776,6 +15042,7 @@ const mcpBeeminderServerPlugin: Plugin = {
     "An MCP server that provides AI assistants access to the Beeminder API, allowing them to help users track goals, manage datapoints, and interact with Beeminder's self-commitment tools through natural language.",
   image: "https://github.com/strickvl.png",
   actions: [],
+  githubUrl: "https://github.com/strickvl/mcp-beeminder",
   _varName: "mcpBeeminderServerPlugin",
 };
 
@@ -15786,6 +15053,7 @@ const mcpAppleNotesPlugin: Plugin = {
     "A Model Context Protocol server that enables semantic search and RAG over your Apple Notes, allowing AI assistants like Claude to search and reference your notes during conversations.",
   image: "https://github.com/Tom-Semple.png",
   actions: [],
+  githubUrl: "https://github.com/Tom-Semple/mcp-apple-notes-fixed",
   _varName: "mcpAppleNotesPlugin",
 };
 
@@ -15827,6 +15095,7 @@ const blastenginemailerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r3-yamauchi/mcp-server-blastengine-mailer",
   _varName: "blastenginemailerPlugin",
 };
 
@@ -15837,6 +15106,7 @@ const nexusMcpBridgeForVscodePlugin: Plugin = {
     "A lightweight bridge extension that enables Claude Desktop to connect to VSCode workspaces via Model Context Protocol, allowing Claude to read and write files, create directories, and list contents in your workspace.",
   image: "https://github.com/wesnermichel.png",
   actions: [],
+  githubUrl: "https://github.com/wesnermichel/nexus-mcp-claude-desktop-server",
   _varName: "nexusMcpBridgeForVscodePlugin",
 };
 
@@ -15847,6 +15117,7 @@ const mcpBlockchainQueryServerPlugin: Plugin = {
     "A Model Context Protocol server providing tools for querying Bitcoin blockchain data via Blockchain Data and Query APIs, supporting various BTC information retrieval functions.",
   image: "https://github.com/pavel-bc.png",
   actions: [],
+  githubUrl: "https://github.com/pavel-bc/mcp-blockchain-query",
   _varName: "mcpBlockchainQueryServerPlugin",
 };
 
@@ -15950,6 +15221,7 @@ const firefliesMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Props-Labs/fireflies-mcp",
   _varName: "firefliesMcpServerPlugin",
 };
 
@@ -15997,6 +15269,7 @@ const elasticsearch7xMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/imlewc/elasticsearch7-mcp-server",
   _varName: "elasticsearch7xMcpServerPlugin",
 };
 
@@ -16021,6 +15294,7 @@ const deepseekMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/moyu6027/deepseek-MCP-server",
   _varName: "deepseekMcpServerPlugin",
 };
 
@@ -16031,6 +15305,7 @@ const portMcpServerPlugin: Plugin = {
     "An MCP server that enables Claude to interact with Port.io's AI agent, allowing users to trigger the agent with prompts and receive structured responses including status, output, and action items.",
   image: "https://github.com/port-experimental.png",
   actions: [],
+  githubUrl: "https://github.com/port-experimental/port-mcp-server",
   _varName: "portMcpServerPlugin",
 };
 
@@ -16066,6 +15341,7 @@ const mcpServerDiscordWebhookPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/genm/mcp-server-discord-webhook",
   _varName: "mcpServerDiscordWebhookPlugin",
 };
 
@@ -16102,6 +15378,7 @@ const grantsSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Tar-ive/grants-mcp",
   _varName: "grantsSearchMcpServerPlugin",
 };
 
@@ -16151,6 +15428,7 @@ const toxTestingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/that1guy15/tox-testing",
   _varName: "toxTestingMcpServerPlugin",
 };
 
@@ -16161,6 +15439,7 @@ const mcpServerModalPlugin: Plugin = {
     "An MCP server that allows users to deploy Python scripts to Modal directly from Claude, providing a link to the deployed application that can be shared with others.",
   image: "https://github.com/Flux159.png",
   actions: [],
+  githubUrl: "https://github.com/Flux159/mcp-server-modal",
   _varName: "mcpServerModalPlugin",
 };
 
@@ -16279,6 +15558,7 @@ const needleMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/needle-ai/needle-mcp",
   _varName: "needleMcpServerPlugin",
 };
 
@@ -16338,6 +15618,8 @@ const irisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/Sunwood-ai-labs/release-notes-generator-iris-mcp-server",
   _varName: "irisMcpServerPlugin",
 };
 
@@ -16348,6 +15630,7 @@ const kokoroTtsMcpServerPlugin: Plugin = {
     "Provides text-to-speech capabilities through the Model Context Protocol, allowing applications to easily integrate speech synthesis with customizable voices, adjustable speech speed, and cross-platform audio playback support.",
   image: "https://github.com/giannisanni.png",
   actions: [],
+  githubUrl: "https://github.com/giannisanni/kokoro-tts-mcp",
   _varName: "kokoroTtsMcpServerPlugin",
 };
 
@@ -16358,6 +15641,7 @@ const backlogMcpServerPlugin: Plugin = {
     "Integrates Backlog project management with Claude via Model Context Protocol, enabling access to projects, issues, and wiki pages through natural language interactions.",
   image: "https://github.com/katsuhirohonda.png",
   actions: [],
+  githubUrl: "https://github.com/katsuhirohonda/mcp-backlog-server",
   _varName: "backlogMcpServerPlugin",
 };
 
@@ -16368,6 +15652,7 @@ const bluestoneappsMcpRemoteServerPlugin: Plugin = {
     "Implements the Model Context Protocol (MCP) over HTTP to provide remote access to BluestoneApps coding standards and React Native code examples.",
   image: "https://github.com/lallen30.png",
   actions: [],
+  githubUrl: "https://github.com/lallen30/mcp-remote-server",
   _varName: "bluestoneappsMcpRemoteServerPlugin",
 };
 
@@ -16378,6 +15663,7 @@ const mcpCodeIndexerPlugin: Plugin = {
     "A smart code retrieval tool based on Model Context Protocol that provides efficient and accurate code repository search capabilities for large language models.",
   image: "https://github.com/zxfgds.png",
   actions: [],
+  githubUrl: "https://github.com/zxfgds/mcp-code-indexer",
   _varName: "mcpCodeIndexerPlugin",
 };
 
@@ -16388,6 +15674,7 @@ const thingsMcpServerPlugin: Plugin = {
     "Lets you use Claude Desktop to interact with your task management data in Things app, enabling you to create tasks, analyze projects, manage priorities, and implement productivity workflows through natural language.",
   image: "https://github.com/excelsier.png",
   actions: [],
+  githubUrl: "https://github.com/excelsier/things-fastmcp",
   _varName: "thingsMcpServerPlugin",
 };
 
@@ -16398,6 +15685,7 @@ const tavilyMcpServerPlugin: Plugin = {
     "Enables AI assistants to perform up-to-date web searches through the Tavily API, providing comprehensive search results with AI-generated summaries.",
   image: "https://github.com/it-beard.png",
   actions: [],
+  githubUrl: "https://github.com/it-beard/tavily-server",
   _varName: "tavilyMcpServerPlugin",
 };
 
@@ -17249,6 +16537,7 @@ const githubProjectsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/taylor-lindores-reeves/mcp-github-projects",
   _varName: "githubProjectsMcpServerPlugin",
 };
 
@@ -17259,6 +16548,7 @@ const filesystemMcpServer1Plugin: Plugin = {
     "Node.js server implementing Model Context Protocol for filesystem operations, allowing Claude to read, write, and manipulate files and directories in specified locations.",
   image: "https://github.com/Legaltime.png",
   actions: [],
+  githubUrl: "https://github.com/Legaltime/filesystem",
   _varName: "filesystemMcpServer1Plugin",
 };
 
@@ -17269,6 +16559,7 @@ const xcodeMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to build and test Xcode projects directly through a standardized interface, with capabilities for running tests, monitoring progress, and accessing logs in real-time.",
   image: "https://github.com/PolarVista.png",
   actions: [],
+  githubUrl: "https://github.com/PolarVista/Xcode-mcp-server",
   _varName: "xcodeMcpServerPlugin",
 };
 
@@ -17279,6 +16570,7 @@ const uberEatsMcpServer1Plugin: Plugin = {
     "A proof-of-concept server implementing the Model Context Protocol that enables LLM applications to interact with Uber Eats functionality.",
   image: "https://github.com/skudskud.png",
   actions: [],
+  githubUrl: "https://github.com/skudskud/test-repo-mcp",
   _varName: "uberEatsMcpServer1Plugin",
 };
 
@@ -17309,6 +16601,7 @@ const sourcesageMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/source-sage-mcp-server",
   _varName: "sourcesageMcpPlugin",
 };
 
@@ -17319,6 +16612,7 @@ const knowledgeGraphMemoryServerPlugin: Plugin = {
     "A persistent memory implementation using a local knowledge graph that lets Claude remember information about users across conversations.",
   image: "https://github.com/AgentWong.png",
   actions: [],
+  githubUrl: "https://github.com/AgentWong/optimized-memory-mcp-server",
   _varName: "knowledgeGraphMemoryServerPlugin",
 };
 
@@ -17329,6 +16623,7 @@ const devdocsMcpPlugin: Plugin = {
     "A Model Context Protocol implementation that enables AI-powered access to documentation resources, featuring URI-based navigation, template matching, and structured documentation management.",
   image: "https://github.com/llmian-space.png",
   actions: [],
+  githubUrl: "https://github.com/llmian-space/devdocs-mcp",
   _varName: "devdocsMcpPlugin",
 };
 
@@ -17339,6 +16634,7 @@ const apiTesterMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows Claude to make API requests on your behalf, providing tools for testing various APIs including HTTP requests and OpenAI integrations without sharing your API keys in the chat.",
   image: "https://github.com/Vikrant-Khedkar.png",
   actions: [],
+  githubUrl: "https://github.com/Vikrant-Khedkar/api-tester-mcp",
   _varName: "apiTesterMcpServerPlugin",
 };
 
@@ -17349,6 +16645,7 @@ const mcpToolboxPlugin: Plugin = {
     "A comprehensive toolkit that enhances LLM capabilities through the Model Context Protocol, allowing LLMs to interact with external services including command-line operations, file management, Figma integration, and audio processing.",
   image: "https://github.com/ai-zerolab.png",
   actions: [],
+  githubUrl: "https://github.com/ai-zerolab/mcp-toolbox",
   _varName: "mcpToolboxPlugin",
 };
 
@@ -17637,6 +16934,7 @@ const spotifyMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ashwanth1109/mcp-spotify",
   _varName: "spotifyMcpPlugin",
 };
 
@@ -17647,6 +16945,7 @@ const rememberizerMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling LLMs to search, retrieve, and manage documents through Rememberizer's knowledge management API.",
   image: "https://github.com/skydeckai.png",
   actions: [],
+  githubUrl: "https://github.com/skydeckai/mcp-server-rememberizer",
   _varName: "rememberizerMcpServerPlugin",
 };
 
@@ -17657,6 +16956,7 @@ const mcpServerMemoryFilePlugin: Plugin = {
     "An MCP server that allows Claude and other LLMs to manage persistent memories across conversations through text file storage, enabling commands to add, search, delete and list memory entries.",
   image: "https://github.com/g0t4.png",
   actions: [],
+  githubUrl: "https://github.com/g0t4/mcp-server-memory-file",
   _varName: "mcpServerMemoryFilePlugin",
 };
 
@@ -17667,6 +16967,7 @@ const airbyteStatusCheckerPlugin: Plugin = {
     "An MCP server for Claude Desktop that allows users to check the status of their Airbyte connections.",
   image: "https://github.com/quintonwall.png",
   actions: [],
+  githubUrl: "https://github.com/quintonwall/mcp-airbyte-list-sources",
   _varName: "airbyteStatusCheckerPlugin",
 };
 
@@ -17747,6 +17048,7 @@ const perplexityMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RossH121/perplexity-mcp",
   _varName: "perplexityMcpServer1Plugin",
 };
 
@@ -17771,6 +17073,7 @@ const scrapboxMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/YuheiNakasaka/scrapbox-mcp",
   _varName: "scrapboxMcpServerPlugin",
 };
 
@@ -17781,6 +17084,7 @@ const connectwiseManageMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude to interact with the ConnectWise Manage API to perform operations like retrieving, creating, updating, and deleting tickets, companies, contacts, and other entities.",
   image: "https://github.com/ethangillani.png",
   actions: [],
+  githubUrl: "https://github.com/ethangillani/connectwise-mcp-server",
   _varName: "connectwiseManageMcpServerPlugin",
 };
 
@@ -17791,6 +17095,7 @@ const githubMcpServerPlugin: Plugin = {
     "Provides integration with Github through the Model Context Protocol (MCP), allowing Large Language Models to interact with Github's repositories, issues, pull requests and search functionality.",
   image: "https://github.com/ParasSolanki.png",
   actions: [],
+  githubUrl: "https://github.com/ParasSolanki/github-mcp-server",
   _varName: "githubMcpServerPlugin",
 };
 
@@ -17934,6 +17239,7 @@ const mcpJupiterPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dcSpark/mcp-server-jupiter",
   _varName: "mcpJupiterPlugin",
 };
 
@@ -17944,6 +17250,7 @@ const steelPuppeteerPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to automate web browsers using Puppeteer, allowing navigation, screenshots, form filling, and JavaScript execution in a real browser environment.",
   image: "https://github.com/rdvo.png",
   actions: [],
+  githubUrl: "https://github.com/rdvo/mcp-server",
   _varName: "steelPuppeteerPlugin",
 };
 
@@ -17954,6 +17261,7 @@ const homeAssistantMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that integrates with Home Assistant to provide smart home control capabilities through natural language, supporting devices like lights, climate systems, locks, alarms, and humidifiers.",
   image: "https://github.com/miguelg719.png",
   actions: [],
+  githubUrl: "https://github.com/miguelg719/home-assistant-mcp",
   _varName: "homeAssistantMcpServerPlugin",
 };
 
@@ -17964,6 +17272,7 @@ const substackReaderPlugin: Plugin = {
     "Enables fetching and reading subscriber-only content from Trade Companion by Adam Mancini on Substack, allowing Claude to access and discuss the latest financial trading articles.",
   image: "https://github.com/pl728.png",
   actions: [],
+  githubUrl: "https://github.com/pl728/substack-fetcher-mcp",
   _varName: "substackReaderPlugin",
 };
 
@@ -18370,6 +17679,7 @@ const awsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/rishikavikondala/mcp-server-aws",
   _varName: "awsMcpServerPlugin",
 };
 
@@ -18806,6 +18116,7 @@ const elasticsearchKnowledgeGraphForMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/j3k0/mcp-elastic-memory",
   _varName: "elasticsearchKnowledgeGraphForMcpPlugin",
 };
 
@@ -18816,6 +18127,7 @@ const mozillaReadabilityParserMcpServerPlugin: Plugin = {
     "A Python implementation of an MCP server that extracts webpage content, removes ads and non-essential elements, and transforms it into clean, LLM-optimized Markdown.",
   image: "https://github.com/jmh108.png",
   actions: [],
+  githubUrl: "https://github.com/jmh108/MCP-server-readability-python",
   _varName: "mozillaReadabilityParserMcpServerPlugin",
 };
 
@@ -19205,6 +18517,7 @@ const sentryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/codyde/mcp-sentry-ts",
   _varName: "sentryMcpServerPlugin",
 };
 
@@ -19215,6 +18528,7 @@ const excelMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to read from and write to Microsoft Excel files, supporting formats like xlsx, xlsm, xltx, and xltm.",
   image: "https://github.com/negokaz.png",
   actions: [],
+  githubUrl: "https://github.com/negokaz/excel-mcp-server",
   _varName: "excelMcpServerPlugin",
 };
 
@@ -19412,6 +18726,7 @@ const emergencyMedicarePlannerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/manolaz/emergency-medicare-planner-mcp-server",
   _varName: "emergencyMedicarePlannerMcpServerPlugin",
 };
 
@@ -19436,6 +18751,7 @@ const ipGeolocationMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/briandconnelly/mcp-server-ipinfo",
   _varName: "ipGeolocationMcpServerPlugin",
 };
 
@@ -19496,6 +18812,7 @@ const whoisMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bharathvaj-ganesan/whois-mcp",
   _varName: "whoisMcpPlugin",
 };
 
@@ -19521,6 +18838,7 @@ const githubMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PoliTwit1984/github-meta-mcp-server",
   _varName: "githubMcpServer1Plugin",
 };
 
@@ -19598,6 +18916,7 @@ const mcpServerLinearPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/floodfx/mcp-server-linear",
   _varName: "mcpServerLinearPlugin",
 };
 
@@ -19633,6 +18952,7 @@ const claudegasbridgePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/KaishuShito/gas-interpreter-mcp",
   _varName: "claudegasbridgePlugin",
 };
 
@@ -19643,6 +18963,7 @@ const mcpStripeServerPlugin: Plugin = {
     "A server that integrates with Stripe for handling payments, customers, and refunds through the Model Context Protocol, providing a secure API to manage financial transactions.",
   image: "https://github.com/atharvagupta2003.png",
   actions: [],
+  githubUrl: "https://github.com/atharvagupta2003/mcp-stripe",
   _varName: "mcpStripeServerPlugin",
 };
 
@@ -19666,6 +18987,7 @@ const microsoftSqlServerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RichardHan/mssql_mcp_server",
   _varName: "microsoftSqlServerMcpServerPlugin",
 };
 
@@ -19676,6 +18998,7 @@ const mondaycomMcpServerPlugin: Plugin = {
     "An MCP server that enables interaction with the Monday.com API for managing boards, workspaces, and items, supporting both individual and bulk operations with comprehensive error handling.",
   image: "https://github.com/launchthatbrand.png",
   actions: [],
+  githubUrl: "https://github.com/launchthatbrand/mcp-monday-ts",
   _varName: "mondaycomMcpServerPlugin",
 };
 
@@ -19686,6 +19009,7 @@ const pythonMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that extracts and analyzes Python code structures, focusing on import/export relationships between files to help LLMs understand code context.",
   image: "https://github.com/hesiod-au.png",
   actions: [],
+  githubUrl: "https://github.com/hesiod-au/python-mcp",
   _varName: "pythonMcpServerPlugin",
 };
 
@@ -19733,6 +19057,7 @@ const suposMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/FREEZONEX/mcp-server-supos",
   _varName: "suposMcpServerPlugin",
 };
 
@@ -19756,6 +19081,7 @@ const pythonDocsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AnuragRai017/python-docs-server-MCP-Server",
   _varName: "pythonDocsServerPlugin",
 };
 
@@ -19766,6 +19092,7 @@ const gmailMcpServer1Plugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to interact with Gmail services, supporting email operations, draft management, and calendar functionality through Google API integration.",
   image: "https://github.com/zacco16.png",
   actions: [],
+  githubUrl: "https://github.com/zacco16/gmail-mcp-server",
   _varName: "gmailMcpServer1Plugin",
 };
 
@@ -19889,6 +19216,7 @@ const mcpankiconnectPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/samefarrar/mcp-ankiconnect",
   _varName: "mcpankiconnectPlugin",
 };
 
@@ -20020,6 +19348,7 @@ const solarwindsLogsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jakenuts/mcp-solarwinds",
   _varName: "solarwindsLogsMcpServerPlugin",
 };
 
@@ -20030,6 +19359,7 @@ const mongodbMcpServerPlugin: Plugin = {
     "A protocol server that enables LLMs like Claude to interact with MongoDB databases, providing tools for schema exploration, aggregation queries, and data analysis through natural language in Cursor.",
   image: "https://github.com/1RB.png",
   actions: [],
+  githubUrl: "https://github.com/1RB/mongo-mcp",
   _varName: "mongodbMcpServerPlugin",
 };
 
@@ -20203,6 +19533,7 @@ const deltataskMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/brysontang/DeltaTask",
   _varName: "deltataskMcpServerPlugin",
 };
 
@@ -20265,6 +19596,7 @@ const excelReaderServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/softgridinc-pte-ltd/mcp-excel-reader-server",
   _varName: "excelReaderServerPlugin",
 };
 
@@ -20384,6 +19716,7 @@ const dubcoMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Gitmaxd/dubco-mcp-server",
   _varName: "dubcoMcpServerPlugin",
 };
 
@@ -20407,6 +19740,7 @@ const commandExecutorMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/command-executor-mcp-server",
   _varName: "commandExecutorMcpServerPlugin",
 };
 
@@ -20448,6 +19782,7 @@ const confluenceCommunicationServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/KS-GEN-AI/confluence-mcp-server",
   _varName: "confluenceCommunicationServerPlugin",
 };
 
@@ -20501,6 +19836,7 @@ const mcpFirecrawlServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/codyde/mcp-firecrawl-tool",
   _varName: "mcpFirecrawlServerPlugin",
 };
 
@@ -20530,6 +19866,7 @@ const imageGeneratorMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammyl720/image-generator-mcp-server",
   _varName: "imageGeneratorMcpServer1Plugin",
 };
 
@@ -21201,6 +20538,7 @@ const todoistMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/miottid/todoist-mcp",
   _varName: "todoistMcpPlugin",
 };
 
@@ -21265,6 +20603,7 @@ const hyperliquidMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mektigboy/server-hyperliquid",
   _varName: "hyperliquidMcpServerPlugin",
 };
 
@@ -21275,6 +20614,7 @@ const dockerMcpServerPlugin: Plugin = {
     "An MCP server that allows managing Docker containers through natural language, enabling users to compose, introspect, and debug containers without running commands themselves.",
   image: "https://github.com/ckreiling.png",
   actions: [],
+  githubUrl: "https://github.com/ckreiling/mcp-server-docker",
   _varName: "dockerMcpServerPlugin",
 };
 
@@ -21392,6 +20732,7 @@ const mcpClientConfigurationServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/landicefu/mcp-client-configuration-server",
   _varName: "mcpClientConfigurationServerPlugin",
 };
 
@@ -21439,6 +20780,7 @@ const perplexityToolForClaudeDesktopPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/letsbuildagent/perplexity-tool",
   _varName: "perplexityToolForClaudeDesktopPlugin",
 };
 
@@ -21449,6 +20791,7 @@ const mcpWebToolsServerPlugin: Plugin = {
     "A Model Context Protocol server that allows LLMs to interact with web content through standardized tools, currently supporting web scraping functionality.",
   image: "https://github.com/surya-madhav.png",
   actions: [],
+  githubUrl: "https://github.com/surya-madhav/MCP",
   _varName: "mcpWebToolsServerPlugin",
 };
 
@@ -21459,6 +20802,7 @@ const notionKnowledgeBaseMcpServerPlugin: Plugin = {
     "An MCP server that connects to your Notion knowledge base, allowing you to query and retrieve information directly from VSCode using the Cline extension.",
   image: "https://github.com/rickydata-indexer.png",
   actions: [],
+  githubUrl: "https://github.com/rickydata-indexer/notion_mcp_server",
   _varName: "notionKnowledgeBaseMcpServerPlugin",
 };
 
@@ -21469,6 +20813,7 @@ const kustoMcpServerPlugin: Plugin = {
     "An MCP server that provides access to Azure Data Explorer (ADX) clusters, allowing users to list tables, execute queries, and retrieve schema information.",
   image: "https://github.com/ZZZHDW.png",
   actions: [],
+  githubUrl: "https://github.com/ZZZHDW/mcp-server-kusto",
   _varName: "kustoMcpServerPlugin",
 };
 
@@ -21534,6 +20879,7 @@ const memoryCacheMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/ibproduct/ib-mcp-cache-server",
   _varName: "memoryCacheMcpServerPlugin",
 };
 
@@ -21569,6 +20915,7 @@ const openapiClientGeneratorMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/orhanveli/openapi-client-generator-mcp",
   _varName: "openapiClientGeneratorMcpPlugin",
 };
 
@@ -21579,6 +20926,7 @@ const lighthouseMcpPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude to interact with and analyze your Lighthouse.one crypto portfolio data through secure authentication.",
   image: "https://github.com/l3wi.png",
   actions: [],
+  githubUrl: "https://github.com/l3wi/mcp-lighthouse",
   _varName: "lighthouseMcpPlugin",
 };
 
@@ -21589,6 +20937,7 @@ const codebaseMcpPlugin: Plugin = {
     "A Model Context Protocol server that enables AI agents to retrieve and understand entire codebases at once, providing tools to analyze local workspaces or remote GitHub repositories.",
   image: "https://github.com/DeDeveloper23.png",
   actions: [],
+  githubUrl: "https://github.com/DeDeveloper23/codebase-mcp",
   _varName: "codebaseMcpPlugin",
 };
 
@@ -21739,6 +21088,7 @@ const hackerNewsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/devabdultech/hn-mcp",
   _varName: "hackerNewsMcpServerPlugin",
 };
 
@@ -21834,6 +21184,7 @@ const ethereumRpcMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/0xKoda/eth-mcp",
   _varName: "ethereumRpcMcpServerPlugin",
 };
 
@@ -21844,6 +21195,7 @@ const gitlabMcpServerPlugin: Plugin = {
     "A custom server implementation that allows AI assistants to interact with GitLab repositories, providing capabilities for searching, fetching files, creating/updating content, and managing issues and merge requests.",
   image: "https://github.com/chris-miaskowski.png",
   actions: [],
+  githubUrl: "https://github.com/chris-miaskowski/custom-gitlab-mcp-server",
   _varName: "gitlabMcpServerPlugin",
 };
 
@@ -22282,6 +21634,7 @@ const mcpParadexServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sv/mcp-paradex-py",
   _varName: "mcpParadexServerPlugin",
 };
 
@@ -22292,6 +21645,7 @@ const mcpPostgresServerPlugin: Plugin = {
     "A server implementing the Model Context Protocol (MCP) for Cursor that allows using a PostgreSQL database as storage for model contexts, enabling secure database exploration and querying.",
   image: "https://github.com/MadeByNando.png",
   actions: [],
+  githubUrl: "https://github.com/MadeByNando/mcp-postgres-server",
   _varName: "mcpPostgresServerPlugin",
 };
 
@@ -22512,6 +21866,7 @@ const lettaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/oculairmedia/Letta-MCP-server",
   _varName: "lettaMcpServerPlugin",
 };
 
@@ -22810,6 +22165,7 @@ const airtableMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/felores/airtable-mcp",
   _varName: "airtableMcpServerPlugin",
 };
 
@@ -22820,6 +22176,7 @@ const kubernetesMonitorPlugin: Plugin = {
     "A read-only MCP server for Kubernetes that allows querying cluster information and diagnosing issues through natural language interfaces like Claude.",
   image: "https://github.com/vlttnv.png",
   actions: [],
+  githubUrl: "https://github.com/vlttnv/k8s-mcp",
   _varName: "kubernetesMonitorPlugin",
 };
 
@@ -22830,6 +22187,7 @@ const dependencymcpServerPlugin: Plugin = {
     "Analyzes codebases to generate dependency graphs and architectural insights across multiple programming languages, helping developers understand code structure and validate against architectural rules.",
   image: "https://github.com/mkearl.png",
   actions: [],
+  githubUrl: "https://github.com/mkearl/dependency-mcp",
   _varName: "dependencymcpServerPlugin",
 };
 
@@ -22840,6 +22198,7 @@ const gmailMcpPlugin: Plugin = {
     "A server that allows Claude to search and retrieve emails from your Gmail account, supporting functions like searching emails, retrieving full content of specific emails, and listing recent messages.",
   image: "https://github.com/vinayak-mehta.png",
   actions: [],
+  githubUrl: "https://github.com/vinayak-mehta/gmail-mcp",
   _varName: "gmailMcpPlugin",
 };
 
@@ -22850,6 +22209,7 @@ const mcpServerSemgrepPlugin: Plugin = {
     "A Model Context Protocol compliant server that integrates Semgrep static analysis tool with AI assistants like Anthropic Claude, enabling advanced code analysis, security vulnerability detection, and code quality improvements through a conversational interface.",
   image: "https://github.com/Szowesgad.png",
   actions: [],
+  githubUrl: "https://github.com/Szowesgad/mcp-server-semgrep",
   _varName: "mcpServerSemgrepPlugin",
 };
 
@@ -23015,6 +22375,7 @@ const specifaiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/vj-presidio/specif-ai-mcp-server",
   _varName: "specifaiMcpServerPlugin",
 };
 
@@ -23182,6 +22543,7 @@ const mcpunkPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jurasofish/mcpunk",
   _varName: "mcpunkPlugin",
 };
 
@@ -23283,6 +22645,7 @@ const datagovMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/melaodoidao/datagov-mcp-server",
   _varName: "datagovMcpServerPlugin",
 };
 
@@ -23293,6 +22656,7 @@ const whimsicalMcpServerPlugin: Plugin = {
     "Enables programmatic creation of Whimsical diagrams from Mermaid markup generated by AI models like Claude through the Model Context Protocol.",
   image: "https://github.com/BrockReece.png",
   actions: [],
+  githubUrl: "https://github.com/BrockReece/whimsical-mcp-server",
   _varName: "whimsicalMcpServerPlugin",
 };
 
@@ -23786,6 +23150,7 @@ const mcpCalcToolsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nbiish/mcp-calc-tools",
   _varName: "mcpCalcToolsPlugin",
 };
 
@@ -24766,6 +24131,7 @@ const lichessMcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/karayaman/lichess-mcp",
   _varName: "lichessMcpPlugin",
 };
 
@@ -24776,6 +24142,7 @@ const mcpSshServerPlugin: Plugin = {
     "A secure SSH server implementation for Model Context Protocol that enables remote command execution and file operations, supporting both password and key-based authentication.",
   image: "https://github.com/shaike1.png",
   actions: [],
+  githubUrl: "https://github.com/shaike1/mcp-server-ssh",
   _varName: "mcpSshServerPlugin",
 };
 
@@ -24786,6 +24153,7 @@ const hexApiMcpServerPlugin: Plugin = {
     "A server that allows AI assistants to access, view, run, and manage Hex projects through a standardized interface.",
   image: "https://github.com/franccesco.png",
   actions: [],
+  githubUrl: "https://github.com/franccesco/hex-mcp",
   _varName: "hexApiMcpServerPlugin",
 };
 
@@ -24796,6 +24164,7 @@ const fluxImageMcpServerPlugin: Plugin = {
     "Provides image generation capabilities using the Flux Schnell model on Replicate, allowing users to create images from text prompts.",
   image: "https://github.com/ckz.png",
   actions: [],
+  githubUrl: "https://github.com/ckz/flux-img-mcp",
   _varName: "fluxImageMcpServerPlugin",
 };
 
@@ -24806,6 +24175,7 @@ const tfnswRealtimeAlertsMcpServerPlugin: Plugin = {
     "This server enables large language models to access and interact with real-time transport alerts from Transport for NSW's network, supporting filtering by transport mode and returning formatted alert information about disruptions and planned works.",
   image: "https://github.com/piddlingtuna.png",
   actions: [],
+  githubUrl: "https://github.com/piddlingtuna/tfnsw-realtime-alerts-mcp-server",
   _varName: "tfnswRealtimeAlertsMcpServerPlugin",
 };
 
@@ -24816,6 +24186,7 @@ const codingStandardsMcpServerPlugin: Plugin = {
     "Provides tools for accessing coding style guidelines and best practices for various technologies including Java, Python, and React.",
   image: "https://github.com/ggerve.png",
   actions: [],
+  githubUrl: "https://github.com/ggerve/coding-standards-mcp",
   _varName: "codingStandardsMcpServerPlugin",
 };
 
@@ -24826,6 +24197,7 @@ const beamlitMcpServerPlugin: Plugin = {
     "An MCP server implementation that enables seamless integration between Beamlit CLI and AI models using the Model Context Protocol standard.",
   image: "https://github.com/beamlit.png",
   actions: [],
+  githubUrl: "https://github.com/beamlit/mcp-gateway",
   _varName: "beamlitMcpServerPlugin",
 };
 
@@ -24836,6 +24208,7 @@ const docScraperMcpServerPlugin: Plugin = {
     "Converts web-based documentation into markdown format using jina.ai's conversion service, allowing users to scrape documentation from any URL and save it as markdown files.",
   image: "https://github.com/askjohngeorge.png",
   actions: [],
+  githubUrl: "https://github.com/askjohngeorge/mcp-doc-scraper",
   _varName: "docScraperMcpServerPlugin",
 };
 
@@ -24967,6 +24340,7 @@ const gitlabKanbanMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/gitlab-kanban-mcp-server",
   _varName: "gitlabKanbanMcpServerPlugin",
 };
 
@@ -24977,6 +24351,7 @@ const deepseekMcpServer1Plugin: Plugin = {
     "A Model Control Protocol server implementation that allows Claude Desktop to use Deepseek models running in Docker, enabling seamless integration between Claude Desktop and Deepseek's language models.",
   image: "https://github.com/vincentf305.png",
   actions: [],
+  githubUrl: "https://github.com/vincentf305/mcp-server-deepseek",
   _varName: "deepseekMcpServer1Plugin",
 };
 
@@ -25018,6 +24393,7 @@ const imessageMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/marissamarym/imessage-mcp-server",
   _varName: "imessageMcpServerPlugin",
 };
 
@@ -25179,6 +24555,7 @@ const couchdbMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/robertoamoreno/couchdb-mcp-server",
   _varName: "couchdbMcpServerPlugin",
 };
 
@@ -25189,6 +24566,7 @@ const mcppythonPlugin: Plugin = {
     "A server that enables interaction with PostgreSQL, MySQL, MariaDB, or SQLite databases through Claude Desktop using natural language queries.",
   image: "https://github.com/rhabraken.png",
   actions: [],
+  githubUrl: "https://github.com/rhabraken/mcp-python",
   _varName: "mcppythonPlugin",
 };
 
@@ -25292,6 +24670,7 @@ const memoryBoxMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/amotivv/memory-box-mcp",
   _varName: "memoryBoxMcpServerPlugin",
 };
 
@@ -25302,6 +24681,7 @@ const memoryMcpServerPlugin: Plugin = {
     "Provides knowledge graph functionality for managing entities, relations, and observations in memory with strict validation rules to maintain data consistency.",
   image: "https://github.com/evangstav.png",
   actions: [],
+  githubUrl: "https://github.com/evangstav/python-memory-mcp-server",
   _varName: "memoryMcpServerPlugin",
 };
 
@@ -25355,6 +24735,7 @@ const jsonMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GongRzhe/JSON-MCP-Server",
   _varName: "jsonMcpServerPlugin",
 };
 
@@ -25365,6 +24746,7 @@ const baseMcpServerPlugin: Plugin = {
     "Provides onchain tools for Claude AI to interact with the Base blockchain and Coinbase API, enabling wallet management, fund transfers, and smart contract deployment.",
   image: "https://github.com/base.png",
   actions: [],
+  githubUrl: "https://github.com/base/base-mcp",
   _varName: "baseMcpServerPlugin",
 };
 
@@ -25375,6 +24757,7 @@ const drawThingsMcpPlugin: Plugin = {
     "An integration that allows Cursor AI to generate images through the Draw Things API using natural language prompts.",
   image: "https://github.com/jaokuohsuan.png",
   actions: [],
+  githubUrl: "https://github.com/jaokuohsuan/draw-things-mcp-cursor",
   _varName: "drawThingsMcpPlugin",
 };
 
@@ -25440,6 +24823,7 @@ const jenkinsServerMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hekmon8/Jenkins-server-mcp",
   _varName: "jenkinsServerMcpPlugin",
 };
 
@@ -25523,6 +24907,7 @@ const arithmeticMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/YuheiNakasaka/arithmetic-mcp-server",
   _varName: "arithmeticMcpServerPlugin",
 };
 
@@ -25573,6 +24958,7 @@ const mcpServerForApacheOpendalPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Xuanwo/mcp-server-opendal",
   _varName: "mcpServerForApacheOpendalPlugin",
 };
 
@@ -25898,6 +25284,7 @@ const salesforceMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SurajAdsul/mcp-server-salesforce",
   _varName: "salesforceMcpServerPlugin",
 };
 
@@ -25908,6 +25295,7 @@ const bazelMcpServerPlugin: Plugin = {
     "A local MCP server that exposes Bazel build system functionality to AI agents, allowing them to build, test, query, and manage Bazel projects through natural language even in environments where Bazel can't be directly accessed.",
   image: "https://github.com/nacgarg.png",
   actions: [],
+  githubUrl: "https://github.com/nacgarg/bazel-mcp-server",
   _varName: "bazelMcpServerPlugin",
 };
 
@@ -26099,6 +25487,7 @@ const mathmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/EthanHenrickson/math-mcp",
   _varName: "mathmcpPlugin",
 };
 
@@ -26109,6 +25498,7 @@ const mcpserverietfPlugin: Plugin = {
     "A Model Context Protocol server that enables Large Language Models to search and access IETF RFC documents with pagination support.",
   image: "https://github.com/tizee.png",
   actions: [],
+  githubUrl: "https://github.com/tizee/mcp-server-ietf",
   _varName: "mcpserverietfPlugin",
 };
 
@@ -26119,6 +25509,7 @@ const jsonCanvasMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables creating, modifying, and validating infinite canvas data structures according to the JSON Canvas 1.0 specification.",
   image: "https://github.com/Cam10001110101.png",
   actions: [],
+  githubUrl: "https://github.com/Cam10001110101/mcp-server-obsidian-jsoncanvas",
   _varName: "jsonCanvasMcpServerPlugin",
 };
 
@@ -26129,6 +25520,7 @@ const mcpImageRecognitionServerPlugin: Plugin = {
     "Provides image recognition capabilities using Anthropic Claude Vision and OpenAI GPT-4 Vision APIs, supporting multiple image formats and offering optional text extraction via Tesseract OCR.",
   image: "https://github.com/mario-andreschak.png",
   actions: [],
+  githubUrl: "https://github.com/mario-andreschak/mcp-image-recognition",
   _varName: "mcpImageRecognitionServerPlugin",
 };
 
@@ -26170,6 +25562,7 @@ const twitterMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/EnesCinr/twitter-mcp",
   _varName: "twitterMcpServer1Plugin",
 };
 
@@ -26180,6 +25573,7 @@ const opendotaMcpServerPlugin: Plugin = {
     "Model Context Protocol server that enables LLMs and AI assistants to retrieve real-time Dota 2 statistics, match data, player information, and game metrics through a standardized interface.",
   image: "https://github.com/asusevski.png",
   actions: [],
+  githubUrl: "https://github.com/asusevski/opendota-mcp-server",
   _varName: "opendotaMcpServerPlugin",
 };
 
@@ -26282,6 +25676,7 @@ const shannonThinkingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/olaservo/shannon-thinking",
   _varName: "shannonThinkingMcpServerPlugin",
 };
 
@@ -26329,6 +25724,7 @@ const pythonReplMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hdresearch/mcp-python",
   _varName: "pythonReplMcpServerPlugin",
 };
 
@@ -26339,6 +25735,7 @@ const angleOneMcpServerPlugin: Plugin = {
     "An MCP server implementation that integrates with Angle One APIs to provide standardized access to financial market data, trading operations, and portfolio management.",
   image: "https://github.com/baba786.png",
   actions: [],
+  githubUrl: "https://github.com/baba786/angleone-mcp-server",
   _varName: "angleOneMcpServerPlugin",
 };
 
@@ -26656,6 +26053,7 @@ const smartsheetMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/terilios/smartsheet-server",
   _varName: "smartsheetMcpServerPlugin",
 };
 
@@ -26666,6 +26064,7 @@ const clickhouseMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Large Language Models to seamlessly interact with ClickHouse databases, supporting resource listing, schema retrieval, and query execution.",
   image: "https://github.com/ThomAub.png",
   actions: [],
+  githubUrl: "https://github.com/ThomAub/clickhouse_mcp_server",
   _varName: "clickhouseMcpServerPlugin",
 };
 
@@ -27137,6 +26536,7 @@ const gitMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyanheads/git-mcp-server",
   _varName: "gitMcpServerPlugin",
 };
 
@@ -27147,6 +26547,7 @@ const mcpPersonalAssistantAgentPlugin: Plugin = {
     "A versatile Model Context Protocol server that enables AI assistants to manage calendars, track tasks, handle emails, search the web, and control smart home devices.",
   image: "https://github.com/zhangzhongnan928.png",
   actions: [],
+  githubUrl: "https://github.com/zhangzhongnan928/mcp-pa-ai-agent",
   _varName: "mcpPersonalAssistantAgentPlugin",
 };
 
@@ -27188,6 +26589,8 @@ const githubSupportAssistantPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/Jake-Mok-Nelson/mcp-find-similar-github-issues",
   _varName: "githubSupportAssistantPlugin",
 };
 
@@ -27198,6 +26601,7 @@ const sanityMcpServerPlugin: Plugin = {
     "An MCP server that enables Claude Desktop to interact with Sanity.io content, providing tools to create, edit, list documents and get schema templates.",
   image: "https://github.com/jlmelis.png",
   actions: [],
+  githubUrl: "https://github.com/jlmelis/sanity-mcp-server",
   _varName: "sanityMcpServerPlugin",
 };
 
@@ -27254,6 +26658,7 @@ const supabaseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/NightTrek/Supabase-MCP",
   _varName: "supabaseMcpServerPlugin",
 };
 
@@ -27264,6 +26669,7 @@ const fastmcpTodoServerPlugin: Plugin = {
     "A todo management server that receives requests via FastMCP and stores them in MongoDB for processing by the Swarmonomicon todo worker.",
   image: "https://github.com/DanEdens.png",
   actions: [],
+  githubUrl: "https://github.com/DanEdens/fastmcp-todo-server",
   _varName: "fastmcpTodoServerPlugin",
 };
 
@@ -27289,6 +26695,7 @@ const kagiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kagisearch/kagimcp",
   _varName: "kagiMcpServerPlugin",
 };
 
@@ -27299,6 +26706,8 @@ const authenticatedMcpSseServerPlugin: Plugin = {
     "A secure MCP (Model Context Protocol) server hosted on Google Cloud Run that enables team collaboration by providing authenticated access via Google Cloud IAM, allowing teams to share custom MCP servers over the internet before official MCP authentication is implemented.",
   image: "https://github.com/the-freetech-company.png",
   actions: [],
+  githubUrl:
+    "https://github.com/the-freetech-company/mcp-sse-authenticated-cloud-run",
   _varName: "authenticatedMcpSseServerPlugin",
 };
 
@@ -27373,6 +26782,7 @@ const cargoDocMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spacemeowx2/cargo-doc-mcp",
   _varName: "cargoDocMcpServerPlugin",
 };
 
@@ -27383,6 +26793,7 @@ const speechMcpPlugin: Plugin = {
     "A Goose MCP extension providing voice interaction with modern audio visualization, allowing users to communicate with Goose through speech rather than text.",
   image: "https://github.com/Kvadratni.png",
   actions: [],
+  githubUrl: "https://github.com/Kvadratni/speech-mcp",
   _varName: "speechMcpPlugin",
 };
 
@@ -27469,6 +26880,7 @@ const dexscreenerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/openSVM/dexscreener-mcp-server",
   _varName: "dexscreenerMcpServerPlugin",
 };
 
@@ -27479,6 +26891,7 @@ const optionsflowMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to analyze options chains, calculate Greeks, and evaluate basic options strategies through Yahoo Finance data.",
   image: "https://github.com/twolven.png",
   actions: [],
+  githubUrl: "https://github.com/twolven/mcp-optionsflow",
   _varName: "optionsflowMcpServerPlugin",
 };
 
@@ -27489,6 +26902,7 @@ const alpacaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling LLMs like Claude to interact with the Alpaca trading API through natural language for stock trading, checking positions, fetching market data, and managing your account.",
   image: "https://github.com/tedlikeskix.png",
   actions: [],
+  githubUrl: "https://github.com/tedlikeskix/alpaca-mcp-server",
   _varName: "alpacaMcpServerPlugin",
 };
 
@@ -27499,6 +26913,7 @@ const stravaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables language models to interact with Strava data, including activities, athlete statistics, routes, achievements, and social features.",
   image: "https://github.com/ctvidic.png",
   actions: [],
+  githubUrl: "https://github.com/ctvidic/strava-mcp-server",
   _varName: "stravaMcpServerPlugin",
 };
 
@@ -27509,6 +26924,7 @@ const openapiMcpServerPlugin: Plugin = {
     "A server that enables Large Language Models to discover and interact with REST APIs defined by OpenAPI specifications through the Model Context Protocol.",
   image: "https://github.com/ivo-toby.png",
   actions: [],
+  githubUrl: "https://github.com/ivo-toby/mcp-openapi-server",
   _varName: "openapiMcpServerPlugin",
 };
 
@@ -27519,6 +26935,7 @@ const twitterMcpServer2Plugin: Plugin = {
     "Provides AI agents with comprehensive Twitter functionality through the Model Context Protocol standard, enabling reading tweets, posting content, managing interactions, and accessing timeline data with robust error handling.",
   image: "https://github.com/TaazKareem.png",
   actions: [],
+  githubUrl: "https://github.com/TaazKareem/twitter-mcp-server",
   _varName: "twitterMcpServer2Plugin",
 };
 
@@ -27625,6 +27042,7 @@ const gitMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kjozsa/git-mcp",
   _varName: "gitMcpPlugin",
 };
 
@@ -27635,6 +27053,7 @@ const warpcastMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows Claude to interact with Warpcast accounts, enabling actions like posting casts, reading content, searching by keywords, and managing channel interactions through natural language.",
   image: "https://github.com/zhangzhongnan928.png",
   actions: [],
+  githubUrl: "https://github.com/zhangzhongnan928/mcp-warpcast-server",
   _varName: "warpcastMcpServerPlugin",
 };
 
@@ -27645,6 +27064,7 @@ const laravelHelpersMcpPlugin: Plugin = {
     "A collection of Laravel helper tools for integration with Cursor IDE, providing features like log viewing, error searching, artisan command execution, and model information display directly within the editor.",
   image: "https://github.com/jsonallen.png",
   actions: [],
+  githubUrl: "https://github.com/jsonallen/laravel-mcp",
   _varName: "laravelHelpersMcpPlugin",
 };
 
@@ -27720,6 +27140,7 @@ const nefinoMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nefino/mcp-nefino",
   _varName: "nefinoMcpServerPlugin",
 };
 
@@ -27875,6 +27296,7 @@ const googleSearchConsoleMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ahonn/mcp-server-gsc",
   _varName: "googleSearchConsoleMcpServerPlugin",
 };
 
@@ -27885,6 +27307,7 @@ const searxngModelContextProtocolServerPlugin: Plugin = {
     "A server that enables language models to perform web searches through SearXNG using the Model Context Protocol standard.",
   image: "https://github.com/aeon-seraph.png",
   actions: [],
+  githubUrl: "https://github.com/aeon-seraph/searxng-mcp",
   _varName: "searxngModelContextProtocolServerPlugin",
 };
 
@@ -27895,6 +27318,7 @@ const supabaseMcpServer1Plugin: Plugin = {
     "An MCP server that connects to Supabase PostgreSQL databases, exposing table schemas as resources and providing tools for data analysis through SQL queries.",
   image: "https://github.com/stefanraath3.png",
   actions: [],
+  githubUrl: "https://github.com/stefanraath3/mcp-supabase",
   _varName: "supabaseMcpServer1Plugin",
 };
 
@@ -28130,6 +27554,7 @@ const jiraMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/KS-GEN-AI/jira-mcp-server",
   _varName: "jiraMcpServerPlugin",
 };
 
@@ -28166,6 +27591,7 @@ const uniprotMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TakumiY235/uniprot-mcp-server",
   _varName: "uniprotMcpServerPlugin",
 };
 
@@ -28247,6 +27673,7 @@ const docsfetcherMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cdugo/package-documentation-mcp",
   _varName: "docsfetcherMcpServerPlugin",
 };
 
@@ -28257,6 +27684,7 @@ const webmcpPlugin: Plugin = {
     "A framework that enables websites to share tools, resources, and prompts with client-side LLMs without requiring API keys, allowing users to interact with web services using their preferred models.",
   image: "https://github.com/jasonjmcghee.png",
   actions: [],
+  githubUrl: "https://github.com/jasonjmcghee/WebMCP",
   _varName: "webmcpPlugin",
 };
 
@@ -28267,6 +27695,7 @@ const tavilyMcpServer1Plugin: Plugin = {
     "Provides AI-powered web search capabilities using Tavily's search API, enabling LLMs to perform sophisticated web searches, get direct answers to questions, and search recent news articles.",
   image: "https://github.com/RamXX.png",
   actions: [],
+  githubUrl: "https://github.com/RamXX/mcp-tavily",
   _varName: "tavilyMcpServer1Plugin",
 };
 
@@ -28277,6 +27706,7 @@ const mcpMemoryServerPlugin: Plugin = {
     "A Model Context Protocol server for Claude Desktop that provides structured memory management across chat sessions, allowing Claude to maintain context and build a knowledge base within project directories.",
   image: "https://github.com/ebailey78.png",
   actions: [],
+  githubUrl: "https://github.com/ebailey78/mcp-memory",
   _varName: "mcpMemoryServerPlugin",
 };
 
@@ -28287,6 +27717,7 @@ const snowflakeCubeServerPlugin: Plugin = {
     "MCP Server for interacting with Cube semantic layers that provides tools for querying and describing data from Cube deployments.",
   image: "https://github.com/isaacwasserman.png",
   actions: [],
+  githubUrl: "https://github.com/isaacwasserman/mcp_cube_server",
   _varName: "snowflakeCubeServerPlugin",
 };
 
@@ -28327,6 +27758,7 @@ const mcp2serialPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mcp2everything/mcp2serial",
   _varName: "mcp2serialPlugin",
 };
 
@@ -28337,6 +27769,7 @@ const mcpDoclingServerPlugin: Plugin = {
     "A server that provides document processing capabilities using the Model Context Protocol, allowing conversion of documents to markdown, extraction of tables, and processing of document images.",
   image: "https://github.com/zanetworker.png",
   actions: [],
+  githubUrl: "https://github.com/zanetworker/mcp-docling",
   _varName: "mcpDoclingServerPlugin",
 };
 
@@ -28347,6 +27780,7 @@ const blendermcpPlugin: Plugin = {
     "Connects Blender to Claude AI through the Model Context Protocol (MCP), allowing Claude to directly interact with and control Blender for AI-assisted 3D modeling, scene manipulation, and rendering.",
   image: "https://github.com/ahujasid.png",
   actions: [],
+  githubUrl: "https://github.com/ahujasid/blender-mcp",
   _varName: "blendermcpPlugin",
 };
 
@@ -28376,6 +27810,7 @@ const supavecMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/taishikato/supavec-mcp-server",
   _varName: "supavecMcpServerPlugin",
 };
 
@@ -28552,6 +27987,7 @@ const claudeMcpTrelloPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hrs-asano/claude-mcp-trello",
   _varName: "claudeMcpTrelloPlugin",
 };
 
@@ -28594,6 +28030,7 @@ const knowledgeBaseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jeanibarz/knowledge-base-mcp-server",
   _varName: "knowledgeBaseMcpServerPlugin",
 };
 
@@ -28650,6 +28087,7 @@ const unipileMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/baryhuang/mcp-unipile",
   _varName: "unipileMcpServerPlugin",
 };
 
@@ -28673,6 +28111,7 @@ const barnsworthburningMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Aias/barnsworthburning-mcp",
   _varName: "barnsworthburningMcpPlugin",
 };
 
@@ -28683,6 +28122,7 @@ const akshareMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude Desktop to access and analyze Chinese and global financial market data through the AKShare library.",
   image: "https://github.com/ttjslbz001.png",
   actions: [],
+  githubUrl: "https://github.com/ttjslbz001/akshare_mcp_server",
   _varName: "akshareMcpServerPlugin",
 };
 
@@ -28693,6 +28133,7 @@ const sqliteMcpServerPlugin: Plugin = {
     "Enables querying log data stored in SQLite databases through the Model Context Protocol, allowing natural language interactions with log analysis.",
   image: "https://github.com/direkt.png",
   actions: [],
+  githubUrl: "https://github.com/direkt/mcp-test",
   _varName: "sqliteMcpServerPlugin",
 };
 
@@ -28703,6 +28144,7 @@ const fiscalDataMcpServerPlugin: Plugin = {
     "Connects to the US Treasury's Fiscal Data API, enabling users to fetch specific treasury statements, access historical data, and generate formatted reports.",
   image: "https://github.com/QuantGeekDev.png",
   actions: [],
+  githubUrl: "https://github.com/QuantGeekDev/fiscal-data-mcp",
   _varName: "fiscalDataMcpServerPlugin",
 };
 
@@ -28726,6 +28168,7 @@ const s3toolsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sofianhamiti/mcp-server-s3",
   _varName: "s3toolsPlugin",
 };
 
@@ -28736,6 +28179,7 @@ const mongodbMcpServerForLlmsPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to interact directly with MongoDB databases, allowing users to query collections, inspect schemas, and manage data through natural language.",
   image: "https://github.com/nickiiitu.png",
   actions: [],
+  githubUrl: "https://github.com/nickiiitu/MongoDB-Model-Context-Protocol-MCP-",
   _varName: "mongodbMcpServerForLlmsPlugin",
 };
 
@@ -28746,6 +28190,7 @@ const notionMcpServer2Plugin: Plugin = {
     "A simple server that integrates with Claude to allow querying and manipulating Notion pages and databases through natural language prompts.",
   image: "https://github.com/arre-ankit.png",
   actions: [],
+  githubUrl: "https://github.com/arre-ankit/notion-mcp-server",
   _varName: "notionMcpServer2Plugin",
 };
 
@@ -28855,6 +28300,7 @@ const taskApiServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/milkosten/task-mcp-server",
   _varName: "taskApiServerPlugin",
 };
 
@@ -28865,6 +28311,7 @@ const emailProcessingMcpServerPlugin: Plugin = {
     "Processes emails from Outlook with date filtering, storing them in SQLite databases while generating vector embeddings for semantic search capabilities in MongoDB.",
   image: "https://github.com/Cam10001110101.png",
   actions: [],
+  githubUrl: "https://github.com/Cam10001110101/mcp-server-outlook-email",
   _varName: "emailProcessingMcpServerPlugin",
 };
 
@@ -28895,6 +28342,7 @@ const mcpidbPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/noahlozevski/mcp-idb",
   _varName: "mcpidbPlugin",
 };
 
@@ -28905,6 +28353,7 @@ const mcpProjectOrchestratorPlugin: Plugin = {
     "An MCP server that assists with the orchestration of new software projects by applying standardized templates and best practices in design patterns and software architecture.",
   image: "https://github.com/sparesparrow.png",
   actions: [],
+  githubUrl: "https://github.com/sparesparrow/mcp-project-orchestrator",
   _varName: "mcpProjectOrchestratorPlugin",
 };
 
@@ -29021,6 +28470,7 @@ const figmaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MatthewDailey/figma-mcp",
   _varName: "figmaMcpServerPlugin",
 };
 
@@ -29080,6 +28530,7 @@ const faceGeneratorMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dasheck0/face-generator",
   _varName: "faceGeneratorMcpServerPlugin",
 };
 
@@ -29090,6 +28541,7 @@ const dbsnpMcpPluginPlugin: Plugin = {
     "An MCP plugin that provides access to NCBI's dbSNP database, allowing developers to retrieve genetic variant information, search for SNPs, and access clinical significance data directly in their development environment.",
   image: "https://github.com/mattshu0410.png",
   actions: [],
+  githubUrl: "https://github.com/mattshu0410/MCP-server",
   _varName: "dbsnpMcpPluginPlugin",
 };
 
@@ -29100,6 +28552,7 @@ const raindropioMcpServerPlugin: Plugin = {
     "An integration that allows Large Language Models to interact with Raindrop.io bookmarks through the Model Context Protocol, enabling users to create and search bookmarks directly through AI assistants.",
   image: "https://github.com/hiromitsusasaki.png",
   actions: [],
+  githubUrl: "https://github.com/hiromitsusasaki/raindrop-io-mcp-server",
   _varName: "raindropioMcpServerPlugin",
 };
 
@@ -29110,6 +28563,7 @@ const notionMcpServer3Plugin: Plugin = {
     "A Model Context Protocol server that provides a standardized interface for interacting with Notion's API, enabling users to list databases, create pages, and search across their Notion workspace.",
   image: "https://github.com/ccabanillas.png",
   actions: [],
+  githubUrl: "https://github.com/ccabanillas/notion-mcp",
   _varName: "notionMcpServer3Plugin",
 };
 
@@ -29120,6 +28574,7 @@ const dicomMcpServerPlugin: Plugin = {
     "A connectivity testing server that enables DICOM network operations (like C-ECHO) through Claude's Model Context Protocol, with support for node configuration management.",
   image: "https://github.com/fluxinc.png",
   actions: [],
+  githubUrl: "https://github.com/fluxinc/dicom-mcp-server",
   _varName: "dicomMcpServerPlugin",
 };
 
@@ -29130,6 +28585,7 @@ const adamikMcpServerPlugin: Plugin = {
     "Enables read and write interactions with 60+ blockchain networks through Claude Desktop, providing a standardized multi-chain API for transaction management, account insights, staking, and token interactions.",
   image: "https://github.com/AdamikHQ.png",
   actions: [],
+  githubUrl: "https://github.com/AdamikHQ/adamik-mcp-server",
   _varName: "adamikMcpServerPlugin",
 };
 
@@ -29140,6 +28596,7 @@ const teslaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that connects to the Tesla Fleet API, allowing AI assistants like Claude to control Tesla vehicles and access vehicle information through natural language commands.",
   image: "https://github.com/scald.png",
   actions: [],
+  githubUrl: "https://github.com/scald/tesla-mcp",
   _varName: "teslaMcpServerPlugin",
 };
 
@@ -29150,6 +28607,7 @@ const cockroachdbMcpServerPlugin: Plugin = {
     "Connects to CockroachDB instances and exposes database structures as resources, enabling SQL query execution and analysis through Claude's interface.",
   image: "https://github.com/dhartunian.png",
   actions: [],
+  githubUrl: "https://github.com/dhartunian/cockroachdb-mcp-server",
   _varName: "cockroachdbMcpServerPlugin",
 };
 
@@ -29231,6 +28689,7 @@ const stravaMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tomekkorbak/strava-mcp-server",
   _varName: "stravaMcpServer1Plugin",
 };
 
@@ -29241,6 +28700,7 @@ const whoopMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides language models with access to personal Whoop fitness data, allowing queries for cycles, recovery, strain, and workout information from the Whoop API.",
   image: "https://github.com/ctvidic.png",
   actions: [],
+  githubUrl: "https://github.com/ctvidic/whoop-mcp-server",
   _varName: "whoopMcpServerPlugin",
 };
 
@@ -29251,6 +28711,7 @@ const mcpFileContextServerPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to read, search, and analyze code files with advanced caching and real-time file watching capabilities.",
   image: "https://github.com/bsmi021.png",
   actions: [],
+  githubUrl: "https://github.com/bsmi021/mcp-file-context-server",
   _varName: "mcpFileContextServerPlugin",
 };
 
@@ -29293,6 +28754,7 @@ const mcpTerminalServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RinardNick/mcp-terminal",
   _varName: "mcpTerminalServerPlugin",
 };
 
@@ -29365,6 +28827,7 @@ const mcpServerMemosPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RyoJerryYu/mcp-server-memos-py",
   _varName: "mcpServerMemosPlugin",
 };
 
@@ -29375,6 +28838,7 @@ const mcpFhirServerPlugin: Plugin = {
     "A TypeScript-based MCP server that connects to FHIR servers, allowing access to healthcare data via fhir:// URIs and providing search capabilities for FHIR resources.",
   image: "https://github.com/flexpa.png",
   actions: [],
+  githubUrl: "https://github.com/flexpa/mcp-fhir",
   _varName: "mcpFhirServerPlugin",
 };
 
@@ -29385,6 +28849,7 @@ const mcpSentryPlugin: Plugin = {
     "A Model Context Protocol server that retrieves and analyzes Sentry.io issues, allowing users to inspect error reports, stacktraces, and debugging information from their Sentry account.",
   image: "https://github.com/MCP-100.png",
   actions: [],
+  githubUrl: "https://github.com/MCP-100/mcp-sentry",
   _varName: "mcpSentryPlugin",
 };
 
@@ -29395,6 +28860,7 @@ const birdnetpiMcpServerPlugin: Plugin = {
     "A Python-based server that enables accessing and analyzing bird detection data through the Model Context Protocol, offering features like filtering detections, accessing audio recordings, and generating reports.",
   image: "https://github.com/DMontgomery40.png",
   actions: [],
+  githubUrl: "https://github.com/DMontgomery40/mcp-local-server",
   _varName: "birdnetpiMcpServerPlugin",
 };
 
@@ -29568,6 +29034,7 @@ const shopifyPythonMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kishimoto-banana/shopify-py-mcp",
   _varName: "shopifyPythonMcpServerPlugin",
 };
 
@@ -29578,6 +29045,7 @@ const mcpSnowflakeServicePlugin: Plugin = {
     "A Model Context Protocol server that enables Claude to execute SQL queries on Snowflake databases with automatic connection lifecycle management.",
   image: "https://github.com/datawiz168.png",
   actions: [],
+  githubUrl: "https://github.com/datawiz168/mcp-snowflake-service",
   _varName: "mcpSnowflakeServicePlugin",
 };
 
@@ -29615,6 +29083,7 @@ const instagramMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/duhlink/instagram-server-next-mcp",
   _varName: "instagramMcpServerPlugin",
 };
 
@@ -29668,6 +29137,7 @@ const framerPluginMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sheshiyer/framer-plugin-mcp",
   _varName: "framerPluginMcpServerPlugin",
 };
 
@@ -29678,6 +29148,7 @@ const mongodbMcpServer1Plugin: Plugin = {
     "Provides read-only access to MongoDB databases for LLMs to inspect collection schemas and execute aggregation pipelines.",
   image: "https://github.com/mongodb-developer.png",
   actions: [],
+  githubUrl: "https://github.com/mongodb-developer/mongodb-mcp-server",
   _varName: "mongodbMcpServer1Plugin",
 };
 
@@ -29707,6 +29178,7 @@ const mcpHumanLoopServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/boorich/mcp-human-loop",
   _varName: "mcpHumanLoopServerPlugin",
 };
 
@@ -29717,6 +29189,7 @@ const mathematicaDocumentationMcpServerPlugin: Plugin = {
     "A server that provides access to Mathematica documentation through FastMCP, enabling users to retrieve function documentation and list package symbols from Wolfram Mathematica.",
   image: "https://github.com/benhaotang.png",
   actions: [],
+  githubUrl: "https://github.com/benhaotang/mcp-mma-docs",
   _varName: "mathematicaDocumentationMcpServerPlugin",
 };
 
@@ -29752,6 +29225,7 @@ const togetherAiImageServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zym9863/together-ai-image-server",
   _varName: "togetherAiImageServerPlugin",
 };
 
@@ -29762,6 +29236,7 @@ const canvasMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables interaction with the Canvas Learning Management System API, allowing users to manage courses, assignments, enrollments, and grades within Canvas.",
   image: "https://github.com/DMontgomery40.png",
   actions: [],
+  githubUrl: "https://github.com/DMontgomery40/mcp-canvas-lms",
   _varName: "canvasMcpServerPlugin",
 };
 
@@ -29964,6 +29439,7 @@ const linearMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/vinayak-mehta/linear-mcp",
   _varName: "linearMcpServerPlugin",
 };
 
@@ -29974,6 +29450,7 @@ const mcpNotmuchSendmailPlugin: Plugin = {
     "An email assistant server that connects Claude Desktop to notmuch email databases, allowing users to search emails, view threads, compose new messages, and reply to conversations with markdown formatting.",
   image: "https://github.com/runekaagaard.png",
   actions: [],
+  githubUrl: "https://github.com/runekaagaard/mcp-notmuch-sendmail",
   _varName: "mcpNotmuchSendmailPlugin",
 };
 
@@ -29984,6 +29461,7 @@ const cloudflareToGithubBackupMcpServerPlugin: Plugin = {
     "An MCP server that automates the backup of Cloudflare projects to a GitHub repository, providing a systematic way to preserve Cloudflare configurations and assets.",
   image: "https://github.com/DynamicEndpoints.png",
   actions: [],
+  githubUrl: "https://github.com/DynamicEndpoints/cloudflare-github-backup-mcp",
   _varName: "cloudflareToGithubBackupMcpServerPlugin",
 };
 
@@ -29994,6 +29472,7 @@ const mcpBatchitPlugin: Plugin = {
     "A simple aggregator server that allows batching multiple MCP tool calls into a single request, reducing token usage and network overhead for AI agents.",
   image: "https://github.com/ryanjoachim.png",
   actions: [],
+  githubUrl: "https://github.com/ryanjoachim/mcp-batchit",
   _varName: "mcpBatchitPlugin",
 };
 
@@ -30004,6 +29483,7 @@ const tmf620McpServerPlugin: Plugin = {
     "Allows AI agents to interact with a remote TMF620 Product Catalog Management API, enabling operations like listing, retrieving, and creating catalogs, product offerings, and product specifications.",
   image: "https://github.com/oopsyz.png",
   actions: [],
+  githubUrl: "https://github.com/oopsyz/mcp",
   _varName: "tmf620McpServerPlugin",
 };
 
@@ -30045,6 +29525,7 @@ const claudekeepPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sdairs/claudekeep",
   _varName: "claudekeepPlugin",
 };
 
@@ -30055,6 +29536,7 @@ const tectonMcpServerPlugin: Plugin = {
     "Provides a set of tools to interact with Tecton clusters, manage feature stores, and execute Tecton CLI commands through the Mission Control Protocol.",
   image: "https://github.com/tecton-ai.png",
   actions: [],
+  githubUrl: "https://github.com/tecton-ai/tecton-mcp",
   _varName: "tectonMcpServerPlugin",
 };
 
@@ -30065,6 +29547,7 @@ const numpyCalculatorPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that provides mathematical calculations and operations using NumPy, enabling users to perform numerical computations like matrix operations, statistical analysis, and polynomial fitting directly through Claude.",
   image: "https://github.com/colesmcintosh.png",
   actions: [],
+  githubUrl: "https://github.com/colesmcintosh/numpy-mcp",
   _varName: "numpyCalculatorPlugin",
 };
 
@@ -30369,6 +29852,7 @@ const chromeDebugMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/robertheadley/chrome-debug-mcp",
   _varName: "chromeDebugMcpServerPlugin",
 };
 
@@ -30542,6 +30026,7 @@ const mcpdblpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/szeider/mcp-dblp",
   _varName: "mcpdblpPlugin",
 };
 
@@ -30597,6 +30082,7 @@ const mcpcliexecMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jakenuts/mcp-cli-exec",
   _varName: "mcpcliexecMcpServerPlugin",
 };
 
@@ -30607,6 +30093,7 @@ const aiVisionDebugMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides AI vision capabilities for analyzing UI screenshots, offering tools for screen analysis, file operations, and UI/UX report generation.",
   image: "https://github.com/samihalawa.png",
   actions: [],
+  githubUrl: "https://github.com/samihalawa/mcp-server-ai-vision",
   _varName: "aiVisionDebugMcpServerPlugin",
 };
 
@@ -30691,6 +30178,7 @@ const valyuMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/valyu-network/valyu-mcp-js",
   _varName: "valyuMcpServerPlugin",
 };
 
@@ -30736,6 +30224,7 @@ const jsonResumeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jsonresume/mcp",
   _varName: "jsonResumeMcpServerPlugin",
 };
 
@@ -30746,6 +30235,7 @@ const tripadvisorVacationPlannerMcpServerPlugin: Plugin = {
     "This MCP server provides access to TripAdvisor data for planning vacations, enabling users to search for and get details about locations, attractions, restaurants, and hotels through an interactive planning experience.",
   image: "https://github.com/hhw67865.png",
   actions: [],
+  githubUrl: "https://github.com/hhw67865/tripadvisor-mcp-server",
   _varName: "tripadvisorVacationPlannerMcpServerPlugin",
 };
 
@@ -30756,6 +30246,7 @@ const radarrAndSonarrMcpServerPlugin: Plugin = {
     "A Python-based Model Context Protocol server that allows AI assistants like Claude to access and query your movie and TV show collection via Radarr and Sonarr APIs.",
   image: "https://github.com/BerryKuipers.png",
   actions: [],
+  githubUrl: "https://github.com/BerryKuipers/mcp_services_radarr_sonarr",
   _varName: "radarrAndSonarrMcpServerPlugin",
 };
 
@@ -30766,6 +30257,7 @@ const githubIntegrationMcpServerPlugin: Plugin = {
     "Extracts diffs from GitHub Pull Requests, allowing users to retrieve and analyze changes between branches in a repository.",
   image: "https://github.com/highlight-ing.png",
   actions: [],
+  githubUrl: "https://github.com/highlight-ing/highlight-github-mcp",
   _varName: "githubIntegrationMcpServerPlugin",
 };
 
@@ -30832,6 +30324,7 @@ const imageGenerationMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/manascb1344/together-mcp-server",
   _varName: "imageGenerationMcpServer1Plugin",
 };
 
@@ -30842,6 +30335,7 @@ const puppeteerMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides browser automation capabilities using Playwright, enabling LLMs to interact with web pages, take screenshots, and execute JavaScript in a real browser environment.",
   image: "https://github.com/twolven.png",
   actions: [],
+  githubUrl: "https://github.com/twolven/mcp-server-puppeteer-py",
   _varName: "puppeteerMcpServerPlugin",
 };
 
@@ -30852,6 +30346,7 @@ const mcpDocumentationServicePlugin: Plugin = {
     "A Model Context Protocol implementation that enables AI assistants to interact with markdown documentation files, providing capabilities for document management, metadata handling, search, and documentation health analysis.",
   image: "https://github.com/alekspetrov.png",
   actions: [],
+  githubUrl: "https://github.com/alekspetrov/mcp-docs-service",
   _varName: "mcpDocumentationServicePlugin",
 };
 
@@ -30862,6 +30357,7 @@ const notionMcpServer4Plugin: Plugin = {
     "A Model Context Protocol server that enables Claude and other LLMs to interact with Notion workspaces, providing capabilities like searching, retrieving, creating and updating pages, as well as managing databases.",
   image: "https://github.com/SAhmadUmass.png",
   actions: [],
+  githubUrl: "https://github.com/SAhmadUmass/notion-mcp-server",
   _varName: "notionMcpServer4Plugin",
 };
 
@@ -31057,6 +30553,7 @@ const ankiMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nailuoGG/anki-mcp-server",
   _varName: "ankiMcpServer1Plugin",
 };
 
@@ -31547,6 +31044,7 @@ const mongodbMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jonfreeland/mongodb-mcp",
   _varName: "mongodbMcpServer2Plugin",
 };
 
@@ -31557,6 +31055,7 @@ const voiceRecorderMcpServerPlugin: Plugin = {
     "Enables recording audio from a microphone and transcribing it using OpenAI's Whisper model. Works as both a standalone MCP server and a Goose AI agent extension.",
   image: "https://github.com/DefiBax.png",
   actions: [],
+  githubUrl: "https://github.com/DefiBax/mcp_servers",
   _varName: "voiceRecorderMcpServerPlugin",
 };
 
@@ -31628,6 +31127,7 @@ const everythingSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Alihkhawaher/everything-search-server",
   _varName: "everythingSearchMcpServerPlugin",
 };
 
@@ -31638,6 +31138,7 @@ const azureDevopsMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to interact with Azure DevOps resources including projects, work items, repositories, pull requests, branches, and pipelines through a standardized protocol.",
   image: "https://github.com/Tiberriver256.png",
   actions: [],
+  githubUrl: "https://github.com/Tiberriver256/azure-devops-mcp",
   _varName: "azureDevopsMcpServerPlugin",
 };
 
@@ -31685,6 +31186,7 @@ const hhJiraMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/alexeydubinin/hh-jira-mcp-server",
   _varName: "hhJiraMcpServerPlugin",
 };
 
@@ -31695,6 +31197,7 @@ const linkedinBrowserMcpServerPlugin: Plugin = {
     "A FastMCP-based server that enables programmatic LinkedIn automation and data extraction through browser automation, offering secure authentication and tools for profile operations and post interactions while respecting LinkedIn's rate limits.",
   image: "https://github.com/alinaqi.png",
   actions: [],
+  githubUrl: "https://github.com/alinaqi/mcp-linkedin-server",
   _varName: "linkedinBrowserMcpServerPlugin",
 };
 
@@ -31705,6 +31208,7 @@ const modelContextProtocolServerForSolanaClientPlugin: Plugin = {
     "A server that enables interaction with the Solana blockchain, providing access to over 40 Solana RPC methods including getting balances, transaction details, block information, and sending transactions.",
   image: "https://github.com/tywenk.png",
   actions: [],
+  githubUrl: "https://github.com/tywenk/mcp-sol",
   _varName: "modelContextProtocolServerForSolanaClientPlugin",
 };
 
@@ -31839,6 +31343,7 @@ const macrostratMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/blake365/macrostrat-mcp",
   _varName: "macrostratMcpServerPlugin",
 };
 
@@ -31849,6 +31354,7 @@ const pythonJiraMcpServerPlugin: Plugin = {
     "A server implementation that allows AI models to interact with Jira through the Model Context Protocol, enabling tasks like JQL searches and retrieving issue details.",
   image: "https://github.com/Chase-Bullock.png",
   actions: [],
+  githubUrl: "https://github.com/Chase-Bullock/python-jira-mcp",
   _varName: "pythonJiraMcpServerPlugin",
 };
 
@@ -31950,6 +31456,7 @@ const spotifyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/varunneal/spotify-mcp",
   _varName: "spotifyMcpServerPlugin",
 };
 
@@ -31960,6 +31467,7 @@ const pythonLocalMcpServerPlugin: Plugin = {
     "Provides an interactive Python REPL environment that maintains persistent session state, allowing users to execute Python code and access session history.",
   image: "https://github.com/Alec2435.png",
   actions: [],
+  githubUrl: "https://github.com/Alec2435/python_mcp",
   _varName: "pythonLocalMcpServerPlugin",
 };
 
@@ -32037,6 +31545,7 @@ const taskwarriorMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/awwaiid/mcp-server-taskwarrior",
   _varName: "taskwarriorMcpServerPlugin",
 };
 
@@ -32047,6 +31556,7 @@ const cloudflareMcpServerPlugin: Plugin = {
     "An MCP server that allows using natural language to manage Cloudflare resources (Workers, KV, R2, D1) through Claude Desktop, VSCode, and other MCP clients.",
   image: "https://github.com/GutMutCode.png",
   actions: [],
+  githubUrl: "https://github.com/GutMutCode/mcp-server-cloudflare",
   _varName: "cloudflareMcpServerPlugin",
 };
 
@@ -32841,6 +32351,7 @@ const sourcesyncaiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/scmdr/sourcesyncai-mcp",
   _varName: "sourcesyncaiMcpServerPlugin",
 };
 
@@ -32851,6 +32362,7 @@ const mcpServer2Plugin: Plugin = {
     "Provides browser automation capabilities through an API endpoint that interprets natural language commands to perform web tasks using OpenAI's GPT models.",
   image: "https://github.com/jonnyhoff.png",
   actions: [],
+  githubUrl: "https://github.com/jonnyhoff/mcp-browser-use",
   _varName: "mcpServer2Plugin",
 };
 
@@ -33809,6 +33321,7 @@ const mcpEthersWalletPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-ethers-server",
   _varName: "mcpEthersWalletPlugin",
 };
 
@@ -34947,6 +34460,7 @@ const abapadtapiMcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mario-andreschak/mcp-abap-abap-adt-api",
   _varName: "abapadtapiMcpserverPlugin",
 };
 
@@ -34957,6 +34471,7 @@ const obsidianIndexMcpServerPlugin: Plugin = {
     "Provides semantic search capability over Obsidian vaults and exposes recent notes as resources to Claude through the MCP protocol.",
   image: "https://github.com/tcsavage.png",
   actions: [],
+  githubUrl: "https://github.com/tcsavage/mcp-obsidian-index",
   _varName: "obsidianIndexMcpServerPlugin",
 };
 
@@ -34967,6 +34482,7 @@ const mdWebcrawlMcpPlugin: Plugin = {
     "A Python-based MCP server that crawls websites to extract and save content as markdown files, with features for mapping website structure and links.",
   image: "https://github.com/jmh108.png",
   actions: [],
+  githubUrl: "https://github.com/jmh108/md-webcrawl-mcp",
   _varName: "mdWebcrawlMcpPlugin",
 };
 
@@ -35008,6 +34524,7 @@ const mcpLlmstxtExplorerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/thedaviddias/mcp-llms-txt-explorer",
   _varName: "mcpLlmstxtExplorerPlugin",
 };
 
@@ -35018,6 +34535,7 @@ const mcpRedditServerPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants like Claude to browse and analyze Reddit content, including searching subreddits, retrieving post details with comments, and viewing trending posts.",
   image: "https://github.com/wllcnm.png",
   actions: [],
+  githubUrl: "https://github.com/wllcnm/mcp-reddit",
   _varName: "mcpRedditServerPlugin",
 };
 
@@ -35130,6 +34648,7 @@ const mcpDuckdbKnowledgeGraphMemoryServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/IzumiSy/mcp-duckdb-memory-server",
   _varName: "mcpDuckdbKnowledgeGraphMemoryServerPlugin",
 };
 
@@ -35408,6 +34927,7 @@ const powerpointMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/supercurses/powerpoint",
   _varName: "powerpointMcpServerPlugin",
 };
 
@@ -35469,6 +34989,7 @@ const mcp2tavilyPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mcp2everything/mcp2tavily",
   _varName: "mcp2tavilyPlugin",
 };
 
@@ -35479,6 +35000,7 @@ const servicenowMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling AI agents to access and manipulate ServiceNow data through natural language interactions, allowing users to search for records, update them, and manage scripts.",
   image: "https://github.com/michaelbuckner.png",
   actions: [],
+  githubUrl: "https://github.com/michaelbuckner/servicenow-mcp",
   _varName: "servicenowMcpServerPlugin",
 };
 
@@ -35729,6 +35251,7 @@ const mcpServerTemplateForCursorIdePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jankowtf/mcp-hitchcode",
   _varName: "mcpServerTemplateForCursorIdePlugin",
 };
 
@@ -35796,6 +35319,7 @@ const fetchBrowserPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TheSethRose/Fetch-Browser",
   _varName: "fetchBrowserPlugin",
 };
 
@@ -35949,6 +35473,7 @@ const travelPlannerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GongRzhe/TRAVEL-PLANNER-MCP-Server",
   _varName: "travelPlannerMcpServerPlugin",
 };
 
@@ -35959,6 +35484,7 @@ const prometheusMcpServerPlugin: Plugin = {
     "An MCP server that enables Large Language Models to retrieve, analyze, and query metric data from Prometheus databases through pre-defined routes.",
   image: "https://github.com/CaesarYangs.png",
   actions: [],
+  githubUrl: "https://github.com/CaesarYangs/prometheus_mcp_server",
   _varName: "prometheusMcpServerPlugin",
 };
 
@@ -36024,6 +35550,7 @@ const farcasterMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/manimohans/farcaster-mcp",
   _varName: "farcasterMcpServerPlugin",
 };
 
@@ -36286,6 +35813,7 @@ const bybitMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/bybit-mcp",
   _varName: "bybitMcpServerPlugin",
 };
 
@@ -36426,6 +35954,7 @@ const windowsCliMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/SimonB97/win-cli-mcp-server",
   _varName: "windowsCliMcpServerPlugin",
 };
 
@@ -36490,6 +36019,7 @@ const googleTasksMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mstfe/mcp-google-tasks",
   _varName: "googleTasksMcpServerPlugin",
 };
 
@@ -36500,6 +36030,7 @@ const codingTodoServerPlugin: Plugin = {
     "An MCP server that provides tools and resources for managing a coding project's todo list, allowing users to view, add, update, and delete todo items with details like priority, status, and tags.",
   image: "https://github.com/dennismartis.png",
   actions: [],
+  githubUrl: "https://github.com/dennismartis/mcp-todo",
   _varName: "codingTodoServerPlugin",
 };
 
@@ -36510,6 +36041,7 @@ const cosenseMcpServerPlugin: Plugin = {
     "An MCP server that allows Claude to access pages from Cosense projects, supporting both public and private projects with optional SID authentication.",
   image: "https://github.com/funwarioisii.png",
   actions: [],
+  githubUrl: "https://github.com/funwarioisii/cosense-mcp-server",
   _varName: "cosenseMcpServerPlugin",
 };
 
@@ -36644,6 +36176,7 @@ const markdownifyMcpServerUtf8EnhancedPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JDJR2024/markdownify-mcp-utf8",
   _varName: "markdownifyMcpServerUtf8EnhancedPlugin",
 };
 
@@ -36806,6 +36339,7 @@ const githubKanbanMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/github-kanban-mcp-server",
   _varName: "githubKanbanMcpServerPlugin",
 };
 
@@ -36816,6 +36350,7 @@ const aactClinicalTrialsMcpServerPlugin: Plugin = {
     "Provides access to the ClinicalTrials.gov AACT database, enabling analysis of clinical trial data, tracking development trends, and generating therapeutic landscape insights.",
   image: "https://github.com/navisbio.png",
   actions: [],
+  githubUrl: "https://github.com/navisbio/ctgov_MCP",
   _varName: "aactClinicalTrialsMcpServerPlugin",
 };
 
@@ -37008,6 +36543,7 @@ const biomartMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jzinno/biomart-mcp",
   _varName: "biomartMcpPlugin",
 };
 
@@ -37018,6 +36554,7 @@ const editFileLinesMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that provides tools for making precise line-based edits to text files within allowed directories.",
   image: "https://github.com/oakenai.png",
   actions: [],
+  githubUrl: "https://github.com/oakenai/mcp-edit-file-lines",
   _varName: "editFileLinesMcpServerPlugin",
 };
 
@@ -37048,6 +36585,7 @@ const cursorA11yMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/westsideori/cursor-a11y-mcp",
   _varName: "cursorA11yMcpPlugin",
 };
 
@@ -37058,6 +36596,7 @@ const encodingDevopsMcpServerPlugin: Plugin = {
     "AI-powered assistant that connects Claude to video encoding workflows, translating cryptic errors into plain English and providing actionable solutions for troubleshooting encoding jobs.",
   image: "https://github.com/PatrickKalkman.png",
   actions: [],
+  githubUrl: "https://github.com/PatrickKalkman/encoding-devops",
   _varName: "encodingDevopsMcpServerPlugin",
 };
 
@@ -37068,6 +36607,7 @@ const peakmojoServerPlugin: Plugin = {
     "A Python server implementation that enables integration with the PeakMojo API, providing access to various resources like users, personas, scenarios, and tools for managing PeakMojo functionality.",
   image: "https://github.com/peakmojo.png",
   actions: [],
+  githubUrl: "https://github.com/peakmojo/mcp-server-peakmojo",
   _varName: "peakmojoServerPlugin",
 };
 
@@ -37078,6 +36618,7 @@ const terminalControllerForMcpPlugin: Plugin = {
     "An MCP server that enables secure terminal command execution, directory navigation, and file system operations through a standardized interface for LLMs.",
   image: "https://github.com/GongRzhe.png",
   actions: [],
+  githubUrl: "https://github.com/GongRzhe/terminal-controller-mcp",
   _varName: "terminalControllerForMcpPlugin",
 };
 
@@ -37088,6 +36629,7 @@ const hanaCloudMcpServerPlugin: Plugin = {
     "Enables integration between SAP HANA Cloud Database and Cursor IDE through the Model Context Protocol, providing standardized interfaces for managing ML models and execution contexts.",
   image: "https://github.com/HatriGt.png",
   actions: [],
+  githubUrl: "https://github.com/HatriGt/hana-mcp-server",
   _varName: "hanaCloudMcpServerPlugin",
 };
 
@@ -37098,6 +36640,7 @@ const mcpTemplateioPlugin: Plugin = {
     "A Model Context Protocol server that provides an image generation tool using Templated.io, allowing users to create customized images based on templates with text and image layers.",
   image: "https://github.com/Lucker631.png",
   actions: [],
+  githubUrl: "https://github.com/Lucker631/mcp-templateio",
   _varName: "mcpTemplateioPlugin",
 };
 
@@ -37108,6 +36651,7 @@ const mcpServerRedisPlugin: Plugin = {
     "A server that provides Claude with Redis database access and operations through a set of tools for basic operations, lists, hashes, sets, and pub/sub functionality.",
   image: "https://github.com/prajwalnayak7.png",
   actions: [],
+  githubUrl: "https://github.com/prajwalnayak7/mcp-server-redis",
   _varName: "mcpServerRedisPlugin",
 };
 
@@ -37118,6 +36662,7 @@ const binaryReaderMcpPlugin: Plugin = {
     "A Model Context Protocol server for reading and analyzing binary files, with initial support for Unreal Engine asset files (.uasset).",
   image: "https://github.com/berlinbra.png",
   actions: [],
+  githubUrl: "https://github.com/berlinbra/binary-reader-mcp",
   _varName: "binaryReaderMcpPlugin",
 };
 
@@ -37128,6 +36673,7 @@ const rabbitmqMcpServerPlugin: Plugin = {
     "A Model Context Protocol server implementation that enables Claude to interact with RabbitMQ message queues and topics, allowing read/write operations on a RabbitMQ instance.",
   image: "https://github.com/kenliao94.png",
   actions: [],
+  githubUrl: "https://github.com/kenliao94/mcp-server-rabbitmq",
   _varName: "rabbitmqMcpServerPlugin",
 };
 
@@ -37138,6 +36684,7 @@ const verodatMcpServerPlugin: Plugin = {
     "An MCP server that integrates Verodat's data management capabilities with AI systems like Claude Desktop, enabling users to manage accounts, workspaces, and datasets, as well as perform AI-powered queries on their data.",
   image: "https://github.com/Verodat.png",
   actions: [],
+  githubUrl: "https://github.com/Verodat/verodat-mcp-server",
   _varName: "verodatMcpServerPlugin",
 };
 
@@ -37266,6 +36813,7 @@ const geminiThinkingServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bartekke8it56w2/new-mcp",
   _varName: "geminiThinkingServerPlugin",
 };
 
@@ -37276,6 +36824,7 @@ const shellMcpServer1Plugin: Plugin = {
     "A Model Context Protocol server that allows LLMs to execute shell commands and receive their output in a controlled manner.",
   image: "https://github.com/odysseus0.png",
   actions: [],
+  githubUrl: "https://github.com/odysseus0/mcp-server-shell",
   _varName: "shellMcpServer1Plugin",
 };
 
@@ -37341,6 +36890,7 @@ const safeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/5ajaki/safe-mcp-server",
   _varName: "safeMcpServerPlugin",
 };
 
@@ -37459,6 +37009,7 @@ const overseerrMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jmagar/overseerr-mcp-server",
   _varName: "overseerrMcpServerPlugin",
 };
 
@@ -37469,6 +37020,7 @@ const jinaAiMcpServerPlugin: Plugin = {
     "Enables semantic search, image search, and cross-modal search functionalities through integration with Jina AI's neural search capabilities.",
   image: "https://github.com/Sheshiyer.png",
   actions: [],
+  githubUrl: "https://github.com/Sheshiyer/jina-ai-mcp-multimodal-search",
   _varName: "jinaAiMcpServerPlugin",
 };
 
@@ -37578,6 +37130,7 @@ const zoomTranscriptMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/forayconsulting/zoom_transcript_mcp",
   _varName: "zoomTranscriptMcpServerPlugin",
 };
 
@@ -37654,6 +37207,7 @@ const sqliteMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jacksteamdev/mcp-sqlite-bun-server",
   _varName: "sqliteMcpServer1Plugin",
 };
 
@@ -37664,6 +37218,7 @@ const chooseMcpServerPlugin: Plugin = {
     "An MCP server for Claude Desktop that allows users to query data from selected Google Cloud datasets by configuring project ID and datasets in the Claude Desktop configuration.",
   image: "https://github.com/keurcien.png",
   actions: [],
+  githubUrl: "https://github.com/keurcien/choose-mcp-server",
   _varName: "chooseMcpServerPlugin",
 };
 
@@ -37674,6 +37229,7 @@ const elevenlabsTexttospeechMcpPlugin: Plugin = {
     "Integrates ElevenLabs Text-to-Speech capabilities with Cursor through the Model Context Protocol, allowing users to convert text to speech with selectable voices within the Cursor editor.",
   image: "https://github.com/georgi-io.png",
   actions: [],
+  githubUrl: "https://github.com/georgi-io/jessica",
   _varName: "elevenlabsTexttospeechMcpPlugin",
 };
 
@@ -37684,6 +37240,7 @@ const awsResourcesMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude to execute Python code using boto3 to query and manage AWS resources directly from conversations.",
   image: "https://github.com/baryhuang.png",
   actions: [],
+  githubUrl: "https://github.com/baryhuang/mcp-server-aws-resources-python",
   _varName: "awsResourcesMcpServerPlugin",
 };
 
@@ -37708,6 +37265,7 @@ const ragieModelContextProtocolServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ragieai/ragie-mcp-server",
   _varName: "ragieModelContextProtocolServerPlugin",
 };
 
@@ -37778,6 +37336,7 @@ const markdownDownloaderPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dazeb/markdown-downloader",
   _varName: "markdownDownloaderPlugin",
 };
 
@@ -37788,6 +37347,7 @@ const unixManualServerPlugin: Plugin = {
     "Provides Unix command documentation directly within Claude conversations, allowing users to retrieve help pages, man pages, and usage information without leaving the chat interface.",
   image: "https://github.com/tizee.png",
   actions: [],
+  githubUrl: "https://github.com/tizee/mcp-unix-manual",
   _varName: "unixManualServerPlugin",
 };
 
@@ -37798,6 +37358,7 @@ const mcpToolsForObsidianPlugin: Plugin = {
     "A local MCP server that enables AI applications like Claude Desktop to securely access and work with Obsidian vaults, providing capabilities for reading notes, executing templates, and performing semantic searches.",
   image: "https://github.com/jacksteamdev.png",
   actions: [],
+  githubUrl: "https://github.com/jacksteamdev/obsidian-mcp-tools",
   _varName: "mcpToolsForObsidianPlugin",
 };
 
@@ -37858,6 +37419,7 @@ const telegramMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sparfenyuk/mcp-telegram",
   _varName: "telegramMcpServerPlugin",
 };
 
@@ -37868,6 +37430,7 @@ const shellMcpServer2Plugin: Plugin = {
     "A secure server that enables AI applications to execute shell commands in specified directories, supporting multiple shell types (bash, sh, cmd, powershell) with built-in security features like directory isolation and timeout control.",
   image: "https://github.com/blazickjp.png",
   actions: [],
+  githubUrl: "https://github.com/blazickjp/shell-mcp-server",
   _varName: "shellMcpServer2Plugin",
 };
 
@@ -38029,6 +37592,7 @@ const chainOfDraftCodMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stat-guy/chain-of-draft",
   _varName: "chainOfDraftCodMcpServerPlugin",
 };
 
@@ -38218,6 +37782,7 @@ const claudeOutlookMcpToolPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/syedazharmbnr1/claude-outlook-mcp",
   _varName: "claudeOutlookMcpToolPlugin",
 };
 
@@ -38228,6 +37793,7 @@ const mcpProxyServerPlugin: Plugin = {
     "A central hub that aggregates multiple MCP resource servers into a single unified interface, enabling users to access tools and capabilities from multiple backend servers through one connection point.",
   image: "https://github.com/adamwattis.png",
   actions: [],
+  githubUrl: "https://github.com/adamwattis/mcp-proxy-server",
   _varName: "mcpProxyServerPlugin",
 };
 
@@ -38295,6 +37861,7 @@ const brianknowsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/antoncoding/mcp-brianknows",
   _varName: "brianknowsMcpServerPlugin",
 };
 
@@ -38305,6 +37872,7 @@ const deepseekMcpServer2Plugin: Plugin = {
     "Provides code generation and completion capabilities using the DeepSeek API, with support for tool chaining and cost optimization.",
   image: "https://github.com/Sheshiyer.png",
   actions: [],
+  githubUrl: "https://github.com/Sheshiyer/deepseek-mcp-with-MoE",
   _varName: "deepseekMcpServer2Plugin",
 };
 
@@ -38570,6 +38138,7 @@ const datasetViewerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/privetin/dataset-viewer",
   _varName: "datasetViewerMcpServerPlugin",
 };
 
@@ -38580,6 +38149,7 @@ const mcpCodeAnalyzerPlugin: Plugin = {
     "A comprehensive code analysis and management tool that integrates with Claude Desktop to analyze code at project and file levels, helping adapt changes to projects intelligently.",
   image: "https://github.com/emiryasar.png",
   actions: [],
+  githubUrl: "https://github.com/emiryasar/mcp_code_analyzer",
   _varName: "mcpCodeAnalyzerPlugin",
 };
 
@@ -38590,6 +38160,7 @@ const openaiMcpServerPlugin: Plugin = {
     "A Model Context Protocol server implementation that enables connection between OpenAI APIs and MCP clients for coding assistance with features like CLI interaction, web API integration, and tool-based architecture.",
   image: "https://github.com/arthurcolle.png",
   actions: [],
+  githubUrl: "https://github.com/arthurcolle/openai-mcp",
   _varName: "openaiMcpServerPlugin",
 };
 
@@ -38600,6 +38171,7 @@ const clankiPlugin: Plugin = {
     "An MCP server that enables AI assistants like Claude to interact with Anki flashcard decks, allowing users to create, manage, and update flashcards through natural language conversations.",
   image: "https://github.com/jasperket.png",
   actions: [],
+  githubUrl: "https://github.com/jasperket/clanki",
   _varName: "clankiPlugin",
 };
 
@@ -38610,6 +38182,7 @@ const weatherServiceMcpServerPlugin: Plugin = {
     "A simple note-taking MCP server that allows storing and summarizing notes with custom URI schemes and provides functionality to add notes and generate summaries with different detail levels.",
   image: "https://github.com/Sunwood-ai-labs.png",
   actions: [],
+  githubUrl: "https://github.com/Sunwood-ai-labs/mcp-weather-service-server",
   _varName: "weatherServiceMcpServerPlugin",
 };
 
@@ -38633,6 +38206,7 @@ const claudeDesktopApiMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mlobo2012/Claude_Desktop_API_USE_VIA_MCP",
   _varName: "claudeDesktopApiMcpPlugin",
 };
 
@@ -38818,6 +38392,7 @@ const nodeOmnibusMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bsmi021/mcp-node-omnibus-server",
   _varName: "nodeOmnibusMcpServerPlugin",
 };
 
@@ -38946,6 +38521,7 @@ const todoListMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/RegiByte/todo-list-mcp",
   _varName: "todoListMcpServerPlugin",
 };
 
@@ -38956,6 +38532,7 @@ const mcpAlchemyPlugin: Plugin = {
     "Connects Claude Desktop directly to databases, allowing it to explore database structures, write SQL queries, analyze datasets, and create reports through an API layer with tools for table exploration and query execution.",
   image: "https://github.com/runekaagaard.png",
   actions: [],
+  githubUrl: "https://github.com/runekaagaard/mcp-alchemy",
   _varName: "mcpAlchemyPlugin",
 };
 
@@ -38966,6 +38543,7 @@ const gmailMcpServer2Plugin: Plugin = {
     "MCP server that integrates with Gmail to enable sending, reading, and managing emails through tools like send-email, trash-email, get-unread-emails, and read-email.",
   image: "https://github.com/jasonsum.png",
   actions: [],
+  githubUrl: "https://github.com/jasonsum/gmail-mcp-server",
   _varName: "gmailMcpServer2Plugin",
 };
 
@@ -39030,6 +38608,7 @@ const xtwitterMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/vidhupv/x-mcp",
   _varName: "xtwitterMcpServerPlugin",
 };
 
@@ -39040,6 +38619,7 @@ const mcpMediaGeneratorPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to create images and videos using Amazon Nova Canvas and Nova Reel models.",
   image: "https://github.com/dvejsada.png",
   actions: [],
+  githubUrl: "https://github.com/dvejsada/mcp_media_generator",
   _varName: "mcpMediaGeneratorPlugin",
 };
 
@@ -39050,6 +38630,7 @@ const filesystemMcpServer2Plugin: Plugin = {
     "An MCP server that allows Claude AI to perform filesystem operations including reading, writing, listing, moving files, and searching directories within specified allowed paths.",
   image: "https://github.com/ai-yliu.png",
   actions: [],
+  githubUrl: "https://github.com/ai-yliu/filesystem-mcp-server",
   _varName: "filesystemMcpServer2Plugin",
 };
 
@@ -39060,6 +38641,7 @@ const mcpBlockchainServerPlugin: Plugin = {
     "A secure system enabling AI assistants to interact with blockchain data and prepare transactions while ensuring users maintain exclusive control over their private keys and transaction signing.",
   image: "https://github.com/zhangzhongnan928.png",
   actions: [],
+  githubUrl: "https://github.com/zhangzhongnan928/mcp-blockchain-server",
   _varName: "mcpBlockchainServerPlugin",
 };
 
@@ -39083,6 +38665,7 @@ const brightsyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mattlevine/brightsy-mcp",
   _varName: "brightsyMcpServerPlugin",
 };
 
@@ -39093,6 +38676,7 @@ const ragdocsMcpServerPlugin: Plugin = {
     "Provides RAG capabilities for semantic document search using Qdrant vector database and Ollama/OpenAI embeddings, allowing users to add, search, list, and delete documentation with metadata support.",
   image: "https://github.com/heltonteixeira.png",
   actions: [],
+  githubUrl: "https://github.com/heltonteixeira/ragdocs",
   _varName: "ragdocsMcpServerPlugin",
 };
 
@@ -39103,6 +38687,7 @@ const ledgerMcpServerPlugin: Plugin = {
     "An MCP server that allows accessing and managing ledger files through Claude by providing account listing, balance checking, and transaction register viewing capabilities.",
   image: "https://github.com/mprokopov.png",
   actions: [],
+  githubUrl: "https://github.com/mprokopov/ledger-mcp-server",
   _varName: "ledgerMcpServerPlugin",
 };
 
@@ -39171,6 +38756,7 @@ const homeAssistantMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hekmon8/Homeassistant-server-mcp",
   _varName: "homeAssistantMcpServer1Plugin",
 };
 
@@ -39181,6 +38767,7 @@ const mysqlmcpPlugin: Plugin = {
     "A Model Context Protocol server that enables SQL query execution, database management, and business intelligence capabilities through MySQL connections.",
   image: "https://github.com/zajTools.png",
   actions: [],
+  githubUrl: "https://github.com/zajTools/zaj-MySQL-MCP",
   _varName: "mysqlmcpPlugin",
 };
 
@@ -39191,6 +38778,7 @@ const lancedbMcpServerPlugin: Plugin = {
     "Enables efficient vector database operations for embedding storage and similarity search through a Model Context Protocol interface.",
   image: "https://github.com/RyanLisse.png",
   actions: [],
+  githubUrl: "https://github.com/RyanLisse/lancedb_mcp",
   _varName: "lancedbMcpServerPlugin",
 };
 
@@ -39227,6 +38815,7 @@ const mcpServerTemplateForCursorIde1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MyBlockcities/mcp-server-heroku",
   _varName: "mcpServerTemplateForCursorIde1Plugin",
 };
 
@@ -39237,6 +38826,7 @@ const linearMcpIntegrationServerPlugin: Plugin = {
     "Enables AI models to interact with Linear for issue tracking and project management through capabilities like creating/searching issues, managing sprints, and retrieving workflow states.",
   image: "https://github.com/MadeByNando.png",
   actions: [],
+  githubUrl: "https://github.com/MadeByNando/MCP-linear-Server",
   _varName: "linearMcpIntegrationServerPlugin",
 };
 
@@ -39247,6 +38837,7 @@ const mcpDocumentationServerPlugin: Plugin = {
     "A smart documentation server that provides AI-assisted code improvement and documentation management through Claude Desktop integration.",
   image: "https://github.com/mahawi1992.png",
   actions: [],
+  githubUrl: "https://github.com/mahawi1992/mcp-documentation-server",
   _varName: "mcpDocumentationServerPlugin",
 };
 
@@ -39257,6 +38848,7 @@ const pushoverMcpPlugin: Plugin = {
     "A Model Context Protocol implementation that enables AI agents to send notifications through Pushover.net, supporting message customization with various parameters like priority, sound, and URL.",
   image: "https://github.com/AshikNesin.png",
   actions: [],
+  githubUrl: "https://github.com/AshikNesin/pushover-mcp",
   _varName: "pushoverMcpPlugin",
 };
 
@@ -40691,6 +40283,7 @@ const clickupMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/v4lheru/clickup-mcp-server",
   _varName: "clickupMcpServerPlugin",
 };
 
@@ -40782,6 +40375,7 @@ const webContentMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/amotivv/cloudflare-browser-rendering",
   _varName: "webContentMcpServerPlugin",
 };
 
@@ -40792,6 +40386,7 @@ const mcpDevelopmentServerPlugin: Plugin = {
     "A Model Context Protocol server that enables Claude to manage software development projects with complete context awareness and code execution through Docker environments.",
   image: "https://github.com/dillip285.png",
   actions: [],
+  githubUrl: "https://github.com/dillip285/mcp-dev-server",
   _varName: "mcpDevelopmentServerPlugin",
 };
 
@@ -40802,6 +40397,7 @@ const worldpayMcpServerPlugin: Plugin = {
     "A server implementing the Model Context Protocol to make and query payments through Worldpay APIs, enabling payment processing, payment queries, and checkout form generation.",
   image: "https://github.com/simonwfarrow.png",
   actions: [],
+  githubUrl: "https://github.com/simonwfarrow/worldpay-mcp",
   _varName: "worldpayMcpServerPlugin",
 };
 
@@ -40812,6 +40408,7 @@ const gauntletinceptMcpPlugin: Plugin = {
     "Enables Claude Desktop to interact with the Gauntlet Incept system for generating, tagging, and grading educational content for K-8 students directly through natural language.",
   image: "https://github.com/Birdsmith.png",
   actions: [],
+  githubUrl: "https://github.com/Birdsmith/Gauntlet-Incept-MCP",
   _varName: "gauntletinceptMcpPlugin",
 };
 
@@ -40939,6 +40536,7 @@ const mcpJsonDocumentCollectionServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jimpick/mcp-json-db-collection-server",
   _varName: "mcpJsonDocumentCollectionServerPlugin",
 };
 
@@ -41075,6 +40673,7 @@ const fredMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kablewy/fred-mcp-server",
   _varName: "fredMcpServerPlugin",
 };
 
@@ -41107,6 +40706,7 @@ const scraperisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Ai-Quill/scraperis-mcp",
   _varName: "scraperisMcpServerPlugin",
 };
 
@@ -41163,6 +40763,7 @@ const scrapegraphMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ScrapeGraphAI/scrapegraph-mcp",
   _varName: "scrapegraphMcpServerPlugin",
 };
 
@@ -41308,6 +40909,7 @@ const chromeToolsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nicholmikey/chrome-tools-MCP",
   _varName: "chromeToolsMcpServerPlugin",
 };
 
@@ -41318,6 +40920,7 @@ const mcpAppleNotes1Plugin: Plugin = {
     "A Model Context Protocol server that enables semantic search and retrieval of Apple Notes content, allowing AI assistants to access, search, and create notes using on-device embeddings.",
   image: "https://github.com/Dingzeefs.png",
   actions: [],
+  githubUrl: "https://github.com/Dingzeefs/mcp-apple-notes",
   _varName: "mcpAppleNotes1Plugin",
 };
 
@@ -41328,6 +40931,7 @@ const mcpCommandServerPlugin: Plugin = {
     "A secure server that allows LLM applications like Claude to execute whitelisted system commands with user confirmation and comprehensive security features.",
   image: "https://github.com/Andrew-Beniash.png",
   actions: [],
+  githubUrl: "https://github.com/Andrew-Beniash/mcp-command-server",
   _varName: "mcpCommandServerPlugin",
 };
 
@@ -41338,6 +40942,7 @@ const linearMcpServer1Plugin: Plugin = {
     "A Model Context Protocol server that allows Claude to interact with Linear's API for managing teams, issues, projects, and cycles.",
   image: "https://github.com/cpropster.png",
   actions: [],
+  githubUrl: "https://github.com/cpropster/linear-mcp-server",
   _varName: "linearMcpServer1Plugin",
 };
 
@@ -41348,6 +40953,7 @@ const senechalMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides health data from the Senechal API to LLM applications, enabling AI assistants to access, analyze, and respond to personal health information.",
   image: "https://github.com/mattjoyce.png",
   actions: [],
+  githubUrl: "https://github.com/mattjoyce/senechal-mcp",
   _varName: "senechalMcpServerPlugin",
 };
 
@@ -41377,6 +40983,7 @@ const pdfToPngMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/truaxki/mcp-Pdf2png",
   _varName: "pdfToPngMcpServerPlugin",
 };
 
@@ -41387,6 +40994,7 @@ const mcpSalesforceConnectorPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to interact with Salesforce data through SOQL queries, SOSL searches, and various API operations including record management.",
   image: "https://github.com/smn2gnt.png",
   actions: [],
+  githubUrl: "https://github.com/smn2gnt/MCP-Salesforce",
   _varName: "mcpSalesforceConnectorPlugin",
 };
 
@@ -41417,6 +41025,7 @@ const metaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DMontgomery40/meta-mcp-server",
   _varName: "metaMcpServerPlugin",
 };
 
@@ -41427,6 +41036,7 @@ const windsurfSupabaseMcpServerPlugin: Plugin = {
     "A Model Context Protocol server optimized for integrating Supabase with the Windsurf Editor, providing database interactions through natural language with enhanced error handling and response formatting.",
   image: "https://github.com/hertzfelt.png",
   actions: [],
+  githubUrl: "https://github.com/hertzfelt/windsurf-supabase-mcp",
   _varName: "windsurfSupabaseMcpServerPlugin",
 };
 
@@ -41437,6 +41047,7 @@ const mcpPdfFormsPlugin: Plugin = {
     "A server providing PDF form manipulation tools via MCP's API, allowing users to find PDFs across directories, extract form field information, and visualize form fields in documents.",
   image: "https://github.com/Wildebeest.png",
   actions: [],
+  githubUrl: "https://github.com/Wildebeest/mcp_pdf_forms",
   _varName: "mcpPdfFormsPlugin",
 };
 
@@ -41476,6 +41087,7 @@ const theVergeNewsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/manimohans/verge-news-mcp",
   _varName: "theVergeNewsMcpServerPlugin",
 };
 
@@ -41486,6 +41098,7 @@ const mcpEvmSignerPlugin: Plugin = {
     "A server that securely manages Ethereum private keys locally and enables Claude for Desktop to interact with EVM-compatible blockchains through Infura.",
   image: "https://github.com/zhangzhongnan928.png",
   actions: [],
+  githubUrl: "https://github.com/zhangzhongnan928/mcp-evm-signer",
   _varName: "mcpEvmSignerPlugin",
 };
 
@@ -41632,6 +41245,7 @@ const strapiMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/misterboe/strapi-mcp-server",
   _varName: "strapiMcpServer1Plugin",
 };
 
@@ -41679,6 +41293,7 @@ const comfyuiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jonpojonpo/comfy-ui-mcp-server",
   _varName: "comfyuiMcpServerPlugin",
 };
 
@@ -41727,6 +41342,7 @@ const wintermMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/capecoma/winterm-mcp",
   _varName: "wintermMcpPlugin",
 };
 
@@ -41737,6 +41353,7 @@ const mcpDuckduckgoSearchPluginPlugin: Plugin = {
     "Provides web search functionality via DuckDuckGo for Claude Code and MCP-compatible clients, featuring advanced content exploration, navigation across search results, and detailed webpage analysis.",
   image: "https://github.com/gianlucamazza.png",
   actions: [],
+  githubUrl: "https://github.com/gianlucamazza/mcp-duckduckgo",
   _varName: "mcpDuckduckgoSearchPluginPlugin",
 };
 
@@ -41747,6 +41364,7 @@ const notionMcpServer5Plugin: Plugin = {
     "Enables Language Models to interact with Notion workspaces through standardized tools for searching, reading, creating, and updating pages and databases.",
   image: "https://github.com/v-3.png",
   actions: [],
+  githubUrl: "https://github.com/v-3/notion-server",
   _varName: "notionMcpServer5Plugin",
 };
 
@@ -41814,6 +41432,7 @@ const ankiMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/scorzeth/anki-mcp-server",
   _varName: "ankiMcpServer2Plugin",
 };
 
@@ -41888,6 +41507,7 @@ const trinoMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stinkgen/trino_mcp",
   _varName: "trinoMcpServer1Plugin",
 };
 
@@ -41898,6 +41518,7 @@ const canvasMcpServer1Plugin: Plugin = {
     "A local server that enables interaction with Canvas Learning Management System API through Claude Desktop, allowing users to manage courses, access assignments, view announcements, and retrieve course materials.",
   image: "https://github.com/vishalsachdev.png",
   actions: [],
+  githubUrl: "https://github.com/vishalsachdev/canvas-mcp",
   _varName: "canvasMcpServer1Plugin",
 };
 
@@ -42089,6 +41710,7 @@ const mcpservercodeassistPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/abhishekbhakat/mcp_server_code_assist",
   _varName: "mcpservercodeassistPlugin",
 };
 
@@ -42133,6 +41755,7 @@ const mcpGitRepoBrowserPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/razorback16/mcp-git-repo-browser",
   _varName: "mcpGitRepoBrowserPlugin",
 };
 
@@ -42438,6 +42061,7 @@ const tanaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tim-mcdonnell/tana-mcp",
   _varName: "tanaMcpServerPlugin",
 };
 
@@ -42546,6 +42170,7 @@ const activitywatchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/8bitgentleman/activitywatch-mcp-server",
   _varName: "activitywatchMcpServerPlugin",
 };
 
@@ -42556,6 +42181,7 @@ const pdfReaderMcpServerPlugin: Plugin = {
     "Provides tools for reading and extracting text from PDF files, supporting both local files and URLs.",
   image: "https://github.com/trafflux.png",
   actions: [],
+  githubUrl: "https://github.com/trafflux/pdf-reader-mcp",
   _varName: "pdfReaderMcpServerPlugin",
 };
 
@@ -42566,6 +42192,7 @@ const blenderMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows management and execution of Blender Python scripts, enabling users to create, edit and run scripts in a headless Blender environment through natural language interfaces.",
   image: "https://github.com/cwahlfeldt.png",
   actions: [],
+  githubUrl: "https://github.com/cwahlfeldt/blender-mcp",
   _varName: "blenderMcpServerPlugin",
 };
 
@@ -42576,6 +42203,7 @@ const mcpServerForSpinnakerPlugin: Plugin = {
     "A Model Context Protocol server implementation that allows AI models to interact with and manage Spinnaker deployments, pipelines, and applications through a standardized interface.",
   image: "https://github.com/dion-hagan.png",
   actions: [],
+  githubUrl: "https://github.com/dion-hagan/mcp-server-spinnaker",
   _varName: "mcpServerForSpinnakerPlugin",
 };
 
@@ -42586,6 +42214,7 @@ const workersMcpPlugin: Plugin = {
     "A package that connects Claude Desktop and other MCP clients to Cloudflare Workers, enabling custom functionality to be accessed via natural language through the Model Context Protocol.",
   image: "https://github.com/cloudflare.png",
   actions: [],
+  githubUrl: "https://github.com/cloudflare/workers-mcp",
   _varName: "workersMcpPlugin",
 };
 
@@ -42774,6 +42403,7 @@ const jiraMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/George5562/Jira-MCP-Server",
   _varName: "jiraMcpServer1Plugin",
 };
 
@@ -42784,6 +42414,7 @@ const gmailMcpServer3Plugin: Plugin = {
     "Provides comprehensive Gmail integration with LLM processing capabilities, allowing users to read, search, filter emails and handle attachments through the Model Context Protocol.",
   image: "https://github.com/cablate.png",
   actions: [],
+  githubUrl: "https://github.com/cablate/mcp-google-gmail",
   _varName: "gmailMcpServer3Plugin",
 };
 
@@ -42794,6 +42425,7 @@ const notionMcpPlugin: Plugin = {
     "A Model Context Protocol server that integrates with Notion's API to manage personal todo lists, allowing users to view, add, and update tasks directly from Claude.",
   image: "https://github.com/Badhansen.png",
   actions: [],
+  githubUrl: "https://github.com/Badhansen/notion-mcp",
   _varName: "notionMcpPlugin",
 };
 
@@ -42854,6 +42486,7 @@ const databaseUpdaterMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AnuragRai017/database-updater-MCP-Server",
   _varName: "databaseUpdaterMcpServerPlugin",
 };
 
@@ -42864,6 +42497,7 @@ const untappdMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that allows Claude to query the Untappd beer database API for searching beers and retrieving detailed beer information.",
   image: "https://github.com/jtucker.png",
   actions: [],
+  githubUrl: "https://github.com/jtucker/mcp-untappd-server",
   _varName: "untappdMcpServerPlugin",
 };
 
@@ -42874,6 +42508,7 @@ const systemdcoredumpMcpServerPlugin: Plugin = {
     "Enables MCP-capable applications to access, manage, and analyze system core dumps through integration with systemd-coredump functionality.",
   image: "https://github.com/signal-slot.png",
   actions: [],
+  githubUrl: "https://github.com/signal-slot/mcp-systemd-coredump",
   _varName: "systemdcoredumpMcpServerPlugin",
 };
 
@@ -43199,6 +42834,7 @@ const salesforceMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tsmztech/mcp-server-salesforce",
   _varName: "salesforceMcpServer1Plugin",
 };
 
@@ -43273,6 +42909,7 @@ const alphaVantageStockMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ranveer0323/stock-analysis-mcp",
   _varName: "alphaVantageStockMcpServerPlugin",
 };
 
@@ -43283,6 +42920,7 @@ const logseqMcpServerPlugin: Plugin = {
     "A server that enables LLMs to programmatically interact with Logseq knowledge graphs, allowing creation and management of pages and blocks.",
   image: "https://github.com/dailydaniel.png",
   actions: [],
+  githubUrl: "https://github.com/dailydaniel/logseq-mcp",
   _varName: "logseqMcpServerPlugin",
 };
 
@@ -43293,6 +42931,7 @@ const mcpServerForVertexAiSearchPlugin: Plugin = {
     "A server that enables document searching using Vertex AI with Gemini grounding, improving search results by grounding responses in private data stored in Vertex AI Datastore.",
   image: "https://github.com/ubie-oss.png",
   actions: [],
+  githubUrl: "https://github.com/ubie-oss/mcp-vertexai-search",
   _varName: "mcpServerForVertexAiSearchPlugin",
 };
 
@@ -43303,6 +42942,7 @@ const stockflowMcpServerPlugin: Plugin = {
     "A Model Context Protocol server providing real-time stock data and options analysis through Yahoo Finance, enabling LLMs to access market data, analyze stocks, and evaluate options strategies.",
   image: "https://github.com/twolven.png",
   actions: [],
+  githubUrl: "https://github.com/twolven/mcp-stockflow",
   _varName: "stockflowMcpServerPlugin",
 };
 
@@ -43440,6 +43080,7 @@ const todoistMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/abhiz123/todoist-mcp-server",
   _varName: "todoistMcpServerPlugin",
 };
 
@@ -43615,6 +43256,7 @@ const mondaycomMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sakce/mcp-server-monday",
   _varName: "mondaycomMcpServer1Plugin",
 };
 
@@ -43703,6 +43345,7 @@ const mcpEtherscanServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/5ajaki/mcp-etherscan-server",
   _varName: "mcpEtherscanServerPlugin",
 };
 
@@ -43764,6 +43407,7 @@ const ideogramMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/ideagram-mcp-server",
   _varName: "ideogramMcpServerPlugin",
 };
 
@@ -43793,6 +43437,7 @@ const mcpGoogleCustomSearchServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/limklister/mcp-google-custom-search-server",
   _varName: "mcpGoogleCustomSearchServerPlugin",
 };
 
@@ -43803,6 +43448,7 @@ const elasticsearchMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables LLMs to interact with Elasticsearch clusters, allowing them to manage indices and execute search queries using natural language.",
   image: "https://github.com/da1y.png",
   actions: [],
+  githubUrl: "https://github.com/da1y/mcp-server-elasticsearch",
   _varName: "elasticsearchMcpServerPlugin",
 };
 
@@ -43962,6 +43608,7 @@ const ollamaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/NightTrek/Ollama-mcp",
   _varName: "ollamaMcpServerPlugin",
 };
 
@@ -44054,6 +43701,7 @@ const websearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/m4s1t4/webSearch-Tools",
   _varName: "websearchPlugin",
 };
 
@@ -44064,6 +43712,7 @@ const mcpGithubRepositoryServerPlugin: Plugin = {
     "A server that allows AI assistants to browse and read files from specified GitHub repositories, providing access to repository contents via the Model Context Protocol.",
   image: "https://github.com/loglmhq.png",
   actions: [],
+  githubUrl: "https://github.com/loglmhq/mcp-server-github-repo",
   _varName: "mcpGithubRepositoryServerPlugin",
 };
 
@@ -44447,6 +44096,7 @@ const mcpfigmaPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/smithery-ai/mcp-figma",
   _varName: "mcpfigmaPlugin",
 };
 
@@ -44632,6 +44282,7 @@ const mcpAbapAdtPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mario-andreschak/mcp-abap-adt",
   _varName: "mcpAbapAdtPlugin",
 };
 
@@ -44751,6 +44402,7 @@ const binanceMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qeinfinity/binance-mcp-server",
   _varName: "binanceMcpServerPlugin",
 };
 
@@ -44761,6 +44413,7 @@ const aiDevelopmentAssistantMcpServerPlugin: Plugin = {
     "A Cursor-compatible toolkit that provides intelligent coding assistance through custom AI tools for code architecture planning, screenshot analysis, code review, and file reading capabilities.",
   image: "https://github.com/yeakub108.png",
   actions: [],
+  githubUrl: "https://github.com/yeakub108/mcp-server",
   _varName: "aiDevelopmentAssistantMcpServerPlugin",
 };
 
@@ -44895,6 +44548,7 @@ const memoryCustomPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/BRO3886/mcp-memory-custom",
   _varName: "memoryCustomPlugin",
 };
 
@@ -44905,6 +44559,7 @@ const chromaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server providing vector database capabilities through Chroma, enabling semantic document search, metadata filtering, and document management with persistent storage.",
   image: "https://github.com/privetin.png",
   actions: [],
+  githubUrl: "https://github.com/privetin/chroma",
   _varName: "chromaMcpServerPlugin",
 };
 
@@ -44915,6 +44570,7 @@ const umamiAnalyticsMcpServerPlugin: Plugin = {
     "Enhances Claude's capabilities by providing access to website analytics data from Umami, enabling analysis of user behavior, website performance tracking, and data-driven insights generation.",
   image: "https://github.com/jakeyShakey.png",
   actions: [],
+  githubUrl: "https://github.com/jakeyShakey/umami_mcp_server",
   _varName: "umamiAnalyticsMcpServerPlugin",
 };
 
@@ -44925,6 +44581,7 @@ const codecheckerMcpPlugin: Plugin = {
     "A code review tool for Cursor IDE that uses OpenAI's GPT models to provide intelligent code analysis and suggestions.",
   image: "https://github.com/jacklandis29.png",
   actions: [],
+  githubUrl: "https://github.com/jacklandis29/codechecker-mcp",
   _varName: "codecheckerMcpPlugin",
 };
 
@@ -45519,6 +45176,7 @@ const alchemyMcpPluginPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/itsanishjain/alchemy-sdk-mcp",
   _varName: "alchemyMcpPluginPlugin",
 };
 
@@ -45529,6 +45187,7 @@ const mcpHeliusPlugin: Plugin = {
     "A Model Context Protocol server that provides Claude with comprehensive access to Solana blockchain data via the Helius API, enabling operations like checking wallet balances, retrieving blockchain information, and interacting with tokens and NFTs.",
   image: "https://github.com/dcSpark.png",
   actions: [],
+  githubUrl: "https://github.com/dcSpark/mcp-server-helius",
   _varName: "mcpHeliusPlugin",
 };
 
@@ -45539,6 +45198,7 @@ const mcpserverllmlingPlugin: Plugin = {
     "A server for the Machine Chat Protocol (MCP) that provides a YAML-based configuration system for LLM applications, allowing users to define resources, tools, and prompts without writing code.",
   image: "https://github.com/phil65.png",
   actions: [],
+  githubUrl: "https://github.com/phil65/mcp-server-llmling",
   _varName: "mcpserverllmlingPlugin",
 };
 
@@ -45648,6 +45308,7 @@ const mcpSnapshotServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-snapshot-server",
   _varName: "mcpSnapshotServerPlugin",
 };
 
@@ -45658,6 +45319,7 @@ const scaflogZohoMcpServerPlugin: Plugin = {
     "An MCP server for Zoho Creator's Scaflog application that provides note management functionality with capabilities to store, access, and summarize notes.",
   image: "https://github.com/mastercode-io.png",
   actions: [],
+  githubUrl: "https://github.com/mastercode-io/scaflog-zoho-mcp-server",
   _varName: "scaflogZohoMcpServerPlugin",
 };
 
@@ -45668,6 +45330,7 @@ const memexPlugin: Plugin = {
     "A tool for Model Context Protocol (MCP) that allows you to analyze web content and add it to your knowledge base, storing content as Markdown files for easy viewing with tools like Obsidian.",
   image: "https://github.com/narphorium.png",
   actions: [],
+  githubUrl: "https://github.com/narphorium/mcp-memex",
   _varName: "memexPlugin",
 };
 
@@ -45678,6 +45341,7 @@ const googleDriveMcpServerPlugin: Plugin = {
     "Integrates with Google Drive to enable listing, searching, and reading files, plus reading and writing to Google Sheets.",
   image: "https://github.com/isaacphi.png",
   actions: [],
+  githubUrl: "https://github.com/isaacphi/mcp-gdrive",
   _varName: "googleDriveMcpServerPlugin",
 };
 
@@ -45714,6 +45378,7 @@ const surfMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ravinahp/surf-mcp",
   _varName: "surfMcpServerPlugin",
 };
 
@@ -46086,6 +45751,7 @@ const smtpMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/samihalawa/mcp-server-smtp",
   _varName: "smtpMcpServerPlugin",
 };
 
@@ -46167,6 +45833,7 @@ const googleJobsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ChanMeng666/server-google-jobs",
   _varName: "googleJobsMcpServerPlugin",
 };
 
@@ -46177,6 +45844,7 @@ const youtubeIntegrationPlugin: Plugin = {
     "Enables extraction of transcript text from YouTube videos by providing the video URL, supporting standard, shortened, and embed URL formats.",
   image: "https://github.com/highlight-ing.png",
   actions: [],
+  githubUrl: "https://github.com/highlight-ing/highlight-youtube-mcp",
   _varName: "youtubeIntegrationPlugin",
 };
 
@@ -46187,6 +45855,7 @@ const mistralMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that provides two tools for chatting with Mistral AI models, supporting both text-only conversations and image+text inputs.",
   image: "https://github.com/speakeasy-api.png",
   actions: [],
+  githubUrl: "https://github.com/speakeasy-api/mistral-mcp-server-example",
   _varName: "mistralMcpServerPlugin",
 };
 
@@ -46324,6 +45993,7 @@ const mcpPromptsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sparesparrow/mcp-prompts",
   _varName: "mcpPromptsServerPlugin",
 };
 
@@ -46955,6 +46625,7 @@ const illumioMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/alexgoller/illumio-mcp-server",
   _varName: "illumioMcpServerPlugin",
 };
 
@@ -47040,6 +46711,7 @@ const mcpServerOfficePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/famano/mcp-server-office",
   _varName: "mcpServerOfficePlugin",
 };
 
@@ -47050,6 +46722,7 @@ const pubmedMcpServerPlugin: Plugin = {
     "An MCP server implementation that enables searching and retrieving research articles from PubMed with specific focus on open access content filtering and full-text link retrieval.",
   image: "https://github.com/rikachu225.png",
   actions: [],
+  githubUrl: "https://github.com/rikachu225/mcp-pubmed-server",
   _varName: "pubmedMcpServerPlugin",
 };
 
@@ -47121,6 +46794,7 @@ const macosDefaultsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/g0t4/mcp-server-macos-defaults",
   _varName: "macosDefaultsMcpServerPlugin",
 };
 
@@ -47131,6 +46805,7 @@ const elasticsearchSemanticSearchMcpServerPlugin: Plugin = {
     "A Python MCP server that enables semantic search through Search Labs blog posts indexed in Elasticsearch, allowing Claude to intelligently retrieve relevant information from the blog content.",
   image: "https://github.com/jedrazb.png",
   actions: [],
+  githubUrl: "https://github.com/jedrazb/elastic-semantic-search-mcp-server",
   _varName: "elasticsearchSemanticSearchMcpServerPlugin",
 };
 
@@ -47141,6 +46816,7 @@ const difyWorkflowsMcpServerPlugin: Plugin = {
     "A TypeScript implementation of a Model Context Protocol (MCP) server that exposes Dify workflows as tools for AI systems to interact with.",
   image: "https://github.com/localSummer.png",
   actions: [],
+  githubUrl: "https://github.com/localSummer/dify-workflow-mcp",
   _varName: "difyWorkflowsMcpServerPlugin",
 };
 
@@ -47165,6 +46841,7 @@ const isitdownMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hesreallyhim/mcp-server-isitdown",
   _varName: "isitdownMcpServerPlugin",
 };
 
@@ -47175,6 +46852,7 @@ const dingtalkMcpServerV2Plugin: Plugin = {
     "A Model Control Protocol server for integrating with DingTalk, enabling users to send messages, retrieve conversation/user information, and query calendar events through Claude.",
   image: "https://github.com/wllcnm.png",
   actions: [],
+  githubUrl: "https://github.com/wllcnm/dingding_mcp_v2",
   _varName: "dingtalkMcpServerV2Plugin",
 };
 
@@ -47185,6 +46863,7 @@ const mcpGatewayForRfkJrEndpointsPlugin: Plugin = {
     "A Model Context Protocol gateway that connects to RFK Jr-related endpoints, supporting both STDIO and SSE transport methods.",
   image: "https://github.com/debedb.png",
   actions: [],
+  githubUrl: "https://github.com/debedb/mcprfkgw",
   _varName: "mcpGatewayForRfkJrEndpointsPlugin",
 };
 
@@ -47195,6 +46874,7 @@ const mdpdfmcpPlugin: Plugin = {
     "Converts Markdown to styled PDFs using VS Code's markdown styling and Python's ReportLab, providing a simple note storage system with custom URI scheme.",
   image: "https://github.com/seanivore.png",
   actions: [],
+  githubUrl: "https://github.com/seanivore/md-pdf-mcp",
   _varName: "mdpdfmcpPlugin",
 };
 
@@ -47398,6 +47078,7 @@ const freeagentMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/markpitt/freeagent-mcp",
   _varName: "freeagentMcpServerPlugin",
 };
 
@@ -47643,6 +47324,7 @@ const dartMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/egyleader/dart-mcp",
   _varName: "dartMcpServerPlugin",
 };
 
@@ -47653,6 +47335,7 @@ const mssqlMcpServer1Plugin: Plugin = {
     "A Model Context Protocol server that enables secure and structured interaction with Microsoft SQL Server databases, allowing AI assistants to list tables, read data, and execute SQL queries with controlled access.",
   image: "https://github.com/JexinSam.png",
   actions: [],
+  githubUrl: "https://github.com/JexinSam/mssql_mcp_server",
   _varName: "mssqlMcpServer1Plugin",
 };
 
@@ -47694,6 +47377,7 @@ const devrevMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kpsunil97/devrev-mcp-server",
   _varName: "devrevMcpServerPlugin",
 };
 
@@ -47704,6 +47388,7 @@ const tavilyMcpServerWithProxySupportPlugin: Plugin = {
     "Enables LLMs to perform sophisticated web searches through proxy servers using Tavily's API, supporting comprehensive web searches, direct question answering, and recent news article retrieval with AI-extracted content.",
   image: "https://github.com/tulong66.png",
   actions: [],
+  githubUrl: "https://github.com/tulong66/mcp-tavily-proxy",
   _varName: "tavilyMcpServerWithProxySupportPlugin",
 };
 
@@ -47727,6 +47412,7 @@ const mcpServerMakePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wrale/mcp-server-make",
   _varName: "mcpServerMakePlugin",
 };
 
@@ -47737,6 +47423,7 @@ const cursorDbMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that enables AI assistants to explore and interact with Cursor IDE's SQLite databases, providing access to project data, chat history, and composer information.",
   image: "https://github.com/jbdamask.png",
   actions: [],
+  githubUrl: "https://github.com/jbdamask/cursor-db-mcp",
   _varName: "cursorDbMcpServerPlugin",
 };
 
@@ -47747,6 +47434,7 @@ const perplexityWebSearchMcpServerPlugin: Plugin = {
     "Allows Claude or other MCP-compatible AI assistants to search the web and get up-to-date information using the Perplexity API, with features for filtering results by time period.",
   image: "https://github.com/nachoal.png",
   actions: [],
+  githubUrl: "https://github.com/nachoal/perplexity-mcp",
   _varName: "perplexityWebSearchMcpServerPlugin",
 };
 
@@ -47808,6 +47496,7 @@ const mcpIntercomServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/fabian1710/mcp-intercom",
   _varName: "mcpIntercomServerPlugin",
 };
 
@@ -47858,6 +47547,7 @@ const timeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ConechoAI/time-mcp-local",
   _varName: "timeMcpServerPlugin",
 };
 
@@ -48023,6 +47713,7 @@ const lightdashMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/syucream/lightdash-mcp-server",
   _varName: "lightdashMcpServerPlugin",
 };
 
@@ -48058,6 +47749,7 @@ const deepsrtMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DeepSRT/deepsrt-mcp",
   _varName: "deepsrtMcpServerPlugin",
 };
 
@@ -48444,6 +48136,7 @@ const hiveMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/gluneau/hive-mcp-server",
   _varName: "hiveMcpServerPlugin",
 };
 
@@ -48454,6 +48147,7 @@ const linearMcpServer2Plugin: Plugin = {
     "A Model Context Protocol server that integrates with Linear's issue tracking system, allowing LLMs to create, update, search, and comment on Linear issues through natural language interactions.",
   image: "https://github.com/jerhadf.png",
   actions: [],
+  githubUrl: "https://github.com/jerhadf/linear-mcp-server",
   _varName: "linearMcpServer2Plugin",
 };
 
@@ -48492,6 +48186,7 @@ const mcpDatetimePlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/odgrim/mcp-datetime",
   _varName: "mcpDatetimePlugin",
 };
 
@@ -48502,6 +48197,8 @@ const postgresqlMultischemaMcpServerPlugin: Plugin = {
     "A Model Context Protocol server that provides read-only access to PostgreSQL databases with enhanced multi-schema support, allowing LLMs to inspect database schemas across multiple namespaces and execute read-only queries while maintaining schema isolation.",
   image: "https://github.com/HarjjotSinghh.png",
   actions: [],
+  githubUrl:
+    "https://github.com/HarjjotSinghh/mcp-server-postgres-multi-schema",
   _varName: "postgresqlMultischemaMcpServerPlugin",
 };
 
@@ -48512,6 +48209,7 @@ const pytorchHudMcpServerPlugin: Plugin = {
     "Provides access to PyTorch CI/CD analytics data including workflows, jobs, test runs, and log analysis through an MCP interface.",
   image: "https://github.com/izaitsevfb.png",
   actions: [],
+  githubUrl: "https://github.com/izaitsevfb/claude-pytorch-treehugger",
   _varName: "pytorchHudMcpServerPlugin",
 };
 
@@ -48607,6 +48305,7 @@ const eventbriteMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ibraheem4/eventbrite-mcp",
   _varName: "eventbriteMcpServerPlugin",
 };
 
@@ -48617,6 +48316,7 @@ const dingdingMcpPlugin: Plugin = {
     "A Model Control Protocol server that provides access to DingDing (Chinese workplace collaboration platform) API features, including retrieving access tokens, department lists, user information, and searching users by name.",
   image: "https://github.com/wllcnm.png",
   actions: [],
+  githubUrl: "https://github.com/wllcnm/dingding-mcp",
   _varName: "dingdingMcpPlugin",
 };
 
@@ -48627,6 +48327,7 @@ const argusPlugin: Plugin = {
     "A Model Context Protocol tool for analyzing code repositories, performing security scans, and assessing code quality across multiple programming languages.",
   image: "https://github.com/athapong.png",
   actions: [],
+  githubUrl: "https://github.com/athapong/argus",
   _varName: "argusPlugin",
 };
 
@@ -48637,6 +48338,7 @@ const multiserviceMcpServerPlugin: Plugin = {
     "A modular server that implements the Model Context Protocol standard, providing tools for interacting with GitHub, GitLab, Google Maps, Memory storage, and web automation through a unified gateway.",
   image: "https://github.com/AdamPippert.png",
   actions: [],
+  githubUrl: "https://github.com/AdamPippert/multi-service-mcp-server",
   _varName: "multiserviceMcpServerPlugin",
 };
 
@@ -48707,6 +48409,7 @@ const magicComponentPlatformMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/21st-dev/magic-mcp",
   _varName: "magicComponentPlatformMcpPlugin",
 };
 
@@ -48717,6 +48420,7 @@ const neo4jMcpServer1Plugin: Plugin = {
     "A fork of the Neo4j Model Context Protocol server that enables interaction with Neo4j knowledge graphs through environment variable configuration and improved options for remote connections.",
   image: "https://github.com/rebots-online.png",
   actions: [],
+  githubUrl: "https://github.com/rebots-online/mcp-neo4j",
   _varName: "neo4jMcpServer1Plugin",
 };
 
@@ -48857,6 +48561,7 @@ const mcpFathomAnalyticsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mackenly/mcp-fathom-analytics",
   _varName: "mcpFathomAnalyticsPlugin",
 };
 
@@ -48874,6 +48579,7 @@ const macosClipboardMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/newbeb/clipboard-mcp",
   _varName: "macosClipboardMcpServerPlugin",
 };
 
@@ -49017,6 +48723,7 @@ const claudeServerMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/davidteren/claude-server",
   _varName: "claudeServerMcpPlugin",
 };
 
@@ -49068,6 +48775,7 @@ const emojikeyserverMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/identimoji/mcp-server-emojikey",
   _varName: "emojikeyserverMcpServerPlugin",
 };
 
@@ -49078,6 +48786,7 @@ const typesenseMcpServerPlugin: Plugin = {
     "An MCP server implementation that enables AI models to discover, search, and analyze data stored in Typesense collections through tools for querying documents, retrieving specific items, and accessing collection statistics.",
   image: "https://github.com/suhail-ak-s.png",
   actions: [],
+  githubUrl: "https://github.com/suhail-ak-s/mcp-typesense-server",
   _varName: "typesenseMcpServerPlugin",
 };
 
@@ -49088,6 +48797,7 @@ const mcpMysqlServerPlugin: Plugin = {
     "Facilitates interaction with a local MySQL database via a RESTful API, supporting database queries and real-time updates with integration for Cursor MCP services.",
   image: "https://github.com/TristanLib.png",
   actions: [],
+  githubUrl: "https://github.com/TristanLib/mcp_server_mysql_windows",
   _varName: "mcpMysqlServerPlugin",
 };
 
@@ -49098,6 +48808,7 @@ const dockerMcpServer1Plugin: Plugin = {
     "Facilitates isolated code execution within Docker containers, enabling secure multi-language script execution and integration with language models like Claude via the Model Context Protocol.",
   image: "https://github.com/zaycruz.png",
   actions: [],
+  githubUrl: "https://github.com/zaycruz/docker_mcp",
   _varName: "dockerMcpServer1Plugin",
 };
 
@@ -49280,6 +48991,7 @@ const firebaseMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gannonh/firebase-mcp",
   _varName: "firebaseMcpPlugin",
 };
 
@@ -49289,6 +49001,7 @@ const mcpserverstravaPlugin: Plugin = {
   description: "Integration Strava API с Model Context Protocol SDK",
   image: "https://github.com/rbctmz.png",
   actions: [],
+  githubUrl: "https://github.com/rbctmz/mcp-server-strava",
   _varName: "mcpserverstravaPlugin",
 };
 
@@ -49299,6 +49012,7 @@ const sanderkoogermcpserverragdocsPlugin: Plugin = {
     "An MCP server implementation that provides tools for retrieving and processing documentation through vector search, enabling AI assistants to augment their responses with relevant documentation context.\n\nUses Ollama or OpenAI to generate embeddings.\n\nDocker files included",
   image: "https://github.com/sanderkooger.png",
   actions: [],
+  githubUrl: "https://github.com/sanderkooger/mcp-server-ragdocs",
   _varName: "sanderkoogermcpserverragdocsPlugin",
 };
 
@@ -49387,6 +49101,7 @@ const googleSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mixelpixx/Google-Search-MCP-Server",
   _varName: "googleSearchMcpServerPlugin",
 };
 
@@ -49397,6 +49112,7 @@ const woocommerceMcpServerPlugin: Plugin = {
     "WooCommerce MCP Server enables interaction with WooCommerce stores through the WordPress REST API. It provides comprehensive tools for managing all aspects of products, orders, customers, shipping, taxes, discounts, and store configuration using JSON-RPC 2.0 protocol.",
   image: "https://github.com/techspawn.png",
   actions: [],
+  githubUrl: "https://github.com/techspawn/woocommerce-mcp-server",
   _varName: "woocommerceMcpServerPlugin",
 };
 
@@ -49779,6 +49495,7 @@ const noaatidesandcurrentsmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RyanCardin15/NOAA",
   _varName: "noaatidesandcurrentsmcpPlugin",
 };
 
@@ -52035,6 +51752,7 @@ const azuredevopsmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RyanCardin15/AzureDevOps-MCP",
   _varName: "azuredevopsmcpPlugin",
 };
 
@@ -52091,6 +51809,7 @@ const figmamcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JayZeeDesign/figma-mcp",
   _varName: "figmamcpPlugin",
 };
 
@@ -52101,6 +51820,7 @@ const claudedebugsforyouPlugin: Plugin = {
     "Enable Claude (or any other LLM) to interactively debug your code (set breakpoints and evaluate expressions in stack frame).\n\nIt's language-agnostic, assuming debugger console support and valid launch.json for debugging in VSCode.",
   image: "https://github.com/jasonjmcghee.png",
   actions: [],
+  githubUrl: "https://github.com/jasonjmcghee/claude-debugs-for-you",
   _varName: "claudedebugsforyouPlugin",
 };
 
@@ -52199,6 +51919,7 @@ const dbmcptoolPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wirdes/db-mcp-tool",
   _varName: "dbmcptoolPlugin",
 };
 
@@ -52209,6 +51930,7 @@ const consolespyPlugin: Plugin = {
     "A tool that captures browser console logs and makes them available in Cursor IDE through the Model Context Protocol (MCP).",
   image: "https://github.com/mgsrevolver.png",
   actions: [],
+  githubUrl: "https://github.com/mgsrevolver/consolespy",
   _varName: "consolespyPlugin",
 };
 
@@ -53068,6 +52790,7 @@ const giteePlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/normal-coder/gitee-mcp-server",
   _varName: "giteePlugin",
 };
 
@@ -53105,6 +52828,7 @@ const mcpxcodebuildPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ShenghaiWang/xcodebuild",
   _varName: "mcpxcodebuildPlugin",
 };
 
@@ -53115,6 +52839,7 @@ const ticktickmcpserverPlugin: Plugin = {
     "A MCP server for TickTick that enables interacting with your TickTick task management system directly through Claude and other MCP clients.",
   image: "https://github.com/jacepark12.png",
   actions: [],
+  githubUrl: "https://github.com/jacepark12/ticktick-mcp",
   _varName: "ticktickmcpserverPlugin",
 };
 
@@ -53125,6 +52850,7 @@ const mcplogogenPlugin: Plugin = {
     "MCP Tool Server for Logo Generation.\nThis server provides logo generation capabilities using FAL AI, with tools for image generation, background removal, and image scaling.",
   image: "https://github.com/sshtunnelvision.png",
   actions: [],
+  githubUrl: "https://github.com/sshtunnelvision/MCP-LOGO-GEN",
   _varName: "mcplogogenPlugin",
 };
 
@@ -53621,6 +53347,7 @@ const mixpanelPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dragonkhoi/mixpanel-mcp",
   _varName: "mixpanelPlugin",
 };
 
@@ -53631,6 +53358,7 @@ const cLangMcpServerPlugin: Plugin = {
     "A VS Code extension provides a MCP server that exposes Roslyn language features. It enables tools like find usages, go to definition, quick info, etc.",
   image: "https://github.com/biegehydra.png",
   actions: [],
+  githubUrl: "https://github.com/biegehydra/BifrostMCP",
   _varName: "cLangMcpServerPlugin",
 };
 
@@ -53641,6 +53369,7 @@ const mcpserverstarrocksPlugin: Plugin = {
     "This MCP server provides connection to Starrocks allows you to explore this query engine with minimum effort.",
   image: "https://github.com/hagsmand.png",
   actions: [],
+  githubUrl: "https://github.com/hagsmand/mcp-server-starrocks",
   _varName: "mcpserverstarrocksPlugin",
 };
 
@@ -54022,6 +53751,7 @@ const mcpserverdatadogPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/winor30/mcp-server-datadog",
   _varName: "mcpserverdatadogPlugin",
 };
 
@@ -54144,6 +53874,7 @@ const mcpllmPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/mcp-llm",
   _varName: "mcpllmPlugin",
 };
 
@@ -54153,6 +53884,7 @@ const testPlugin: Plugin = {
   description: "Test",
   image: "https://github.com/punkpeye.png",
   actions: [],
+  githubUrl: "https://github.com/punkpeye/awesome-mcp-servers",
   _varName: "testPlugin",
 };
 
@@ -54201,6 +53933,7 @@ const mermaidmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/peng-shawn/mermaid-mcp-server",
   _varName: "mermaidmcpserverPlugin",
 };
 
@@ -54211,6 +53944,7 @@ const convexMcpServerPlugin: Plugin = {
     "Convex’s MCP server lets you introspect tables, call functions, and read/write data seamlessly. Agents can generate one-off queries safely—thanks to Convex’s sandboxed queries, ensuring data integrity. Perfect for AI automation, real-time apps, and dynamic data access.",
   image: "https://github.com/get-convex.png",
   actions: [],
+  githubUrl: "https://github.com/get-convex/convex-backend",
   _varName: "convexMcpServerPlugin",
 };
 
@@ -54240,6 +53974,7 @@ const scrapezyPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Scrapezy/mcp",
   _varName: "scrapezyPlugin",
 };
 
@@ -54250,6 +53985,7 @@ const wanakuMcpServerPlugin: Plugin = {
     "The Wanaku MCP Router stands between autonomous AI agents and your enterprise systems. Wanaku leverages proven integration technology, like Apache Camel, to set up and manage hundreds or thousands of integrations.",
   image: "https://github.com/wanaku-ai.png",
   actions: [],
+  githubUrl: "https://github.com/wanaku-ai/wanaku",
   _varName: "wanakuMcpServerPlugin",
 };
 
@@ -54259,6 +53995,7 @@ const test1Plugin: Plugin = {
   description: "this is a test",
   image: "https://github.com/barlanyado.png",
   actions: [],
+  githubUrl: "https://github.com/barlanyado/mcp-server-test",
   _varName: "test1Plugin",
 };
 
@@ -54269,6 +54006,7 @@ const openledgermcpserverPlugin: Plugin = {
     "A Model Context Protocol (MCP) server implementation for the OpenLedger API. This server provides structured context to AI models according to the MCP specification.",
   image: "https://github.com/openledger.png",
   actions: [],
+  githubUrl: "https://github.com/openledger/Open-Ledger-MCP-Server",
   _varName: "openledgermcpserverPlugin",
 };
 
@@ -55116,6 +54854,7 @@ const railwaymcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jason-tan-swe/railway-mcp",
   _varName: "railwaymcpPlugin",
 };
 
@@ -55177,6 +54916,7 @@ const emqxmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Benniu/emqx-mcp-server",
   _varName: "emqxmcpserverPlugin",
 };
 
@@ -55187,6 +54927,8 @@ const mcpserverollamadeepresearcherPlugin: Plugin = {
     "This is a Model Context Protocol (MCP) server adaptation of LangChain Ollama Deep Researcher. It provides the deep research capabilities as MCP tools that can be used within the model context protocol ecosystem, allowing AI assistants to perform in-depth research on topics (locally) via Ollama",
   image: "https://github.com/Cam10001110101.png",
   actions: [],
+  githubUrl:
+    "https://github.com/Cam10001110101/mcp-server-ollama-deep-researcher",
   _varName: "mcpserverollamadeepresearcherPlugin",
 };
 
@@ -55964,6 +55706,7 @@ const graphlitmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/graphlit/graphlit-mcp-server",
   _varName: "graphlitmcpserverPlugin",
 };
 
@@ -56213,6 +55956,7 @@ const outlookCalendarMcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/merajmehrabi/Outlook_Calendar_MCP",
   _varName: "outlookCalendarMcpPlugin",
 };
 
@@ -56256,6 +56000,7 @@ const duckduckgoMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nickclyde/duckduckgo-mcp-server",
   _varName: "duckduckgoMcpServer1Plugin",
 };
 
@@ -56266,6 +56011,7 @@ const mcppinterestPlugin: Plugin = {
     "A Pinterest Model Context Protocol (MCP) server for image search and information retrieval",
   image: "https://github.com/terryso.png",
   actions: [],
+  githubUrl: "https://github.com/terryso/mcp-pinterest",
   _varName: "mcppinterestPlugin",
 };
 
@@ -56275,6 +56021,7 @@ const omniparserautoguimcpPlugin: Plugin = {
   description: "Automatic operation of on-screen GUI.",
   image: "https://github.com/NON906.png",
   actions: [],
+  githubUrl: "https://github.com/NON906/omniparser-autogui-mcp",
   _varName: "omniparserautoguimcpPlugin",
 };
 
@@ -56310,6 +56057,7 @@ const mcpsummarizerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/0xshellming/mcp-summarizer",
   _varName: "mcpsummarizerPlugin",
 };
 
@@ -56320,6 +56068,7 @@ const focus_mcp_sqlPlugin: Plugin = {
     "A NL2SQL plugin based on FocusSearch keyword parsing, offering greater accuracy, higher speed, and more reliability!",
   image: "https://github.com/FocusSearch.png",
   actions: [],
+  githubUrl: "https://github.com/FocusSearch/focus_mcp_sql",
   _varName: "focus_mcp_sqlPlugin",
 };
 
@@ -56330,6 +56079,7 @@ const focus_mcp_dataPlugin: Plugin = {
     "The intelligent data query plugin under DataFocus that supports multi-round conversations provides plug-and-play ChatBI capabilities.",
   image: "https://github.com/FocusSearch.png",
   actions: [],
+  githubUrl: "https://github.com/FocusSearch/focus_mcp_data",
   _varName: "focus_mcp_dataPlugin",
 };
 
@@ -56416,6 +56166,7 @@ const ouraMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/tomekkorbak/oura-mcp-server",
   _varName: "ouraMcpServerPlugin",
 };
 
@@ -56426,6 +56177,7 @@ const mcpAtlassianPlugin: Plugin = {
     "An MCP server that enables AI agents to interact with Atlassian products (Confluence and Jira) for content management, issue tracking, and project management through a standardized interface.",
   image: "https://github.com/samwang0723.png",
   actions: [],
+  githubUrl: "https://github.com/samwang0723/mcp-atlassian",
   _varName: "mcpAtlassianPlugin",
 };
 
@@ -56531,6 +56283,7 @@ const mcpRedminePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/runekaagaard/mcp-redmine",
   _varName: "mcpRedminePlugin",
 };
 
@@ -56541,6 +56294,7 @@ const mcpYoutubeServerPlugin: Plugin = {
     "A server for downloading, processing, and managing YouTube content with features like video quality selection, format conversion, and metadata extraction.",
   image: "https://github.com/DimitriGeelen.png",
   actions: [],
+  githubUrl: "https://github.com/DimitriGeelen/mcp-youtube",
   _varName: "mcpYoutubeServerPlugin",
 };
 
@@ -56551,6 +56305,7 @@ const retailSupplyChainAnalysisMcpPlugin: Plugin = {
     "Enables users to upload retail data, analyze trends, optimize inventory, and forecast sales using AI-powered insights, acting as a senior supply chain expert.",
   image: "https://github.com/jaydrage.png",
   actions: [],
+  githubUrl: "https://github.com/jaydrage/MCP_VMI",
   _varName: "retailSupplyChainAnalysisMcpPlugin",
 };
 
@@ -56561,6 +56316,7 @@ const geminiDocsMcpServerPlugin: Plugin = {
     "Provides curated documentation access via the Gemini API, enabling users to query and interact with technical docs effectively by overcoming context and search limitations.",
   image: "https://github.com/M-Gonzalo.png",
   actions: [],
+  githubUrl: "https://github.com/M-Gonzalo/cosa-sai",
   _varName: "geminiDocsMcpServerPlugin",
 };
 
@@ -56621,6 +56377,7 @@ const matlabMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/WilliamCloudQi/matlab-mcp-server",
   _varName: "matlabMcpServerPlugin",
 };
 
@@ -56673,6 +56430,7 @@ const mysqlMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/xiangma9712/mysql-mcp-server",
   _varName: "mysqlMcpServer1Plugin",
 };
 
@@ -56683,6 +56441,7 @@ const ragrabbitmcpPlugin: Plugin = {
     "Access any documentation indexed by RagRabbit Open Source AI site search",
   image: "https://github.com/madarco.png",
   actions: [],
+  githubUrl: "https://github.com/madarco/ragrabbit",
   _varName: "ragrabbitmcpPlugin",
 };
 
@@ -56707,6 +56466,7 @@ const fileFinderMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sergey-fintech/MCP",
   _varName: "fileFinderMcpServerPlugin",
 };
 
@@ -56885,6 +56645,7 @@ const linearMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tiovikram/linear-mcp",
   _varName: "linearMcpServer3Plugin",
 };
 
@@ -56922,6 +56683,7 @@ const frontendReviewMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zueai/frontend-review-mcp",
   _varName: "frontendReviewMcpPlugin",
 };
 
@@ -57326,6 +57088,7 @@ const mcp3dPrinterServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DMontgomery40/mcp-3D-printer-server",
   _varName: "mcp3dPrinterServerPlugin",
 };
 
@@ -57336,6 +57099,7 @@ const mcpSumoLogicServerPlugin: Plugin = {
     "Integrates with Sumo Logic's API to enable log search with configurable queries and time ranges, supporting error handling and easy deployment via Docker.",
   image: "https://github.com/samwang0723.png",
   actions: [],
+  githubUrl: "https://github.com/samwang0723/mcp-sumologic",
   _varName: "mcpSumoLogicServerPlugin",
 };
 
@@ -57372,6 +57136,7 @@ const mcp2lambdaPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/danilop/MCP2Lambda",
   _varName: "mcp2lambdaPlugin",
 };
 
@@ -57402,6 +57167,7 @@ const hefengWeatherMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shanggqm/hefeng-mcp-weather",
   _varName: "hefengWeatherMcpServerPlugin",
 };
 
@@ -57553,6 +57319,7 @@ const httpsgithubcomstreen9reactmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Streen9/react-mcp",
   _varName: "httpsgithubcomstreen9reactmcpPlugin",
 };
 
@@ -57563,6 +57330,7 @@ const dropboxMcpServerPlugin: Plugin = {
     "Enables interaction with Dropbox through the Model Context Protocol, providing tools for file management, uploads, downloads, deletion, and token updates with secure runtime authentication.",
   image: "https://github.com/amgadabdelhafez.png",
   actions: [],
+  githubUrl: "https://github.com/amgadabdelhafez/dbx-mcp-server",
   _varName: "dropboxMcpServerPlugin",
 };
 
@@ -57573,6 +57341,7 @@ const workosMcpServerPlugin: Plugin = {
     "A lightweight MCP server allowing agents to interact with the WorkOS API for streamlined WorkOS operations through natural language commands.",
   image: "https://github.com/zueai.png",
   actions: [],
+  githubUrl: "https://github.com/zueai/workos-mcp",
   _varName: "workosMcpServerPlugin",
 };
 
@@ -57654,6 +57423,7 @@ const roomMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/agree-able/room-mcp",
   _varName: "roomMcpPlugin",
 };
 
@@ -60053,6 +59823,7 @@ const appwriteMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/appwrite/mcp",
   _varName: "appwriteMcpServer1Plugin",
 };
 
@@ -60100,6 +59871,7 @@ const siriShortcutsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dvcrn/mcp-server-siri-shortcuts",
   _varName: "siriShortcutsMcpServerPlugin",
 };
 
@@ -60173,6 +59945,7 @@ const awsathenamcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lishenxydlgzs/aws-athena-mcp",
   _varName: "awsathenamcpPlugin",
 };
 
@@ -61434,6 +61207,7 @@ const meilisearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/devlimelabs/meilisearch-ts-mcp",
   _varName: "meilisearchMcpServerPlugin",
 };
 
@@ -61470,6 +61244,7 @@ const mcp2lambda1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/danilop/MCP2Lambda",
   _varName: "mcp2lambda1Plugin",
 };
 
@@ -61519,6 +61294,7 @@ const emailSendingMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/resend/mcp-send-email",
   _varName: "emailSendingMcpPlugin",
 };
 
@@ -61529,6 +61305,7 @@ const jiracontextmcpPlugin: Plugin = {
     "MCP server to provide Jira Tickets information to AI coding agents like Cursor",
   image: "https://github.com/rahulthedevil.png",
   actions: [],
+  githubUrl: "https://github.com/rahulthedevil/Jira-Context-MCP",
   _varName: "jiracontextmcpPlugin",
 };
 
@@ -61539,6 +61316,7 @@ const apifoxMcpServer1Plugin: Plugin = {
     "This server acts as a Message Communication Protocol (MCP) service for integrating Apifox and Cursor, enabling OpenAPI interface implementation through AI-driven interaction.",
   image: "https://github.com/Tzott.png",
   actions: [],
+  githubUrl: "https://github.com/Tzott/apifox-mcp-demo",
   _varName: "apifoxMcpServer1Plugin",
 };
 
@@ -61549,6 +61327,7 @@ const mcpGoogleWorkspaceServerPlugin: Plugin = {
     "Enables interaction with Gmail and Google Calendar using the MCP protocol, supporting multiple Google accounts, email management, and calendar operations through natural language.",
   image: "https://github.com/j3k0.png",
   actions: [],
+  githubUrl: "https://github.com/j3k0/mcp-google-workspace",
   _varName: "mcpGoogleWorkspaceServerPlugin",
 };
 
@@ -61559,6 +61338,7 @@ const storySdkMcpServerPlugin: Plugin = {
     "Provides tools for managing IP assets and licenses, interacting with the Story Python SDK, and handling operations like minting tokens, registering IP, and uploading metadata to IPFS.",
   image: "https://github.com/piplabs.png",
   actions: [],
+  githubUrl: "https://github.com/piplabs/story-mcp-hub",
   _varName: "storySdkMcpServerPlugin",
 };
 
@@ -61667,6 +61447,7 @@ const mitmproxymcpMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lucasoeth/mitmproxy-mcp",
   _varName: "mitmproxymcpMcpServerPlugin",
 };
 
@@ -61918,6 +61699,7 @@ const crypto_mcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/1595901624/crypto-mcp",
   _varName: "crypto_mcpPlugin",
 };
 
@@ -61948,6 +61730,7 @@ const figmaMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/moonray/mcp-figma",
   _varName: "figmaMcpServer1Plugin",
 };
 
@@ -61958,6 +61741,7 @@ const ntropyMcpServerPlugin: Plugin = {
     "Enables enrichment of banking data through the Ntropy API, including creating account holders and enriching transaction details.",
   image: "https://github.com/smithery-ai.png",
   actions: [],
+  githubUrl: "https://github.com/smithery-ai/ntropy-mcp",
   _varName: "ntropyMcpServerPlugin",
 };
 
@@ -61968,6 +61752,7 @@ const cloudflareApiMcpServerPlugin: Plugin = {
     "Enables agents to interact with the Cloudflare REST API, allowing operations like managing DNS records and other Cloudflare resources through an MCP interface.",
   image: "https://github.com/zueai.png",
   actions: [],
+  githubUrl: "https://github.com/zueai/cloudflare-api-mcp",
   _varName: "cloudflareApiMcpServerPlugin",
 };
 
@@ -62150,6 +61935,7 @@ const firebaseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gemini-dk/mcp-server-firebase",
   _varName: "firebaseMcpServerPlugin",
 };
 
@@ -62160,6 +61946,7 @@ const mcpEmailServerPlugin: Plugin = {
     "Provides IMAP and SMTP capabilities, enabling developers to manage email services with seamless integration and automated workflows.",
   image: "https://github.com/ai-zerolab.png",
   actions: [],
+  githubUrl: "https://github.com/ai-zerolab/mcp-email-server",
   _varName: "mcpEmailServerPlugin",
 };
 
@@ -62238,6 +62025,7 @@ const mcpServerTemplateForCursorIde2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/andreasHornqvist/MCP",
   _varName: "mcpServerTemplateForCursorIde2Plugin",
 };
 
@@ -62248,6 +62036,7 @@ const vercelMcpServerPlugin: Plugin = {
     "A powerful Model Context Protocol (MCP) server enabling seamless Vercel project management, including deployments, domains, environment variables, and team configurations through Cursor's Composer or Codeium's Cascade.",
   image: "https://github.com/Quegenx.png",
   actions: [],
+  githubUrl: "https://github.com/Quegenx/vercel-mcp-server",
   _varName: "vercelMcpServerPlugin",
 };
 
@@ -62297,6 +62086,7 @@ const mcpdataextractorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/mcp-data-extractor",
   _varName: "mcpdataextractorPlugin",
 };
 
@@ -65670,6 +65460,7 @@ const airflowmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/abhishekbhakat/airflow-mcp-server",
   _varName: "airflowmcpserverPlugin",
 };
 
@@ -65680,6 +65471,7 @@ const ntropymcpMcpServerPlugin: Plugin = {
     "Enables enriching banking data with the Ntropy API, providing tools to create account holders and enrich transactions efficiently.",
   image: "https://github.com/ntropy-network.png",
   actions: [],
+  githubUrl: "https://github.com/ntropy-network/ntropy-mcp",
   _varName: "ntropymcpMcpServerPlugin",
 };
 
@@ -65769,6 +65561,7 @@ const mcpTavilyPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kshern/mcp-tavily",
   _varName: "mcpTavilyPlugin",
 };
 
@@ -65926,6 +65719,7 @@ const terraformRegistryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/thrashr888/terraform-mcp-server",
   _varName: "terraformRegistryMcpServerPlugin",
 };
 
@@ -65992,6 +65786,7 @@ const quickchartmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GongRzhe/Quickchart-MCP-Server",
   _varName: "quickchartmcpserverPlugin",
 };
 
@@ -66064,6 +65859,7 @@ const harvestNaturalLanguageTimeEntryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adrian-dotco/harvest-mcp-server",
   _varName: "harvestNaturalLanguageTimeEntryMcpServerPlugin",
 };
 
@@ -66099,6 +65895,7 @@ const redmineMcpServerForClinePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ilask/Redmine-MCP",
   _varName: "redmineMcpServerForClinePlugin",
 };
 
@@ -66109,6 +65906,7 @@ const qrcode_mcpPlugin: Plugin = {
     "An MCP server that generates customizable QR codes with options for size, colors, error correction, and margin settings.",
   image: "https://github.com/1595901624.png",
   actions: [],
+  githubUrl: "https://github.com/1595901624/qrcode-mcp",
   _varName: "qrcode_mcpPlugin",
 };
 
@@ -66119,6 +65917,7 @@ const modelContextProviderMcpServerPlugin: Plugin = {
     "Facilitates enhanced interaction with large language models (LLMs) by providing intelligent context management, tool integration, and multi-provider AI model coordination for efficient AI-driven workflows.",
   image: "https://github.com/Mark850409.png",
   actions: [],
+  githubUrl: "https://github.com/Mark850409/20250223_mcp-client",
   _varName: "modelContextProviderMcpServerPlugin",
 };
 
@@ -66129,6 +65928,7 @@ const snykMcpServerPlugin: Plugin = {
     "A standalone server enabling Snyk security scanning through the Model Context Protocol, with support for repository and project analysis, token verification, and CLI integration.",
   image: "https://github.com/sammcj.png",
   actions: [],
+  githubUrl: "https://github.com/sammcj/mcp-snyk",
   _varName: "snykMcpServerPlugin",
 };
 
@@ -66139,6 +65939,7 @@ const cloudflareApiMcpServer1Plugin: Plugin = {
     "A lightweight MCP server for managing DNS records, purging cache, and interacting with the Cloudflare API through natural language commands.",
   image: "https://github.com/zueai.png",
   actions: [],
+  githubUrl: "https://github.com/zueai/cloudflare-api-mcp",
   _varName: "cloudflareApiMcpServer1Plugin",
 };
 
@@ -66198,6 +65999,7 @@ const appleNotesMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Siddhant-K-code/mcp-apple-notes",
   _varName: "appleNotesMcpServerPlugin",
 };
 
@@ -66489,6 +66291,7 @@ const dartMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jmanhype/dart-mcp-server",
   _varName: "dartMcpServer1Plugin",
 };
 
@@ -66499,6 +66302,7 @@ const modelContextProtocolMcpServerForHomeAssistantPlugin: Plugin = {
     "Enables seamless integration between Home Assistant and Language Learning Models (LLMs), allowing natural language interaction for smart home control and automation management.",
   image: "https://github.com/drejom.png",
   actions: [],
+  githubUrl: "https://github.com/drejom/homeassistant-mcp",
   _varName: "modelContextProtocolMcpServerForHomeAssistantPlugin",
 };
 
@@ -66509,6 +66313,7 @@ const neonMcpServerPlugin: Plugin = {
     "A lightweight MCP server that interacts with the Neon REST API, deployable on Cloudflare Workers for streamlined database management and integration.",
   image: "https://github.com/zueai.png",
   actions: [],
+  githubUrl: "https://github.com/zueai/neon-mcp",
   _varName: "neonMcpServerPlugin",
 };
 
@@ -66519,6 +66324,7 @@ const mcpopenapiPlugin: Plugin = {
     "An MCP server that exposes HTTP methods defined in an OpenAPI specification as tools, enabling interaction with APIs via the Model Context Protocol.",
   image: "https://github.com/rmasters.png",
   actions: [],
+  githubUrl: "https://github.com/rmasters/mcp-openapi",
   _varName: "mcpopenapiPlugin",
 };
 
@@ -66579,6 +66385,7 @@ const cryptoPriceMarketAnalysisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/truss44/mcp-crypto-price",
   _varName: "cryptoPriceMarketAnalysisMcpServerPlugin",
 };
 
@@ -66942,6 +66749,7 @@ const sendgridMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Garoth/sendgrid-mcp",
   _varName: "sendgridMcpServerPlugin",
 };
 
@@ -67007,6 +66815,7 @@ const azureMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Streen9/azure-mcp",
   _varName: "azureMcpServerPlugin",
 };
 
@@ -67265,6 +67074,7 @@ const pygithubMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AstroMined/pygithub-mcp-server",
   _varName: "pygithubMcpServerPlugin",
 };
 
@@ -67275,6 +67085,7 @@ const modelControlProtocolServerMcpPlugin: Plugin = {
     "Enables the creation and deployment of API-based MCP tools for Cursor Agent using Cloudflare Workers, streamlining development and integration of custom functionalities.",
   image: "https://github.com/zueai.png",
   actions: [],
+  githubUrl: "https://github.com/zueai/create-mcp",
   _varName: "modelControlProtocolServerMcpPlugin",
 };
 
@@ -67362,6 +67173,7 @@ const mcpotcPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/otc-ai/mcp-otc",
   _varName: "mcpotcPlugin",
 };
 
@@ -67378,6 +67190,7 @@ const superSecretMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/gbti-network/mcp-basic-test",
   _varName: "superSecretMcpServerPlugin",
 };
 
@@ -67503,6 +67316,7 @@ const singlestoreMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/madhukarkumar/singlestore-mcp-server",
   _varName: "singlestoreMcpServerPlugin",
 };
 
@@ -67513,6 +67327,7 @@ const taptoolsApiMcpPlugin: Plugin = {
     "A Python-based MCP server that integrates the TapTools API, enabling AI models to fetch Cardano blockchain data, including tokens, NFTs, market stats, and wallet info, through standardized tools.",
   image: "https://github.com/brianbell-x.png",
   actions: [],
+  githubUrl: "https://github.com/brianbell-x/tadpoletools-mcp",
   _varName: "taptoolsApiMcpPlugin",
 };
 
@@ -67567,6 +67382,7 @@ const jenkinsMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kjozsa/jenkins-mcp",
   _varName: "jenkinsMcpPlugin",
 };
 
@@ -67577,6 +67393,7 @@ const awesomeMcpFastapiPlugin: Plugin = {
     "A production-ready MCP server built with FastAPI, providing an enhanced tool registry for creating, managing, and documenting AI tools for Large Language Models (LLMs).",
   image: "https://github.com/MR-GREEN1337.png",
   actions: [],
+  githubUrl: "https://github.com/MR-GREEN1337/awesome-mcp-fastapi",
   _varName: "awesomeMcpFastapiPlugin",
 };
 
@@ -67796,6 +67613,7 @@ const netlifyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DynamicEndpoints/Netlify-MCP-Server",
   _varName: "netlifyMcpServerPlugin",
 };
 
@@ -68070,6 +67888,7 @@ const paypalMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DynamicEndpoints/Paypal-MCP",
   _varName: "paypalMcpPlugin",
 };
 
@@ -68080,6 +67899,7 @@ const stripePlugin: Plugin = {
     "The Stripe Model Context Protocol server allows you to integrate with Stripe APIs through function calling. This protocol supports various tools to interact with different Stripe services.",
   image: "https://github.com/stripe.png",
   actions: [],
+  githubUrl: "https://github.com/stripe/agent-toolkit",
   _varName: "stripePlugin",
 };
 
@@ -68090,6 +67910,7 @@ const myserverMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that enables users to manage text notes and generate summaries, showcasing key MCP concepts like resource representation and LLM integration.",
   image: "https://github.com/vivalalova.png",
   actions: [],
+  githubUrl: "https://github.com/vivalalova/mcp_practice",
   _varName: "myserverMcpServerPlugin",
 };
 
@@ -68132,6 +67953,7 @@ const wolframalphaLlmMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/Garoth/wolframalpha-llm-mcp",
   _varName: "wolframalphaLlmMcpServerPlugin",
 };
 
@@ -68297,6 +68119,7 @@ const serpersearchscrapemcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/marcopesani/mcp-server-serper",
   _varName: "serpersearchscrapemcpserverPlugin",
 };
 
@@ -68307,6 +68130,7 @@ const metamcpMcpServerPlugin: Plugin = {
     "A proxy server that unifies multiple MCP servers, enabling seamless tool, prompt, and resource management via the MetaMCP App.",
   image: "https://github.com/metatool-ai.png",
   actions: [],
+  githubUrl: "https://github.com/metatool-ai/mcp-server-metamcp",
   _varName: "metamcpMcpServerPlugin",
 };
 
@@ -68317,6 +68141,7 @@ const contentfulDeliveryMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that interacts with Contentful's Delivery API, enabling users to create, query, and summarize text notes through natural language.",
   image: "https://github.com/mshaaban0.png",
   actions: [],
+  githubUrl: "https://github.com/mshaaban0/contentful-delivery-mcp",
   _varName: "contentfulDeliveryMcpServerPlugin",
 };
 
@@ -68327,6 +68152,7 @@ const mcpServerForDifyAiPlugin: Plugin = {
     "Enables LLMs to interact with Dify AI's chat completion API, including conversation context support and a restaurant recommendation tool.",
   image: "https://github.com/yuru-sha.png",
   actions: [],
+  githubUrl: "https://github.com/yuru-sha/mcp-server-dify",
   _varName: "mcpServerForDifyAiPlugin",
 };
 
@@ -68350,6 +68176,7 @@ const mcpSecurityAuditServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qianniuspace/mcp-security-audit",
   _varName: "mcpSecurityAuditServerPlugin",
 };
 
@@ -68360,6 +68187,7 @@ const mcpServerForMysql1Plugin: Plugin = {
     "Enables LLMs to safely inspect MySQL database schemas and execute read-only queries through Docker or NPM integration.",
   image: "https://github.com/yuru-sha.png",
   actions: [],
+  githubUrl: "https://github.com/yuru-sha/mcp-server-mysql",
   _varName: "mcpServerForMysql1Plugin",
 };
 
@@ -68370,6 +68198,7 @@ const mcpMysqlServer1Plugin: Plugin = {
     "Enables LLMs to interact with MySQL databases by inspecting schemas and executing safe, read-only queries within transactions.",
   image: "https://github.com/yuru-sha.png",
   actions: [],
+  githubUrl: "https://github.com/yuru-sha/mcp-server-mysql",
   _varName: "mcpMysqlServer1Plugin",
 };
 
@@ -68380,6 +68209,7 @@ const sqlServerExpressMcpServerPlugin: Plugin = {
     "Facilitates interaction with Microsoft SQL Server Express, supporting database operations such as querying, table management, and schema inspection via natural language MCP commands.",
   image: "https://github.com/hanweg.png",
   actions: [],
+  githubUrl: "https://github.com/hanweg/mcp-sqlexpress",
   _varName: "sqlServerExpressMcpServerPlugin",
 };
 
@@ -68409,6 +68239,7 @@ const openaiMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/thadius83/mcp-server-openai",
   _varName: "openaiMcpServer1Plugin",
 };
 
@@ -68594,6 +68425,7 @@ const mcpFluxStudioPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jmanhype/mcp-flux-studio",
   _varName: "mcpFluxStudioPlugin",
 };
 
@@ -69004,6 +68836,7 @@ const mcpOpenfecServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/psalzman/mcp-openfec",
   _varName: "mcpOpenfecServerPlugin",
 };
 
@@ -69123,6 +68956,7 @@ const biggoMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/Funmula-Corp/BigGo-MCP-Server",
   _varName: "biggoMcpServerPlugin",
 };
 
@@ -69242,6 +69076,7 @@ const mcpServerForOpenmetadataPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/yangkyeongmo/mcp-server-openmetadata",
   _varName: "mcpServerForOpenmetadataPlugin",
 };
 
@@ -69468,6 +69303,7 @@ const appleMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Dhravya/apple-mcp",
   _varName: "appleMcpServerPlugin",
 };
 
@@ -69478,6 +69314,7 @@ const mcpSapGuiServerPlugin: Plugin = {
     "Automates interactions with SAP GUI using the Model Context Protocol, allowing precise control of SAP transactions through tools like clicking, typing, scrolling, and transaction management.",
   image: "https://github.com/mario-andreschak.png",
   actions: [],
+  githubUrl: "https://github.com/mario-andreschak/mcp-sap-gui",
   _varName: "mcpSapGuiServerPlugin",
 };
 
@@ -69488,6 +69325,7 @@ const fluxdevMcpServerPlugin: Plugin = {
     "Implements a Model Context Protocol (MCP) server powered by Flux API from Cephalon Cloud, enabling users to utilize advanced AI capabilities through standardized communication.",
   image: "https://github.com/nicekate.png",
   actions: [],
+  githubUrl: "https://github.com/nicekate/flux-dev-mcp",
   _varName: "fluxdevMcpServerPlugin",
 };
 
@@ -69498,6 +69336,7 @@ const forevervmPlugin: Plugin = {
     "The sessionless code interpreter.\n\nSecurely run AI-generated code in stateful sandboxes that run forever.",
   image: "https://github.com/jamsocket.png",
   actions: [],
+  githubUrl: "https://github.com/jamsocket/forevervm",
   _varName: "forevervmPlugin",
 };
 
@@ -69535,6 +69374,7 @@ const florence2McpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jkawamoto/mcp-florence2",
   _varName: "florence2McpServerPlugin",
 };
 
@@ -69545,6 +69385,7 @@ const lodestarMcpServerPlugin: Plugin = {
     "This is an MCP server that facilitates building tools for interacting with various APIs and workflows, supporting Python-based development with potential for customizable prompts and user configurations.",
   image: "https://github.com/kanlanc.png",
   actions: [],
+  githubUrl: "https://github.com/kanlanc/lodestar-mcp",
   _varName: "lodestarMcpServerPlugin",
 };
 
@@ -69555,6 +69396,7 @@ const proxmoxMcpServerPlugin: Plugin = {
     "A Python-based server enabling interaction with Proxmox hypervisors. It supports secure authentication and provides tools for managing nodes, VMs, clusters, and storage.",
   image: "https://github.com/canvrno.png",
   actions: [],
+  githubUrl: "https://github.com/canvrno/ProxmoxMCP",
   _varName: "proxmoxMcpServerPlugin",
 };
 
@@ -69636,6 +69478,7 @@ const mcptimeplusPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jovezhong/mcp-timeplus",
   _varName: "mcptimeplusPlugin",
 };
 
@@ -69666,6 +69509,7 @@ const webflowMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/kapilduraphe/webflow-mcp-server",
   _varName: "webflowMcpServerPlugin",
 };
 
@@ -69676,6 +69520,7 @@ const githubMcpServer2Plugin: Plugin = {
     "Enables interaction with GitHub issues via the Model Context Protocol, allowing users to list and create issues with secure authentication.",
   image: "https://github.com/timbuchinger.png",
   actions: [],
+  githubUrl: "https://github.com/timbuchinger/mcp-github",
   _varName: "githubMcpServer2Plugin",
 };
 
@@ -69686,6 +69531,7 @@ const mcpServerForCursorPlugin: Plugin = {
     "A Model Context Protocol server that integrates with Cursor IDE, providing real-time communication, modern web dashboards, and extensible tools via SSE and WebSocket connections.",
   image: "https://github.com/AntDX316.png",
   actions: [],
+  githubUrl: "https://github.com/AntDX316/MCP-Server",
   _varName: "mcpServerForCursorPlugin",
 };
 
@@ -69925,6 +69771,7 @@ const squareMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/block/square-mcp",
   _varName: "squareMcpServerPlugin",
 };
 
@@ -70014,6 +69861,7 @@ const everartForgeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nickbaumann98/everart-forge-mcp",
   _varName: "everartForgeMcpServerPlugin",
 };
 
@@ -70024,6 +69872,7 @@ const mcpAgentTypescriptPortPlugin: Plugin = {
     "A TypeScript implementation of the MCP Agent framework, providing tools for building context-aware agents with advanced workflow management, logging, and execution capabilities.",
   image: "https://github.com/waldzellai.png",
   actions: [],
+  githubUrl: "https://github.com/waldzellai/mcp-agent-ts",
   _varName: "mcpAgentTypescriptPortPlugin",
 };
 
@@ -70072,6 +69921,7 @@ const serperSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/NightTrek/Serper-search-mcp",
   _varName: "serperSearchMcpServerPlugin",
 };
 
@@ -70082,6 +69932,7 @@ const curriMcpServerPlugin: Plugin = {
     "Enables interaction with Curri's API by managing text notes, offering tools for note creation, and generating summaries using structured prompts.",
   image: "https://github.com/teamcurri.png",
   actions: [],
+  githubUrl: "https://github.com/teamcurri/mcp-linear",
   _varName: "curriMcpServerPlugin",
 };
 
@@ -70767,6 +70618,7 @@ const n8nMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/illuminaresolutions/n8n-mcp-server",
   _varName: "n8nMcpServerPlugin",
 };
 
@@ -70777,6 +70629,7 @@ const mcpwcgwPlugin: Plugin = {
     "Shell and file edit capabilities tightly coupled to provide a powerful coding experience.\n\nYou can work with different modes: architect and code-writer for separate plan and implementation phase.\n\nYou can get it to invoke any cli command, e.g., compiling, type checking, linting, github cli, python",
   image: "https://github.com/rusiaaman.png",
   actions: [],
+  githubUrl: "https://github.com/rusiaaman/wcgw",
   _varName: "mcpwcgwPlugin",
 };
 
@@ -70877,6 +70730,7 @@ const softwarePlanningToolPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/NightTrek/Software-planning-mcp",
   _varName: "softwarePlanningToolPlugin",
 };
 
@@ -70936,6 +70790,7 @@ const mcpclickupPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mikah13/mcp-clickup",
   _varName: "mcpclickupPlugin",
 };
 
@@ -70945,6 +70800,7 @@ const pokemonapiserverPlugin: Plugin = {
   description: "Fetch Pokémon data from PokéAPI",
   image: "https://github.com/Harnishnava.png",
   actions: [],
+  githubUrl: "https://github.com/Harnishnava/pokemon-ai",
   _varName: "pokemonapiserverPlugin",
 };
 
@@ -71128,6 +70984,7 @@ const mcpYnabServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/klauern/mcp-ynab",
   _varName: "mcpYnabServerPlugin",
 };
 
@@ -71138,6 +70995,7 @@ const mcpServerForOpensearchPlugin: Plugin = {
     "Provides a semantic memory layer that integrates LLMs with OpenSearch, enabling storage and retrieval of memories within the OpenSearch engine.",
   image: "https://github.com/ibrooksSDX.png",
   actions: [],
+  githubUrl: "https://github.com/ibrooksSDX/mcp-server-opensearch",
   _varName: "mcpServerForOpensearchPlugin",
 };
 
@@ -71148,6 +71006,7 @@ const steamPlugin: Plugin = {
     "Provide information about the games you played and how long you played them for to an LLM",
   image: "https://github.com/dsp.png",
   actions: [],
+  githubUrl: "https://github.com/dsp/mcp-server-steam",
   _varName: "steamPlugin",
 };
 
@@ -71178,6 +71037,7 @@ const buienradarMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wpnbos/buienradar-mcp-server",
   _varName: "buienradarMcpServerPlugin",
 };
 
@@ -71188,6 +71048,7 @@ const kubernetesmcpserverPlugin: Plugin = {
     "A powerful and flexible Kubernetes MCP server implementation with support for OpenShift.",
   image: "https://github.com/manusa.png",
   actions: [],
+  githubUrl: "https://github.com/manusa/kubernetes-mcp-server",
   _varName: "kubernetesmcpserverPlugin",
 };
 
@@ -71299,6 +71160,7 @@ const perplexityAiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/rileyedwards77/perplexity-mcp-server",
   _varName: "perplexityAiMcpServerPlugin",
 };
 
@@ -71393,6 +71255,7 @@ const memoryBankMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/alioshr/memory-bank-mcp",
   _varName: "memoryBankMcpServer1Plugin",
 };
 
@@ -71403,6 +71266,7 @@ const notionMcpServer6Plugin: Plugin = {
     "Enables interaction with Notion through the Notion API by exposing it as tools for LLMs, allowing operations like reading, creating, updating, and deleting Notion pages seamlessly via natural language.",
   image: "https://github.com/orbit-logistics.png",
   actions: [],
+  githubUrl: "https://github.com/orbit-logistics/notion-mcp-server",
   _varName: "notionMcpServer6Plugin",
 };
 
@@ -71466,6 +71330,7 @@ const nreplMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JohanCodinha/nrepl-mcp-server",
   _varName: "nreplMcpServerPlugin",
 };
 
@@ -71476,6 +71341,7 @@ const resendMcpServerPlugin: Plugin = {
     "Allows sending emails through the Resend service using a standardized Model Context Protocol (MCP) interface, with TypeScript support.",
   image: "https://github.com/pontusab.png",
   actions: [],
+  githubUrl: "https://github.com/pontusab/resend-mcp",
   _varName: "resendMcpServerPlugin",
 };
 
@@ -71486,6 +71352,7 @@ const wasmMcpServerPlugin: Plugin = {
     "This server enables running a Model Context Protocol in a web browser with functionalities including arithmetic operations and session-based key-value storage.",
   image: "https://github.com/beekmarks.png",
   actions: [],
+  githubUrl: "https://github.com/beekmarks/mcp-wasm",
   _varName: "wasmMcpServerPlugin",
 };
 
@@ -71496,6 +71363,7 @@ const timeServerPlugin: Plugin = {
     "An MCP server providing timezone conversions and time-related operations via RESTful API endpoints, featuring comprehensive error handling and timezone database integration.",
   image: "https://github.com/clssck.png",
   actions: [],
+  githubUrl: "https://github.com/clssck/mcp-time-server",
   _varName: "timeServerPlugin",
 };
 
@@ -71506,6 +71374,7 @@ const codeKnowledgeMcpServerPlugin: Plugin = {
     "Provides a project memory bank and RAG context provider for enhanced code understanding and management through vector embeddings, integrated with RooCode and Cline.",
   image: "https://github.com/davidvc.png",
   actions: [],
+  githubUrl: "https://github.com/davidvc/code-knowledge-mcptool",
   _varName: "codeKnowledgeMcpServerPlugin",
 };
 
@@ -71643,6 +71512,7 @@ const coolifyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/StuMason/coolify-mcp-server",
   _varName: "coolifyMcpServerPlugin",
 };
 
@@ -71653,6 +71523,7 @@ const agentcarePlugin: Plugin = {
     "An MCP server that provides healthcare tools for interacting with FHIR data and medical resources on EMRs like Cerner and Epic",
   image: "https://github.com/Kartha-AI.png",
   actions: [],
+  githubUrl: "https://github.com/Kartha-AI/agentcare-mcp",
   _varName: "agentcarePlugin",
 };
 
@@ -71663,6 +71534,7 @@ const excelmcpserverPlugin: Plugin = {
     "Provides Excel file manipulation capabilities. This server enables workbook creation, data manipulation, formatting, and advanced Excel features.",
   image: "https://github.com/haris-musa.png",
   actions: [],
+  githubUrl: "https://github.com/haris-musa/excel-mcp-server",
   _varName: "excelmcpserverPlugin",
 };
 
@@ -71673,6 +71545,7 @@ const mcpLocalWebSearchServerPlugin: Plugin = {
     "Enables performing local web searches and extracting structured content from web pages using the Model Context Protocol, featuring customizable result limits and domain filtering.",
   image: "https://github.com/FradSer.png",
   actions: [],
+  githubUrl: "https://github.com/FradSer/mcp-server-local-web-search",
   _varName: "mcpLocalWebSearchServerPlugin",
 };
 
@@ -71683,6 +71556,7 @@ const deepResearchMcpServerPlugin: Plugin = {
     "Enables iterative deep research by integrating AI agents with search engines, web scraping, and large language models for efficient data gathering and comprehensive reporting.",
   image: "https://github.com/Ozamatash.png",
   actions: [],
+  githubUrl: "https://github.com/Ozamatash/deep-research-mcp",
   _varName: "deepResearchMcpServerPlugin",
 };
 
@@ -71901,6 +71775,7 @@ const supabaseMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/alexander-zuev/supabase-mcp-server",
   _varName: "supabaseMcpServer2Plugin",
 };
 
@@ -71911,6 +71786,7 @@ const langfusePromptManagementMcpServerPlugin: Plugin = {
     "Facilitates access and management of Langfuse prompts through the Model Context Protocol, enabling prompt discovery, retrieval, and integration within clients like Claude Desktop and Cursor.",
   image: "https://github.com/langfuse.png",
   actions: [],
+  githubUrl: "https://github.com/langfuse/mcp-server-langfuse",
   _varName: "langfusePromptManagementMcpServerPlugin",
 };
 
@@ -71995,6 +71871,7 @@ const seqMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/ahmad2x4/mcp-server-seq",
   _varName: "seqMcpServerPlugin",
 };
 
@@ -72005,6 +71882,7 @@ const linearMcpServer4Plugin: Plugin = {
     "Facilitates project management with the Linear API via the Model Context Protocol, allowing users to manage initiatives, projects, issues, and their relationships through features like creation, viewing, updating, and prioritization.",
   image: "https://github.com/samcfinan.png",
   actions: [],
+  githubUrl: "https://github.com/samcfinan/linear-mcp-server",
   _varName: "linearMcpServer4Plugin",
 };
 
@@ -72258,6 +72136,7 @@ const shellmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kevinwatt/shell-mcp",
   _varName: "shellmcpPlugin",
 };
 
@@ -72347,6 +72226,7 @@ const lunchmoneymcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/leafeye/lunchmoney-mcp-server",
   _varName: "lunchmoneymcpPlugin",
 };
 
@@ -72382,6 +72262,7 @@ const zonosTtsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PhialsBasement/Zonos-TTS-MCP",
   _varName: "zonosTtsMcpServerPlugin",
 };
 
@@ -72392,6 +72273,7 @@ const calendarToolsMcpServerPlugin: Plugin = {
     "Enables comprehensive calendar management with capabilities to create, list, update, and delete events through a Model Context Protocol server integrated with Google Calendar.",
   image: "https://github.com/cablate.png",
   actions: [],
+  githubUrl: "https://github.com/cablate/mcp-google-calendar",
   _varName: "calendarToolsMcpServerPlugin",
 };
 
@@ -72455,6 +72337,7 @@ const modalMcpToolboxPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/philipp-eisen/modal-mcp-toolbox",
   _varName: "modalMcpToolboxPlugin",
 };
 
@@ -72825,6 +72708,7 @@ const mcpMediaProcessingServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/maoxiaoke/mcp-media-processor",
   _varName: "mcpMediaProcessingServerPlugin",
 };
 
@@ -73163,6 +73047,7 @@ const simpleDocumentProcessingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cablate/mcp-doc-forge",
   _varName: "simpleDocumentProcessingMcpServerPlugin",
 };
 
@@ -73231,6 +73116,7 @@ const knmiWeatherMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wolkwork/knmi-mcp",
   _varName: "knmiWeatherMcpPlugin",
 };
 
@@ -73241,6 +73127,7 @@ const mcpServerForThings3Plugin: Plugin = {
     "Enables integration with Things3, allowing the creation and management of tasks and projects via the MCP protocol, including synchronization with Agenda projects.",
   image: "https://github.com/drjforrest.png",
   actions: [],
+  githubUrl: "https://github.com/drjforrest/mcp-things3",
   _varName: "mcpServerForThings3Plugin",
 };
 
@@ -73251,6 +73138,7 @@ const comfyMcpServerPlugin: Plugin = {
     "The Comfy MCP Server uses the FastMCP framework to generate images from prompts by interacting with a remote Comfy server, allowing automated image creation based on workflow configurations.",
   image: "https://github.com/lalanikarim.png",
   actions: [],
+  githubUrl: "https://github.com/lalanikarim/comfy-mcp-server",
   _varName: "comfyMcpServerPlugin",
 };
 
@@ -73374,6 +73262,7 @@ const kospikosdaqPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dragon1086/kospi-kosdaq-stock-server",
   _varName: "kospikosdaqPlugin",
 };
 
@@ -73384,6 +73273,7 @@ const postgresqlMcpServerPlugin: Plugin = {
     "Provides read-only access to PostgreSQL databases, enabling users to inspect database schemas and execute read-only queries through a Model Context Protocol server.",
   image: "https://github.com/vinsidious.png",
   actions: [],
+  githubUrl: "https://github.com/vinsidious/mcp-pg-schema",
   _varName: "postgresqlMcpServerPlugin",
 };
 
@@ -73425,6 +73315,7 @@ const mcpServerPlaygroundPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/psaboia/mcp-server-playground",
   _varName: "mcpServerPlaygroundPlugin",
 };
 
@@ -73556,6 +73447,7 @@ const chatgptMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Toowiredd/chatgpt-mcp-server",
   _varName: "chatgptMcpServerPlugin",
 };
 
@@ -73600,6 +73492,7 @@ const fetchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ExactDoug/mcp-fetch",
   _varName: "fetchMcpServerPlugin",
 };
 
@@ -73773,6 +73666,7 @@ const knowledgeGraphMemoryServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/T1nker-1220/memories-with-lessons-mcp-server",
   _varName: "knowledgeGraphMemoryServer1Plugin",
 };
 
@@ -73796,6 +73690,7 @@ const deepseekThinkerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ruixingshi/deepseek-thinker-mcp",
   _varName: "deepseekThinkerMcpServerPlugin",
 };
 
@@ -74525,6 +74420,7 @@ const todoistMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Chrusic/todoist-mcp-server-extended",
   _varName: "todoistMcpServer1Plugin",
 };
 
@@ -74925,6 +74821,7 @@ const mcpServerForApacheAirflowPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/yangkyeongmo/mcp-server-apache-airflow",
   _varName: "mcpServerForApacheAirflowPlugin",
 };
 
@@ -74935,6 +74832,7 @@ const mysqlMcpServer2Plugin: Plugin = {
     "An MCP server that integrates with MySQL databases, enabling secure read and write operations through LLM-driven interfaces with support for transaction handling and performance monitoring.",
   image: "https://github.com/kevinwatt.png",
   actions: [],
+  githubUrl: "https://github.com/kevinwatt/mysql-mcp",
   _varName: "mysqlMcpServer2Plugin",
 };
 
@@ -74945,6 +74843,7 @@ const jupyterMcpServerPlugin: Plugin = {
     "Enables interaction with Jupyter notebooks through the Model Context Protocol, supporting code execution and markdown insertion within JupyterLab environments.",
   image: "https://github.com/datalayer.png",
   actions: [],
+  githubUrl: "https://github.com/datalayer/jupyter-mcp-server",
   _varName: "jupyterMcpServerPlugin",
 };
 
@@ -75061,6 +74960,7 @@ const figmaMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GLips/Figma-Context-MCP",
   _varName: "figmaMcpServer2Plugin",
 };
 
@@ -75202,6 +75102,7 @@ const bearMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jkawamoto/mcp-bear",
   _varName: "bearMcpServerPlugin",
 };
 
@@ -75284,6 +75185,7 @@ const singaporeLtaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/arjunkmrm/mcp-sg-lta",
   _varName: "singaporeLtaMcpServerPlugin",
 };
 
@@ -75338,6 +75240,7 @@ const searxngMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kevinwatt/mcp-server-searxng",
   _varName: "searxngMcpServerPlugin",
 };
 
@@ -75348,6 +75251,7 @@ const socialListeningMcpServerPlugin: Plugin = {
     "An MCP server offering AI-driven social mention analysis via Syften's API, featuring real-time notifications and trend analysis.",
   image: "https://github.com/fred-em.png",
   actions: [],
+  githubUrl: "https://github.com/fred-em/social-listening",
   _varName: "socialListeningMcpServerPlugin",
 };
 
@@ -75819,6 +75723,7 @@ const gitMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sheshiyer/git-mcp-v2",
   _varName: "gitMcpServer1Plugin",
 };
 
@@ -76140,6 +76045,7 @@ const portkeyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r-huijts/portkey-admin-mcp-server",
   _varName: "portkeyMcpServerPlugin",
 };
 
@@ -76150,6 +76056,7 @@ const ollamaMcpServer1Plugin: Plugin = {
     "Enables seamless integration between Ollama's local LLM models and MCP-compatible applications, supporting model management and chat interactions.",
   image: "https://github.com/rawveg.png",
   actions: [],
+  githubUrl: "https://github.com/rawveg/ollama-mcp",
   _varName: "ollamaMcpServer1Plugin",
 };
 
@@ -76247,6 +76154,7 @@ const scryfallMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cryppadotta/scryfall-mcp",
   _varName: "scryfallMcpServerPlugin",
 };
 
@@ -76257,6 +76165,7 @@ const mcpServerWeaviatePlugin: Plugin = {
     "The MCP Server for Weaviate facilitates integration with Weaviate using a customizable Python-based server, enabling interaction with Weaviate databases and OpenAI APIs via configurable URL and API keys.",
   image: "https://github.com/weaviate.png",
   actions: [],
+  githubUrl: "https://github.com/weaviate/mcp-server-weaviate",
   _varName: "mcpServerWeaviatePlugin",
 };
 
@@ -76267,6 +76176,7 @@ const mcpSeleniumPlugin: Plugin = {
     "Enables browser automation using the Selenium WebDriver through MCP, supporting browser management, element location, and both basic and advanced user interactions.",
   image: "https://github.com/angiejones.png",
   actions: [],
+  githubUrl: "https://github.com/angiejones/mcp-selenium",
   _varName: "mcpSeleniumPlugin",
 };
 
@@ -76316,6 +76226,7 @@ const searchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/fengin/search-server",
   _varName: "searchMcpServerPlugin",
 };
 
@@ -76427,6 +76338,7 @@ const perplexityAiMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/fr0ziii/perplexity-mcp-server",
   _varName: "perplexityAiMcpServer1Plugin",
 };
 
@@ -76452,6 +76364,7 @@ const headlineVibesAnalysisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/fred-em/headline-vibes",
   _varName: "headlineVibesAnalysisMcpServerPlugin",
 };
 
@@ -76462,6 +76375,7 @@ const brevoMcpPlugin: Plugin = {
     "A TypeScript server enabling integration with the Brevo (Sendinblue) API for managing contacts, sending emails, and tracking email events in multi-channel applications like Claude Desktop.",
   image: "https://github.com/apicolet.png",
   actions: [],
+  githubUrl: "https://github.com/apicolet/brevo-mcp",
   _varName: "brevoMcpPlugin",
 };
 
@@ -76504,6 +76418,7 @@ const mcpExcelReaderPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ArchimedesCrypto/excel-reader-mcp",
   _varName: "mcpExcelReaderPlugin",
 };
 
@@ -76540,6 +76455,7 @@ const mcpanyopenapiPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/matthewhand/mcp-openapi-proxy",
   _varName: "mcpanyopenapiPlugin",
 };
 
@@ -76586,6 +76502,7 @@ const pulsemcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/orliesaurus/pulsemcp-server",
   _varName: "pulsemcpServerPlugin",
 };
 
@@ -76596,6 +76513,7 @@ const perplexityMcpServer2Plugin: Plugin = {
     "advance mcp server utilizing Perplexity, without the need for an API key",
   image: "https://github.com/wysh3.png",
   actions: [],
+  githubUrl: "https://github.com/wysh3/perplexity-mcp-zerver",
   _varName: "perplexityMcpServer2Plugin",
 };
 
@@ -76606,6 +76524,7 @@ const novuMcpServerPlugin: Plugin = {
     "Enables AI agents to interact with Novu's notification system, facilitating operations like sending notifications, managing subscribers, and organizing topics.",
   image: "https://github.com/novuhq.png",
   actions: [],
+  githubUrl: "https://github.com/novuhq/smithery-mcp",
   _varName: "novuMcpServerPlugin",
 };
 
@@ -76642,6 +76561,7 @@ const mcpServerTemplateForCursorIde3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/chrisboden/mcp_template",
   _varName: "mcpServerTemplateForCursorIde3Plugin",
 };
 
@@ -76665,6 +76585,7 @@ const mcpServerStarterPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GreatAuk/mcp-weather",
   _varName: "mcpServerStarterPlugin",
 };
 
@@ -76675,6 +76596,7 @@ const mcpllmstxtPlugin: Plugin = {
     "MCP server for SecretiveShell/Awesome-llms-txt. Add documentation directly into your conversation via MCP resources.",
   image: "https://github.com/SecretiveShell.png",
   actions: [],
+  githubUrl: "https://github.com/SecretiveShell/MCP-llms-txt",
   _varName: "mcpllmstxtPlugin",
 };
 
@@ -77993,6 +77915,7 @@ const ghostMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MFYDev/ghost-mcp",
   _varName: "ghostMcpServerPlugin",
 };
 
@@ -78337,6 +78260,7 @@ const azureMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mashriram/azure_mcp_server",
   _varName: "azureMcpServer1Plugin",
 };
 
@@ -78446,6 +78370,7 @@ const linearMcpServer5Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Iwark/linear-mcp-server",
   _varName: "linearMcpServer5Plugin",
 };
 
@@ -78884,6 +78809,7 @@ const gitlabMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zereight/gitlab-mcp",
   _varName: "gitlabMcpPlugin",
 };
 
@@ -79195,6 +79121,7 @@ const confluencemcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zereight/confluence-mcp",
   _varName: "confluencemcpPlugin",
 };
 
@@ -79205,6 +79132,7 @@ const integratedMcpServerPlugin: Plugin = {
     "Facilitates real-time tool discovery and documentation retrieval for command-line tools within a VSCode extension, using Express and SSE for secure and dynamic content streaming.",
   image: "https://github.com/patelnav.png",
   actions: [],
+  githubUrl: "https://github.com/patelnav/my-tools-mcp",
   _varName: "integratedMcpServerPlugin",
 };
 
@@ -79980,6 +79908,7 @@ const clickupMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TaazKareem/clickup-mcp-server",
   _varName: "clickupMcpServer1Plugin",
 };
 
@@ -79990,6 +79919,7 @@ const secondBrainOsMcpServerPlugin: Plugin = {
     "Facilitates integration with Claude Desktop to run AI agents and execute purchased actions without code, leveraging the Model Context Protocol framework.",
   image: "https://github.com/umairkamilcodes.png",
   actions: [],
+  githubUrl: "https://github.com/umairkamilcodes/secondbrainos-mcp-server",
   _varName: "secondBrainOsMcpServerPlugin",
 };
 
@@ -80032,6 +79962,7 @@ const featurediscussionMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/squirrelogic/mcp-feature-discussion",
   _varName: "featurediscussionMcpServerPlugin",
 };
 
@@ -80069,6 +80000,7 @@ const youtubeMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kevinwatt/yt-dlp-mcp",
   _varName: "youtubeMcpServer1Plugin",
 };
 
@@ -80316,6 +80248,7 @@ const mcpPlaywrightCdpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lars-hagen/mcp-playwright-cdp",
   _varName: "mcpPlaywrightCdpPlugin",
 };
 
@@ -80388,6 +80321,7 @@ const fileEditCheckMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/8grackles/file-edit-check-server",
   _varName: "fileEditCheckMcpServerPlugin",
 };
 
@@ -80397,6 +80331,7 @@ const mcptavilysearchPlugin: Plugin = {
   description: "Use Tavily Search to search for news pages or images.",
   image: "https://github.com/y7ut.png",
   actions: [],
+  githubUrl: "https://github.com/y7ut/mcp-tavily-search",
   _varName: "mcptavilysearchPlugin",
 };
 
@@ -80433,6 +80368,7 @@ const mcpImagePlaceholderServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/husniadil/mcp-image-placeholder",
   _varName: "mcpImagePlaceholderServerPlugin",
 };
 
@@ -80443,6 +80379,7 @@ const cryptocurrencyDaemonMcpServerPlugin: Plugin = {
     "Enables secure interactions with cryptocurrency daemon RPC interfaces through AI assistants, supporting transaction management, wallet operations, and daemon monitoring for Bitcoin-derived cryptocurrencies.",
   image: "https://github.com/raw391.png",
   actions: [],
+  githubUrl: "https://github.com/raw391/coin_daemon_mcp",
   _varName: "cryptocurrencyDaemonMcpServerPlugin",
 };
 
@@ -80453,6 +80390,7 @@ const mcpIcalServerPlugin: Plugin = {
     "Transforms macOS calendar management into a conversational experience using natural language, allowing users to create, manage, and update calendar events seamlessly through an MCP-compatible client.",
   image: "https://github.com/Omar-V2.png",
   actions: [],
+  githubUrl: "https://github.com/Omar-V2/mcp-ical",
   _varName: "mcpIcalServerPlugin",
 };
 
@@ -80599,6 +80537,7 @@ const puppeteerMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/merajmehrabi/puppeteer-mcp-server",
   _varName: "puppeteerMcpServer1Plugin",
 };
 
@@ -80641,6 +80580,7 @@ const mcpLiveEventsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mmmaaatttttt/mcp-live-events",
   _varName: "mcpLiveEventsServerPlugin",
 };
 
@@ -80652,6 +80592,7 @@ const mcpServerScalableOpenapiEndpointDiscoveryAndApiRequestToolPlugin: Plugin =
       "This server facilitates scalable discovery and execution of OpenAPI endpoints using semantic search and high-performance processing, overcoming limitations of large spec handling for streamlined API interactions.",
     image: "https://github.com/baryhuang.png",
     actions: [],
+    githubUrl: "https://github.com/baryhuang/mcp-server-any-openapi",
     _varName:
       "mcpServerScalableOpenapiEndpointDiscoveryAndApiRequestToolPlugin",
   };
@@ -80683,6 +80624,7 @@ const mcpServerTemplate1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stevennevins/architect-mcp-server",
   _varName: "mcpServerTemplate1Plugin",
 };
 
@@ -80693,6 +80635,7 @@ const deepclaudeMcpServerPlugin: Plugin = {
     "Enables integration and control of DeepSeek and Claude AI models through RESTful APIs, supporting seamless AI model operations with configurable parameters and robust error handling.",
   image: "https://github.com/smithery-ai.png",
   actions: [],
+  githubUrl: "https://github.com/smithery-ai/DeepClaudeMcp",
   _varName: "deepclaudeMcpServerPlugin",
 };
 
@@ -80730,6 +80673,7 @@ const perplexityAiMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mkusaka/mcp-server-perplexity",
   _varName: "perplexityAiMcpServer2Plugin",
 };
 
@@ -80837,6 +80781,7 @@ const decentsamplerDrumsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dandeliongold/mcp-decent-sampler-drums",
   _varName: "decentsamplerDrumsMcpServerPlugin",
 };
 
@@ -80872,6 +80817,7 @@ const flutterToolsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dkpoulsen/flutter-tools",
   _varName: "flutterToolsMcpServerPlugin",
 };
 
@@ -80901,6 +80847,7 @@ const youtubeTranscriptMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jkawamoto/mcp-youtube-transcript",
   _varName: "youtubeTranscriptMcpServerPlugin",
 };
 
@@ -80924,6 +80871,7 @@ const mcpSourceRelationServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/owayo/mcp-source-relation",
   _varName: "mcpSourceRelationServerPlugin",
 };
 
@@ -81020,6 +80968,7 @@ const ramiLevyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shilomagen/rami-levy-mcp",
   _varName: "ramiLevyMcpServerPlugin",
 };
 
@@ -81108,6 +81057,7 @@ const researchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/h-yanagawa/research-mcp-server",
   _varName: "researchMcpServerPlugin",
 };
 
@@ -81131,6 +81081,7 @@ const mcpServerPagespeedPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/enemyrr/mcp-server-pagespeed",
   _varName: "mcpServerPagespeedPlugin",
 };
 
@@ -81279,6 +81230,7 @@ const mcpmysqlServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/enemyrr/mcp-mysql-server",
   _varName: "mcpmysqlServerPlugin",
 };
 
@@ -81302,6 +81254,7 @@ const drupalmodulesmcpMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Cleversoft-IT/drupal-modules-mcp",
   _varName: "drupalmodulesmcpMcpServerPlugin",
 };
 
@@ -81312,6 +81265,7 @@ const playwrightMcpServerPlugin: Plugin = {
     "Provides a server utilizing Model Context Protocol to enable human-like browser automation with Playwright, allowing control over browser actions such as navigation, element interaction, and scrolling.",
   image: "https://github.com/showfive.png",
   actions: [],
+  githubUrl: "https://github.com/showfive/playwright-mcp-server",
   _varName: "playwrightMcpServerPlugin",
 };
 
@@ -81322,6 +81276,7 @@ const deepclaudeMcpServer1Plugin: Plugin = {
     "This server integrates DeepSeek and Claude AI models to provide enhanced AI responses, featuring a RESTful API, configurable parameters, and robust error handling.",
   image: "https://github.com/Mrdapeng.png",
   actions: [],
+  githubUrl: "https://github.com/Mrdapeng/DeepClaudeMcp",
   _varName: "deepclaudeMcpServer1Plugin",
 };
 
@@ -81332,6 +81287,7 @@ const mcpapplemusicPlugin: Plugin = {
     "Facilitates controlling Apple Music on macOS via AppleScript through MCP commands, allowing users to manage playback, search for tracks, and create playlists.",
   image: "https://github.com/kennethreitz.png",
   actions: [],
+  githubUrl: "https://github.com/kennethreitz/mcp-applemusic",
   _varName: "mcpapplemusicPlugin",
 };
 
@@ -82266,6 +82222,7 @@ const mcpserverasanaPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/roychri/mcp-server-asana",
   _varName: "mcpserverasanaPlugin",
 };
 
@@ -82276,6 +82233,7 @@ const deepseekR1McpServerPlugin: Plugin = {
     "Enables browser automation and real-time computer vision tasks through AI-driven commands, offering zero-cost digital navigation and interaction for enhanced web experiences.",
   image: "https://github.com/grapheneaffiliate.png",
   actions: [],
+  githubUrl: "https://github.com/grapheneaffiliate/dRiNk-ThE-kOoLaId",
   _varName: "deepseekR1McpServerPlugin",
 };
 
@@ -82286,6 +82244,7 @@ const browserAutomationMcpServerPlugin: Plugin = {
     "Enables AI agents to control web browsers via a standardized interface for operations like launching, interacting with, and closing browsers.",
   image: "https://github.com/grapheneaffiliate.png",
   actions: [],
+  githubUrl: "https://github.com/grapheneaffiliate/browser-automation-mcp",
   _varName: "browserAutomationMcpServerPlugin",
 };
 
@@ -82310,6 +82269,7 @@ const mcpSourceTreeServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/owayo/mcp-src-tree",
   _varName: "mcpSourceTreeServerPlugin",
 };
 
@@ -82320,6 +82280,7 @@ const crawl4aiMcpServerPlugin: Plugin = {
     "Crawl4AI MCP Server is an intelligent information retrieval server offering robust search capabilities and LLM-optimized web content understanding, utilizing multi-engine search and intelligent content extraction to efficiently gather and comprehend internet information.",
   image: "https://github.com/weidwonder.png",
   actions: [],
+  githubUrl: "https://github.com/weidwonder/crawl4ai-mcp-server",
   _varName: "crawl4aiMcpServerPlugin",
 };
 
@@ -82382,6 +82343,7 @@ const codeAnalysisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/saiprashanths/code-analysis-mcp",
   _varName: "codeAnalysisMcpServerPlugin",
 };
 
@@ -82670,6 +82632,7 @@ const mcpServerFirecrawlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Msparihar/mcp-server-firecrawl",
   _varName: "mcpServerFirecrawlPlugin",
 };
 
@@ -82735,6 +82698,7 @@ const datetimeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bossjones/datetime-mcp-server",
   _varName: "datetimeMcpServerPlugin",
 };
 
@@ -82783,6 +82747,7 @@ const mcpAsyncServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ViezeVingertjes/example-async-mcp",
   _varName: "mcpAsyncServerPlugin",
 };
 
@@ -82812,6 +82777,7 @@ const drupalmodulesmcpMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Cleversoft-IT/drupal-tools-mcp",
   _varName: "drupalmodulesmcpMcpServer1Plugin",
 };
 
@@ -82835,6 +82801,7 @@ const mcpServerTemplate2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stevennevins/mcp-server-template",
   _varName: "mcpServerTemplate2Plugin",
 };
 
@@ -82915,6 +82882,7 @@ const academicPaperSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/afrise/academic-search-mcp-server",
   _varName: "academicPaperSearchMcpServerPlugin",
 };
 
@@ -82980,6 +82948,7 @@ const webAccessibilityMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bilhasry-deriv/mcp-web-a11y",
   _varName: "webAccessibilityMcpServerPlugin",
 };
 
@@ -83153,6 +83122,7 @@ const web3McpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/strangelove-ventures/web3-mcp",
   _varName: "web3McpServerPlugin",
 };
 
@@ -83163,6 +83133,7 @@ const mcptoolhousePlugin: Plugin = {
     "MCP server for toolhouse.ai. This does not rely on an external llm unlike the official server.",
   image: "https://github.com/SecretiveShell.png",
   actions: [],
+  githubUrl: "https://github.com/SecretiveShell/MCP-toolhouse",
   _varName: "mcptoolhousePlugin",
 };
 
@@ -83319,6 +83290,7 @@ const mcpServerRedditPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Hawstein/mcp-server-reddit",
   _varName: "mcpServerRedditPlugin",
 };
 
@@ -83349,6 +83321,7 @@ const mcpCodeExecutorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bazinga012/mcp_code_executor",
   _varName: "mcpCodeExecutorPlugin",
 };
 
@@ -83359,6 +83332,7 @@ const mcpDeepseekAgentServerPlugin: Plugin = {
     "Enables seamless AI integration via Ollama's Deepseek model, providing protocol compliance and automatic configuration for clean AI-driven interactions.",
   image: "https://github.com/freebeiro.png",
   actions: [],
+  githubUrl: "https://github.com/freebeiro/mcp-deepseek-agent",
   _varName: "mcpDeepseekAgentServerPlugin",
 };
 
@@ -83413,6 +83387,7 @@ const safariScreenshotMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/rogerheykoop/mcp-safari-screenshot",
   _varName: "safariScreenshotMcpServerPlugin",
 };
 
@@ -83589,6 +83564,7 @@ const clickupMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Nazruden/clickup-mcp-server",
   _varName: "clickupMcpServer2Plugin",
 };
 
@@ -83599,6 +83575,7 @@ const fileContextMcpPlugin: Plugin = {
     "This server provides an API to query Large Language Models using context from local files, supporting various models and file types for context-aware responses.",
   image: "https://github.com/compiledwithproblems.png",
   actions: [],
+  githubUrl: "https://github.com/compiledwithproblems/file-context-mcp",
   _varName: "fileContextMcpPlugin",
 };
 
@@ -83609,6 +83586,7 @@ const mcpCommandAndSearchServerPlugin: Plugin = {
     "Facilitates executing system commands and retrieving web data using the Brave Search API by interpreting user intents via a Large Language Model (LLM).",
   image: "https://github.com/mjunaid46.png",
   actions: [],
+  githubUrl: "https://github.com/mjunaid46/mcp",
   _varName: "mcpCommandAndSearchServerPlugin",
 };
 
@@ -83700,6 +83678,7 @@ const mcpArchitectPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/squirrelogic/mcp-architect",
   _varName: "mcpArchitectPlugin",
 };
 
@@ -83757,6 +83736,7 @@ const bitcoinMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AbdelStark/bitcoin-mcp",
   _varName: "bitcoinMcpServerPlugin",
 };
 
@@ -83766,6 +83746,7 @@ const mcpperplexityPlugin: Plugin = {
   description: "MCP Server for the Perplexity API.",
   image: "https://github.com/daniel-lxs.png",
   actions: [],
+  githubUrl: "https://github.com/daniel-lxs/mcp-perplexity",
   _varName: "mcpperplexityPlugin",
 };
 
@@ -83821,6 +83802,7 @@ const mcpAccessServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shin-t-o/mcp-access",
   _varName: "mcpAccessServerPlugin",
 };
 
@@ -83844,6 +83826,7 @@ const perplexityMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jaacob/perplexity-mcp",
   _varName: "perplexityMcpServer3Plugin",
 };
 
@@ -83854,6 +83837,7 @@ const awsWellarchitectedFrameworkMcpServerPlugin: Plugin = {
     "This server provides guidance and recommendations based on AWS's Well-Architected Framework for cloud architectures, enabling analysis and review focused on operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability.",
   image: "https://github.com/artofthepossible.png",
   actions: [],
+  githubUrl: "https://github.com/artofthepossible/mcp-well-architected",
   _varName: "awsWellarchitectedFrameworkMcpServerPlugin",
 };
 
@@ -83864,6 +83848,7 @@ const mcpTitanPlugin: Plugin = {
     "This advanced memory server facilitates neural memory-based sequence learning and prediction, enhancing code generation and understanding through state maintenance and manifold optimization as inspired by Google Research's framework.",
   image: "https://github.com/henryhawke.png",
   actions: [],
+  githubUrl: "https://github.com/henryhawke/mcp-titan",
   _varName: "mcpTitanPlugin",
 };
 
@@ -83874,6 +83859,7 @@ const minecraftDockerMcpPlugin: Plugin = {
     "Enables AI interactions with a running Minecraft server inside a Docker container using RCON, allowing models to programmatically create Minecraft builds and manage the server.",
   image: "https://github.com/rgbkrk.png",
   actions: [],
+  githubUrl: "https://github.com/rgbkrk/rcon-mcp",
   _varName: "minecraftDockerMcpPlugin",
 };
 
@@ -83994,6 +83980,7 @@ const gitForensicsMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/davidorex/git-forensics-mcp",
   _varName: "gitForensicsMcpPlugin",
 };
 
@@ -84004,6 +83991,7 @@ const apptweakMcpServerPlugin: Plugin = {
     "Empowers users to search and analyze mobile apps via the AppTweak API, providing insights into app store data, reviews, ratings, and keyword performance on iOS and Android platforms.",
   image: "https://github.com/robertredbox.png",
   actions: [],
+  githubUrl: "https://github.com/robertredbox/apptweak-mcp-server",
   _varName: "apptweakMcpServerPlugin",
 };
 
@@ -84055,6 +84043,7 @@ const wegeneAssistantMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/xraywu/mcp-wegene-assistant",
   _varName: "wegeneAssistantMcpServerPlugin",
 };
 
@@ -84748,6 +84737,7 @@ const githubMcpServerPlusPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PhialsBasement/mcp-github-server-plus",
   _varName: "githubMcpServerPlusPlugin",
 };
 
@@ -84783,6 +84773,7 @@ const deepseekR1McpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/66julienmartin/MCP-server-Deepseek_R1",
   _varName: "deepseekR1McpServer1Plugin",
 };
 
@@ -84814,6 +84805,7 @@ const daipendencyPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/daipendency/daipendency-mcp",
   _varName: "daipendencyPlugin",
 };
 
@@ -84824,6 +84816,7 @@ const aiDevelopmentAssistantMcpServer1Plugin: Plugin = {
     "An AI-powered development toolkit for Cursor providing intelligent coding assistance through advanced reasoning, UI screenshot analysis, and code review tools.",
   image: "https://github.com/kleneway.png",
   actions: [],
+  githubUrl: "https://github.com/kleneway/awesome-cursor-mpc-server",
   _varName: "aiDevelopmentAssistantMcpServer1Plugin",
 };
 
@@ -84853,6 +84846,7 @@ const browseruseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adamdude828/mcp-browser-use",
   _varName: "browseruseMcpServerPlugin",
 };
 
@@ -84901,6 +84895,7 @@ const mcpOllamaServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/emgeee/mcp-ollama",
   _varName: "mcpOllamaServerPlugin",
 };
 
@@ -84937,6 +84932,7 @@ const mcpOllamaLinkPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/truaxki/mcp-ollama-link",
   _varName: "mcpOllamaLinkPlugin",
 };
 
@@ -85002,6 +84998,7 @@ const memoryCacheServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/tosin2013/mcp-memory-cache-server",
   _varName: "memoryCacheServerPlugin",
 };
 
@@ -85025,6 +85022,7 @@ const mcpregistryserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/KBB99/mcp-registry-server",
   _varName: "mcpregistryserverPlugin",
 };
 
@@ -85035,6 +85033,7 @@ const aqicnMcpServerPlugin: Plugin = {
     "Enables interaction with the World Air Quality Index to fetch real-time air quality data for cities and coordinates worldwide via Model Context Protocol (MCP).",
   image: "https://github.com/mattmarcin.png",
   actions: [],
+  githubUrl: "https://github.com/mattmarcin/aqicn-mcp",
   _varName: "aqicnMcpServerPlugin",
 };
 
@@ -85045,6 +85044,7 @@ const simpleFilesVectorStoreServerPlugin: Plugin = {
     "A very simple vector store that provides capability to watch a list of directories, and automatically index all the markdown, html and text files in the directory to a vector store to enhance context.",
   image: "https://github.com/lishenxydlgzs.png",
   actions: [],
+  githubUrl: "https://github.com/lishenxydlgzs/simple-files-vectorstore",
   _varName: "simpleFilesVectorStoreServerPlugin",
 };
 
@@ -85080,6 +85080,7 @@ const qwenMaxMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/66julienmartin/MCP-server-Qwen_Max",
   _varName: "qwenMaxMcpServerPlugin",
 };
 
@@ -85116,6 +85117,7 @@ const mcpServerTemplateForCursorIde4Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kirill-markin/example-mcp-server",
   _varName: "mcpServerTemplateForCursorIde4Plugin",
 };
 
@@ -85152,6 +85154,7 @@ const weaviateMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kirill-markin/example-mcp-server",
   _varName: "weaviateMcpServerPlugin",
 };
 
@@ -85162,6 +85165,7 @@ const mcpdiscordchatMcpServerPlugin: Plugin = {
     "Facilitates note storage and summarization through custom URIs, allowing users to manage, summarize, and update notes with varying detail levels in a collaborative environment.",
   image: "https://github.com/koladev32.png",
   actions: [],
+  githubUrl: "https://github.com/koladev32/mcp-discord-chat",
   _varName: "mcpdiscordchatMcpServerPlugin",
 };
 
@@ -85172,6 +85176,7 @@ const tuyaMcpServerPlugin: Plugin = {
     "Provides a note storage system with a custom URI scheme and includes tools for adding notes and generating summaries for Tuya devices.",
   image: "https://github.com/cabra-lat.png",
   actions: [],
+  githubUrl: "https://github.com/cabra-lat/tuyactl",
   _varName: "tuyaMcpServerPlugin",
 };
 
@@ -85182,6 +85187,7 @@ const composioMcpServerPlugin: Plugin = {
     "A server implementation that provides MCP-compatible access to Composio applications like Gmail and Linear, allowing interaction through a structured interface for language models.",
   image: "https://github.com/ComposioHQ.png",
   actions: [],
+  githubUrl: "https://github.com/ComposioHQ/composio-mcp-server",
   _varName: "composioMcpServerPlugin",
 };
 
@@ -86415,6 +86421,7 @@ const lumbretravelMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lumile/lumbretravel-mcp",
   _varName: "lumbretravelMcpServerPlugin",
 };
 
@@ -86425,6 +86432,7 @@ const mcpServerForNationalParkServicesDataPlugin: Plugin = {
     "Facilitates retrieval of National Park Services data using the NPS API, allowing users to list national parks by state and access detailed information about specific parks.",
   image: "https://github.com/amysatterlee.png",
   actions: [],
+  githubUrl: "https://github.com/amysatterlee/nps_mcp",
   _varName: "mcpServerForNationalParkServicesDataPlugin",
 };
 
@@ -86503,6 +86511,7 @@ const imageGenerationMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mikeyny/ai-image-gen-mcp",
   _varName: "imageGenerationMcpServer2Plugin",
 };
 
@@ -86513,6 +86522,7 @@ const lsdMcpServerPlugin: Plugin = {
     "The server connects the Claude AI to the internet through the capabilites of the LSD SQL language, turning web data into a queryable database-like structure to interact with real-world data efficiently.",
   image: "https://github.com/lsd-so.png",
   actions: [],
+  githubUrl: "https://github.com/lsd-so/lsd-mcp",
   _varName: "lsdMcpServerPlugin",
 };
 
@@ -86523,6 +86533,8 @@ const allinoneDevPlugin: Plugin = {
     "All In One Model Context Protocol:\n\nqdrant, google suite (gmail, calendar, ...), jira, gitlab, CLI, ...",
   image: "https://github.com/nguyenvanduocit.png",
   actions: [],
+  githubUrl:
+    "https://github.com/nguyenvanduocit/all-in-one-model-context-protocol",
   _varName: "allinoneDevPlugin",
 };
 
@@ -86533,6 +86545,7 @@ const myaiservMcpServerPlugin: Plugin = {
     "A high-performance FastAPI server supporting Model Context Protocol (MCP) for seamless integration with Large Language Models, featuring REST, GraphQL, and WebSocket APIs, along with real-time monitoring and vector search capabilities.",
   image: "https://github.com/eagurin.png",
   actions: [],
+  githubUrl: "https://github.com/eagurin/myaiserv",
   _varName: "myaiservMcpServerPlugin",
 };
 
@@ -86653,6 +86666,7 @@ const knowledgeGraphMemoryServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/yodakeisuke/mcp-memory-domain-knowledge",
   _varName: "knowledgeGraphMemoryServer2Plugin",
 };
 
@@ -86663,6 +86677,7 @@ const crewAiMcpServerPlugin: Plugin = {
     "Enables AI agent and task management using the CrewAI framework, allowing users to create and run agents and tasks in an automated workflow environment.",
   image: "https://github.com/MatthewLaw1.png",
   actions: [],
+  githubUrl: "https://github.com/MatthewLaw1/Near-Intents-MCP-Agentkit",
   _varName: "crewAiMcpServerPlugin",
 };
 
@@ -86673,6 +86688,7 @@ const youtubeMusicMcpServerPlugin: Plugin = {
     "An MCP server that allows AI models to control YouTube Music playback through Google Chrome by searching and playing songs using song and artist names.",
   image: "https://github.com/mondweep.png",
   actions: [],
+  githubUrl: "https://github.com/mondweep/youtube-music-mcp-server",
   _varName: "youtubeMusicMcpServerPlugin",
 };
 
@@ -86683,6 +86699,7 @@ const mcpServerSshRailsRunnerPlugin: Plugin = {
     "Enables secure remote execution of Rails console commands over SSH for read-only operations, mutation planning, and executing approved changes in a deployed Rails environment.",
   image: "https://github.com/tadasant.png",
   actions: [],
+  githubUrl: "https://github.com/tadasant/mcp-server-ssh-rails-runner",
   _varName: "mcpServerSshRailsRunnerPlugin",
 };
 
@@ -86751,6 +86768,7 @@ const unconventionalthinkingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stagsz/Unconventional-thinking",
   _varName: "unconventionalthinkingMcpServerPlugin",
 };
 
@@ -86761,6 +86779,7 @@ const ghostMcpServer1Plugin: Plugin = {
     "Integrates with the Ghost Admin API to allow programmatic management of Ghost CMS features, including posts, pages, tags, authors, members, and image uploads, providing efficient content management capabilities.",
   image: "https://github.com/mtane0412.png",
   actions: [],
+  githubUrl: "https://github.com/mtane0412/ghost-mcp-server",
   _varName: "ghostMcpServer1Plugin",
 };
 
@@ -86771,6 +86790,7 @@ const gmailMcpServer4Plugin: Plugin = {
     "Enables interaction with Gmail through the Gmail API to read, send, and manage emails. Supports multiple Gmail accounts with real-time monitoring and advanced features for email search and attachment handling.",
   image: "https://github.com/Quantum-369.png",
   actions: [],
+  githubUrl: "https://github.com/Quantum-369/Gmail-mcp-server",
   _varName: "gmailMcpServer4Plugin",
 };
 
@@ -86781,6 +86801,7 @@ const attioMcpServerPlugin: Plugin = {
     "Facilitates interaction with the Attio CRM by allowing MCP clients to read and write company records and notes through the Attio API.",
   image: "https://github.com/hmk.png",
   actions: [],
+  githubUrl: "https://github.com/hmk/attio-mcp-server",
   _varName: "attioMcpServerPlugin",
 };
 
@@ -86828,6 +86849,7 @@ const kibelaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kiwamizamurai/mcp-kibela-server",
   _varName: "kibelaMcpServerPlugin",
 };
 
@@ -87041,6 +87063,7 @@ const twitchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mtane0412/twitch-mcp-server",
   _varName: "twitchMcpServerPlugin",
 };
 
@@ -87051,6 +87074,7 @@ const semgrepMcpServer1Plugin: Plugin = {
     "Enables integration of Semgrep in development environments via the MCP protocol, supporting static code analysis, rule management, and scan result operations.",
   image: "https://github.com/stefanskiasan.png",
   actions: [],
+  githubUrl: "https://github.com/stefanskiasan/semgrep-mcp-server",
   _varName: "semgrepMcpServer1Plugin",
 };
 
@@ -87092,6 +87116,7 @@ const mcpGoogleServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adenot/mcp-google-search",
   _varName: "mcpGoogleServerPlugin",
 };
 
@@ -87200,6 +87225,7 @@ const voypMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/paulotaylor/voyp-mcp",
   _varName: "voypMcpServerPlugin",
 };
 
@@ -87210,6 +87236,7 @@ const mcpJsonrpcServerPlugin: Plugin = {
     "A beginner-friendly MCP-inspired JSON-RPC server built with Node.js, offering basic client-server interaction through an 'initialize' capabilities handshake and an 'echo' function.",
   image: "https://github.com/melvincarvalho.png",
   actions: [],
+  githubUrl: "https://github.com/melvincarvalho/mcpjs",
   _varName: "mcpJsonrpcServerPlugin",
 };
 
@@ -87220,6 +87247,7 @@ const audiusMcpServerPlugin: Plugin = {
     "Enables interaction with the Audius music platform API, supporting user, track, and playlist operations through the Model Context Protocol.",
   image: "https://github.com/glassBead-tc.png",
   actions: [],
+  githubUrl: "https://github.com/glassBead-tc/audius-mcp-atris",
   _varName: "audiusMcpServerPlugin",
 };
 
@@ -87230,6 +87258,7 @@ const calculatorMcpServerPlugin: Plugin = {
     "A Model Context Protocol server built with mcp-framework that allows users to create and manage custom tools for processing data, integrating with the Claude Desktop via CLI.",
   image: "https://github.com/QuantGeekDev.png",
   actions: [],
+  githubUrl: "https://github.com/QuantGeekDev/mcp-add-sse",
   _varName: "calculatorMcpServerPlugin",
 };
 
@@ -87253,6 +87282,7 @@ const perplexityMcpServer4Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spragginsdesigns/perplexity-mcp-server",
   _varName: "perplexityMcpServer4Plugin",
 };
 
@@ -87263,6 +87293,7 @@ const mcpFileSystemServerPlugin: Plugin = {
     "This server provides an interface for performing basic file system operations such as navigation, reading, writing, and file analysis, allowing users to manage directories and files efficiently.",
   image: "https://github.com/kvas-it.png",
   actions: [],
+  githubUrl: "https://github.com/kvas-it/mcp-server-fs",
   _varName: "mcpFileSystemServerPlugin",
 };
 
@@ -87273,6 +87304,7 @@ const xrplmcpservicePlugin: Plugin = {
     "A Model Context Protocol (MCP) server providing comprehensive access to the XRP Ledger (XRPL). This service enables AI models to interact with XRPL through standardized endpoints.",
   image: "https://github.com/tedlikeskix.png",
   actions: [],
+  githubUrl: "https://github.com/tedlikeskix/xrpl-mcp-service",
   _varName: "xrplmcpservicePlugin",
 };
 
@@ -87322,6 +87354,7 @@ const mcpJournalingServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mtct/journaling_mcp",
   _varName: "mcpJournalingServerPlugin",
 };
 
@@ -87393,6 +87426,7 @@ const mercadolibreMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lumile/mercadolibre-mcp",
   _varName: "mercadolibreMcpServerPlugin",
 };
 
@@ -87554,6 +87588,7 @@ const audienseInsightsMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/AudienseCo/mcp-audiense-insights",
   _varName: "audienseInsightsMcpServerPlugin",
 };
 
@@ -87577,6 +87612,7 @@ const mcpServerStarter1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/coinselor/mcp-zenon",
   _varName: "mcpServerStarter1Plugin",
 };
 
@@ -87684,6 +87720,7 @@ const mcpeditorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/arathald/mcp-editor",
   _varName: "mcpeditorPlugin",
 };
 
@@ -87694,6 +87731,7 @@ const mcpIpGeolocationServerPlugin: Plugin = {
     "Provides IP geolocation services using IP-API.com without requiring an API key, enabling users to obtain detailed location and network information for any IP address in a clean, formatted output.",
   image: "https://github.com/tedlikeskix.png",
   actions: [],
+  githubUrl: "https://github.com/tedlikeskix/mcp-ip-geolocator",
   _varName: "mcpIpGeolocationServerPlugin",
 };
 
@@ -87704,6 +87742,7 @@ const notesMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that enables users to manage text notes with features like note creation and summary generation using a Model Context Protocol.",
   image: "https://github.com/HeatherFlux.png",
   actions: [],
+  githubUrl: "https://github.com/HeatherFlux/github-issue-mcp-server",
   _varName: "notesMcpServerPlugin",
 };
 
@@ -87727,6 +87766,7 @@ const flutterMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/robert-northmind/flutter-mcp",
   _varName: "flutterMcpServerPlugin",
 };
 
@@ -87762,6 +87802,7 @@ const mcpWebhookServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kevinwatt/mcp-webhook",
   _varName: "mcpWebhookServerPlugin",
 };
 
@@ -87772,6 +87813,7 @@ const lightningNetworkMcpServerPlugin: Plugin = {
     "Enables AI models to interact with the Lightning Network by providing an MCP-compliant API to pay invoices.",
   image: "https://github.com/AbdelStark.png",
   actions: [],
+  githubUrl: "https://github.com/AbdelStark/lightning-mcp",
   _varName: "lightningNetworkMcpServerPlugin",
 };
 
@@ -87782,6 +87824,7 @@ const nostrMcpServerPlugin: Plugin = {
     "A Model Context Protocol (MCP) server enabling AI models to interact with the Nostr network, facilitating note posting and interaction with the freedom of speech protocol.",
   image: "https://github.com/AbdelStark.png",
   actions: [],
+  githubUrl: "https://github.com/AbdelStark/nostr-mcp",
   _varName: "nostrMcpServerPlugin",
 };
 
@@ -87792,6 +87835,7 @@ const privategptMcpServer1Plugin: Plugin = {
     "Facilitates integration of PrivateGPT with MCP-compatible applications, enabling chat functionalities and secure management of knowledge sources and user access.",
   image: "https://github.com/pgpt-dev.png",
   actions: [],
+  githubUrl: "https://github.com/pgpt-dev/MCP-Server-for-MAS-Developments",
   _varName: "privategptMcpServer1Plugin",
 };
 
@@ -87802,6 +87846,7 @@ const digitalfateMcpServerPlugin: Plugin = {
     "Facilitates high-performance multi-client processing by integrating advanced automation tasks with V2 agents and ensuring seamless execution of LLM calls and human-like computer interactions.",
   image: "https://github.com/Kalyankensin.png",
   actions: [],
+  githubUrl: "https://github.com/Kalyankensin/DigitalFate",
   _varName: "digitalfateMcpServerPlugin",
 };
 
@@ -87812,6 +87857,7 @@ const mcpMemoryServerWithQdrantPersistencePlugin: Plugin = {
     "Facilitates knowledge graph representation with semantic search using Qdrant, supporting OpenAI embeddings for semantic similarity and robust HTTPS integration with file-based graph persistence.",
   image: "https://github.com/delorenj.png",
   actions: [],
+  githubUrl: "https://github.com/delorenj/mcp-qdrant-memory",
   _varName: "mcpMemoryServerWithQdrantPersistencePlugin",
 };
 
@@ -87822,6 +87868,7 @@ const codeSandboxMcpPlugin: Plugin = {
     "An MCP server to create secure code sandbox environment for executing code within Docker containers.",
   image: "https://github.com/Automata-Labs-team.png",
   actions: [],
+  githubUrl: "https://github.com/Automata-Labs-team/code-sandbox-mcp",
   _varName: "codeSandboxMcpPlugin",
 };
 
@@ -87832,6 +87879,7 @@ const shopifyMcpServerPlugin: Plugin = {
     "This MCP server connects clients with Shopify store data, enabling retrieval of product and customer information via exposed tools.",
   image: "https://github.com/siddhantbajaj.png",
   actions: [],
+  githubUrl: "https://github.com/siddhantbajaj/shopify-mcp-server",
   _varName: "shopifyMcpServerPlugin",
 };
 
@@ -87842,6 +87890,7 @@ const cleverCloudDocumentationMcpServerPlugin: Plugin = {
     "The MCP server provides access to Clever Cloud's documentation, allowing users to query and interact with it through Model Context Protocol clients like Claude Desktop.",
   image: "https://github.com/LostInBrittany.png",
   actions: [],
+  githubUrl: "https://github.com/LostInBrittany/clever-doc-mcp-server",
   _varName: "cleverCloudDocumentationMcpServerPlugin",
 };
 
@@ -87852,6 +87901,7 @@ const digitalfateMcpServer1Plugin: Plugin = {
     "Facilitates high-performance multi-client processing, enabling scalable task execution and integration of advanced agents for automation in real-world applications.",
   image: "https://github.com/Kalyankensin.png",
   actions: [],
+  githubUrl: "https://github.com/Kalyankensin/DigitalFate",
   _varName: "digitalfateMcpServer1Plugin",
 };
 
@@ -87862,6 +87912,7 @@ const mcpservermultiversePlugin: Plugin = {
     "A middleware server that enables multiple isolated instances of the same MCP servers to coexist independently with unique namespaces and configurations.",
   image: "https://github.com/lamemind.png",
   actions: [],
+  githubUrl: "https://github.com/lamemind/mcp-server-multiverse",
   _varName: "mcpservermultiversePlugin",
 };
 
@@ -87915,6 +87966,7 @@ const clicksendMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/J-Gal02/clicksend-mcp",
   _varName: "clicksendMcpServerPlugin",
 };
 
@@ -88168,6 +88220,7 @@ const mcppifServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hungryrobot1/MCP-PIF",
   _varName: "mcppifServerPlugin",
 };
 
@@ -88245,6 +88298,7 @@ const postgresqlMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nahmanmate/postgresql-mcp-server",
   _varName: "postgresqlMcpServer1Plugin",
 };
 
@@ -88255,6 +88309,7 @@ const swaggerExplorerMcpPlugin: Plugin = {
     "A Management Control Plane server that allows users to explore and analyze Swagger/OpenAPI specifications, providing features such as endpoint exploration, schema analysis, and customizable response formatting, with support for authentication and integration with tools like Claude.",
   image: "https://github.com/johnneerdael.png",
   actions: [],
+  githubUrl: "https://github.com/johnneerdael/swagger-mcp",
   _varName: "swaggerExplorerMcpPlugin",
 };
 
@@ -88265,6 +88320,7 @@ const mcpServer3Plugin: Plugin = {
     "Facilitates multi-client processing for high-performance operations within the DigitalFate framework, enabling advanced automation through task orchestration and agent integration.",
   image: "https://github.com/Kalyankensin.png",
   actions: [],
+  githubUrl: "https://github.com/Kalyankensin/DigitalFate",
   _varName: "mcpServer3Plugin",
 };
 
@@ -88275,6 +88331,7 @@ const mssqlMcpServer2Plugin: Plugin = {
     "Enables execution of SQL queries and management of Microsoft SQL Server database connections through the Model Context Protocol.",
   image: "https://github.com/c0h1b4.png",
   actions: [],
+  githubUrl: "https://github.com/c0h1b4/mssql-mcp-server",
   _varName: "mssqlMcpServer2Plugin",
 };
 
@@ -88441,6 +88498,7 @@ const slackUserMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lars-hagen/slack-user-mcp",
   _varName: "slackUserMcpServerPlugin",
 };
 
@@ -88451,6 +88509,7 @@ const cursorMcpServerPlugin: Plugin = {
     "Acts as a bridge between Claude's desktop application and the Cursor editor, enabling seamless AI-powered automation and multi-instance management across platforms with standardized communication and secure token-based authentication.",
   image: "https://github.com/johnneerdael.png",
   actions: [],
+  githubUrl: "https://github.com/johnneerdael/multiplatform-cursor-mcp",
   _varName: "cursorMcpServerPlugin",
 };
 
@@ -88461,6 +88520,7 @@ const markitdownMcpServerPlugin: Plugin = {
     "Converts various file formats to Markdown using the MarkItDown utility and can be integrated with MCP clients for seamless document processing and conversion.",
   image: "https://github.com/KorigamiK.png",
   actions: [],
+  githubUrl: "https://github.com/KorigamiK/markitdown_mcp_server",
   _varName: "markitdownMcpServerPlugin",
 };
 
@@ -88770,6 +88830,7 @@ const shopifyMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/rezapex/shopify-mcp-server-main",
   _varName: "shopifyMcpServer1Plugin",
 };
 
@@ -89143,6 +89204,7 @@ const descopemcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/descope-sample-apps/descope-mcp-server",
   _varName: "descopemcpserverPlugin",
 };
 
@@ -89153,6 +89215,7 @@ const mcprocqPlugin: Plugin = {
     "MCP-RoCQ integrates with the Coq proof assistant to enable automated dependent type checking, inductive type definitions, and property proving through XML protocol communication.",
   image: "https://github.com/angrysky56.png",
   actions: [],
+  githubUrl: "https://github.com/angrysky56/mcp-rocq",
   _varName: "mcprocqPlugin",
 };
 
@@ -89264,6 +89327,7 @@ const alphavantagemcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/berlinbra/alpha-vantage-mcp",
   _varName: "alphavantagemcpPlugin",
 };
 
@@ -89679,6 +89743,7 @@ const morphoApiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-morpho-server",
   _varName: "morphoApiMcpServerPlugin",
 };
 
@@ -89775,6 +89840,7 @@ const releaseNotesMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nickbaumann98/release-notes-server",
   _varName: "releaseNotesMcpServerPlugin",
 };
 
@@ -89894,6 +89960,7 @@ const tavilyMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tavily-ai/tavily-mcp",
   _varName: "tavilyMcpServer2Plugin",
 };
 
@@ -89904,6 +89971,7 @@ const mcpWeatherServerPlugin: Plugin = {
     "This SSE-based MCP server allows users to connect and interact with National Weather Service APIs to retrieve weather alerts and forecasts.",
   image: "https://github.com/sidharthrajaram.png",
   actions: [],
+  githubUrl: "https://github.com/sidharthrajaram/mcp-sse",
   _varName: "mcpWeatherServerPlugin",
 };
 
@@ -89914,6 +89982,7 @@ const youtubesummarizerMcpServerPlugin: Plugin = {
     "Enables AI applications to integrate with YouTube-Summarizer's APIs through the MCP protocol, offering local tool-based interaction for summarizing YouTube content.",
   image: "https://github.com/trilogy-group.png",
   actions: [],
+  githubUrl: "https://github.com/trilogy-group/youtube-summarizer-mcp",
   _varName: "youtubesummarizerMcpServerPlugin",
 };
 
@@ -89924,6 +89993,7 @@ const mcpServer4Plugin: Plugin = {
     "The MCP Server integrates APIs from the Youtube-Summarizer as tools within the MCP protocol, allowing for local AI application interaction and tool utilization through natural language queries.",
   image: "https://github.com/kabir-ti.png",
   actions: [],
+  githubUrl: "https://github.com/kabir-ti/youtube-summarizer-mcp",
   _varName: "mcpServer4Plugin",
 };
 
@@ -89934,6 +90004,7 @@ const columbiaMcpServerPlugin: Plugin = {
     "Provides a scalable, containerized infrastructure for deploying and managing Model Context Protocol servers with monitoring, high availability, and secure configurations.",
   image: "https://github.com/smithery-ai.png",
   actions: [],
+  githubUrl: "https://github.com/smithery-ai/COLUMBIA-MCP-SERVERS",
   _varName: "columbiaMcpServerPlugin",
 };
 
@@ -90048,6 +90119,7 @@ const codeResearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nahmanmate/code-research-mcp-server",
   _varName: "codeResearchMcpServerPlugin",
 };
 
@@ -90170,6 +90242,7 @@ const betterAuthMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nahmanmate/better-auth-mcp-server",
   _varName: "betterAuthMcpServerPlugin",
 };
 
@@ -90194,6 +90267,7 @@ const deepseekclaudeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/HarshJ23/deepseek-claude-MCP-server",
   _varName: "deepseekclaudeMcpServerPlugin",
 };
 
@@ -90258,6 +90332,7 @@ const trelloMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/andypost/mcp-server-ts-trello",
   _varName: "trelloMcpServerPlugin",
 };
 
@@ -90803,6 +90878,7 @@ const iacMemoryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AgentWong/iac-memory-mcp-server-project",
   _varName: "iacMemoryMcpServerPlugin",
 };
 
@@ -90902,6 +90978,7 @@ const browserUseServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ztobs/cline-browser-use-mcp",
   _varName: "browserUseServerPlugin",
 };
 
@@ -90938,6 +91015,7 @@ const skrapeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/skrapeai/skrape-mcp",
   _varName: "skrapeMcpServerPlugin",
 };
 
@@ -90948,6 +91026,7 @@ const filesystemquarkiversequarkusmcpserversPlugin: Plugin = {
     "browse, list and edit filesystem. Implemented in Java/Quarkus with native image (Fast!) available",
   image: "https://github.com/quarkiverse.png",
   actions: [],
+  githubUrl: "https://github.com/quarkiverse/quarkus-mcp-servers",
   _varName: "filesystemquarkiversequarkusmcpserversPlugin",
 };
 
@@ -90957,6 +91036,7 @@ const mcpserverjfxPlugin: Plugin = {
   description: "Make drawings on a JavaFX canvas",
   image: "https://github.com/quarkiverse.png",
   actions: [],
+  githubUrl: "https://github.com/quarkiverse/quarkus-mcp-servers",
   _varName: "mcpserverjfxPlugin",
 };
 
@@ -90967,6 +91047,7 @@ const smartPhotoJournalMcpServerPlugin: Plugin = {
     "This MCP server aids users in searching and analyzing their photo library by location, labels, and people, offering functionalities like photo analysis and fuzzy matching for enhanced photo management.",
   image: "https://github.com/Siddhant-K-code.png",
   actions: [],
+  githubUrl: "https://github.com/Siddhant-K-code/memory-journal-mcp-server",
   _varName: "smartPhotoJournalMcpServerPlugin",
 };
 
@@ -91009,6 +91090,8 @@ const postmanToolGenerationMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/giovannicocco/mcp-server-postman-tool-generation",
   _varName: "postmanToolGenerationMcpServerPlugin",
 };
 
@@ -91567,6 +91650,7 @@ const mcpSpotifyServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/superseoworld/mcp-spotify",
   _varName: "mcpSpotifyServerPlugin",
 };
 
@@ -91577,6 +91661,7 @@ const googleWorkspaceMcpServerPlugin: Plugin = {
     "Provides authenticated access to Google Workspace APIs with a focus on Gmail operations and planned Calendar support, featuring secure OAuth authentication and multi-account management with detailed error handling.",
   image: "https://github.com/aaronsb.png",
   actions: [],
+  githubUrl: "https://github.com/aaronsb/google-workspace-mcp",
   _varName: "googleWorkspaceMcpServerPlugin",
 };
 
@@ -91587,6 +91672,7 @@ const mcpReadImagesPlugin: Plugin = {
     "An MCP server for analyzing images using OpenRouter vision models, offering capabilities like automatic image resizing, model configuration, and handling custom queries about images.",
   image: "https://github.com/catalystneuro.png",
   actions: [],
+  githubUrl: "https://github.com/catalystneuro/mcp_read_images",
   _varName: "mcpReadImagesPlugin",
 };
 
@@ -91597,6 +91683,7 @@ const goveeMcpServerPlugin: Plugin = {
     "Enables users to control Govee LED devices using the Govee API, with features for turning devices on/off, setting colors, and adjusting brightness through a CLI or MCP clients.",
   image: "https://github.com/mathd.png",
   actions: [],
+  githubUrl: "https://github.com/mathd/govee_mcp_server",
   _varName: "goveeMcpServerPlugin",
 };
 
@@ -91665,6 +91752,7 @@ const zoteroMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kujenga/zotero-mcp",
   _varName: "zoteroMcpServer1Plugin",
 };
 
@@ -91675,6 +91763,7 @@ const mcpragServerPlugin: Plugin = {
     "Connects a RAG application to open-webui using Model Context Protocol (MCP), enabling server-to-client communication for context retrieval and tool usage in remote environments through Server-Sent Events (SSE).",
   image: "https://github.com/felixscherz.png",
   actions: [],
+  githubUrl: "https://github.com/felixscherz/mcp-rag",
   _varName: "mcpragServerPlugin",
 };
 
@@ -91783,6 +91872,7 @@ const modesMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ccc0168/modes-mcp-server",
   _varName: "modesMcpServerPlugin",
 };
 
@@ -91832,6 +91922,7 @@ const braveSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/arben-adm/brave-mcp-search",
   _varName: "braveSearchMcpServerPlugin",
 };
 
@@ -91842,6 +91933,7 @@ const mcpAccessibilityScannerPlugin: Plugin = {
     "Enables automated web accessibility scans for WCAG compliance using Playwright and Axe-core, providing visual and JSON reports with remediation guidance.",
   image: "https://github.com/JustasMonkev.png",
   actions: [],
+  githubUrl: "https://github.com/JustasMonkev/mcp-accessibility-scanner",
   _varName: "mcpAccessibilityScannerPlugin",
 };
 
@@ -91927,6 +92019,7 @@ const waldurMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/waldur/waldur-mcp-server",
   _varName: "waldurMcpServerPlugin",
 };
 
@@ -91937,6 +92030,7 @@ const columbiaMcpServer1Plugin: Plugin = {
     "Facilitates deployment and management of services using the Model Context Protocol with a focus on high availability, scalability, and secure communication, leveraging Docker-based infrastructure, Prometheus, and Grafana for monitoring.",
   image: "https://github.com/GitDakky.png",
   actions: [],
+  githubUrl: "https://github.com/GitDakky/COLUMBIA-MCP-SERVERS",
   _varName: "columbiaMcpServer1Plugin",
 };
 
@@ -91947,6 +92041,7 @@ const nestjsMcpServerModulePlugin: Plugin = {
     "A NestJS module that allows services to be exposed as an MCP server with Server-Sent Events transport, facilitating tool discovery and execution by clients.",
   image: "https://github.com/rekog-labs.png",
   actions: [],
+  githubUrl: "https://github.com/rekog-labs/MCP-Nest",
   _varName: "nestjsMcpServerModulePlugin",
 };
 
@@ -92256,6 +92351,7 @@ const shopifyMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/amir-bengherbi/shopify-mcp-server",
   _varName: "shopifyMcpServer2Plugin",
 };
 
@@ -92367,6 +92463,7 @@ const mcpresearcherServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DaInfernalCoder/perplexity-mcp",
   _varName: "mcpresearcherServerPlugin",
 };
 
@@ -92377,6 +92474,7 @@ const ragDocumentationMcpServerPlugin: Plugin = {
     "Enables AI assistants to enhance their responses with relevant documentation through a semantic vector search, offering tools for managing and processing documentation efficiently.",
   image: "https://github.com/rahulretnan.png",
   actions: [],
+  githubUrl: "https://github.com/rahulretnan/mcp-ragdocs",
   _varName: "ragDocumentationMcpServerPlugin",
 };
 
@@ -92387,6 +92485,7 @@ const mcpRelayServerPlugin: Plugin = {
     "This server allows integration with Discord, enabling message exchanges between Claude and a Discord channel using prompts and notifications.",
   image: "https://github.com/emiliobool.png",
   actions: [],
+  githubUrl: "https://github.com/emiliobool/MCP-Relay",
   _varName: "mcpRelayServerPlugin",
 };
 
@@ -92397,6 +92496,7 @@ const gyazoMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that enables AI assistants to interact with Gyazo images using the Model Context Protocol, providing access to image URIs, metadata, and OCR data via the Gyazo API.",
   image: "https://github.com/yuiseki.png",
   actions: [],
+  githubUrl: "https://github.com/yuiseki/gyazo-mcp-server",
   _varName: "gyazoMcpServerPlugin",
 };
 
@@ -92503,6 +92603,7 @@ const mentorMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyanheads/mentor-mcp-server",
   _varName: "mentorMcpServerPlugin",
 };
 
@@ -92513,6 +92614,7 @@ const googleSearchMcpServer1Plugin: Plugin = {
     "Provides Google search capabilities, web content extraction, and screenshot functionality with advanced bot detection avoidance through the MCP protocol.",
   image: "https://github.com/Claw256.png",
   actions: [],
+  githubUrl: "https://github.com/Claw256/mcp-web-search",
   _varName: "googleSearchMcpServer1Plugin",
 };
 
@@ -92621,6 +92723,7 @@ const modesMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mkc909/modes-mcp-server",
   _varName: "modesMcpServer1Plugin",
 };
 
@@ -92675,6 +92778,8 @@ const ratMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/newideas99/Deepseek-Thinking-Claude-3.5-Sonnet-CLINE-MCP",
   _varName: "ratMcpServerPlugin",
 };
 
@@ -92685,6 +92790,7 @@ const mcpjdbcPlugin: Plugin = {
     "MCP to access any database accessible via JDBC such as Postgres, Oracle, mysql, mariadb, sqlite etc.",
   image: "https://github.com/quarkiverse.png",
   actions: [],
+  githubUrl: "https://github.com/quarkiverse/quarkus-mcp-servers",
   _varName: "mcpjdbcPlugin",
 };
 
@@ -92761,6 +92867,7 @@ const mcpInceptionMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tanevanwifferen/mcp-inception",
   _varName: "mcpInceptionMcpServerPlugin",
 };
 
@@ -92771,6 +92878,7 @@ const systempromptMcpGmailServerPlugin: Plugin = {
     "Enables users to manage Gmail accounts using AI agent-assisted operations via an MCP protocol, supporting email search, reading, deletion, and sending with a voice-powered interface.",
   image: "https://github.com/Ejb503.png",
   actions: [],
+  githubUrl: "https://github.com/Ejb503/systemprompt-mcp-gmail",
   _varName: "systempromptMcpGmailServerPlugin",
 };
 
@@ -93097,6 +93205,7 @@ const mcpServerForEsignaturesPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/esignaturescom/mcp-server-esignatures",
   _varName: "mcpServerForEsignaturesPlugin",
 };
 
@@ -93258,6 +93367,7 @@ const blueskyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/berlinbra/BlueSky-MCP",
   _varName: "blueskyMcpServerPlugin",
 };
 
@@ -94334,6 +94444,7 @@ const netskopeMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/johnneerdael/netskope-mcp",
   _varName: "netskopeMcpServerPlugin",
 };
 
@@ -94567,6 +94678,7 @@ const toolkitMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyanheads/toolkit-mcp-server",
   _varName: "toolkitMcpServerPlugin",
 };
 
@@ -94644,6 +94756,7 @@ const mcppyodidePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/yonaka15/mcp-pyodide",
   _varName: "mcppyodidePlugin",
 };
 
@@ -95171,6 +95284,7 @@ const koboldMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PhialsBasement/KoboldCPP-MCP-Server",
   _varName: "koboldMcpServerPlugin",
 };
 
@@ -95181,6 +95295,7 @@ const netskopeNpaMcpServerPlugin: Plugin = {
     "Provides an interface to manage publishers, upgrade profiles, access policies, and steering for Netskope's Network Private Access (NPA) API.",
   image: "https://github.com/johnneerdael.png",
   actions: [],
+  githubUrl: "https://github.com/johnneerdael/netskope-npa-mcp",
   _varName: "netskopeNpaMcpServerPlugin",
 };
 
@@ -95191,6 +95306,7 @@ const fastmcpPlugin: Plugin = {
     "FastMCP is a comprehensive MCP server allowing secure and standardized data and functionality exposure to LLM applications, offering resources, tools, and prompt management for efficient LLM interactions.",
   image: "https://github.com/wanderingnature.png",
   actions: [],
+  githubUrl: "https://github.com/wanderingnature/mcp-typed-prompts",
   _varName: "fastmcpPlugin",
 };
 
@@ -95257,6 +95373,7 @@ const togetherAiImageMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stefanskiasan/togetherai-image-mcp-server",
   _varName: "togetherAiImageMcpServerPlugin",
 };
 
@@ -95323,6 +95440,7 @@ const mcpChromeGoogleSearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cmann50/mcp-chrome-google-search",
   _varName: "mcpChromeGoogleSearchPlugin",
 };
 
@@ -95489,6 +95607,7 @@ const mcpVarianceLogPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/truaxki/mcp-variance-log",
   _varName: "mcpVarianceLogPlugin",
 };
 
@@ -95518,6 +95637,7 @@ const mcpBrowserUseServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JovaniPink/mcp-browser-use",
   _varName: "mcpBrowserUseServerPlugin",
 };
 
@@ -95558,6 +95678,7 @@ const mcpserveraxiomjsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ThetaBird/mcp-server-axiom-js",
   _varName: "mcpserveraxiomjsPlugin",
 };
 
@@ -95648,6 +95769,7 @@ const mcpsequentialthinkingtoolsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-sequentialthinking-tools",
   _varName: "mcpsequentialthinkingtoolsPlugin",
 };
 
@@ -95729,6 +95851,7 @@ const juliaDocumentationMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jonathanfischer97/juliadoc-mcp",
   _varName: "juliaDocumentationMcpServerPlugin",
 };
 
@@ -96044,6 +96167,7 @@ const linearMcpServer6Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cosmix/linear-mcp",
   _varName: "linearMcpServer6Plugin",
 };
 
@@ -96134,6 +96258,7 @@ const esaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/d-kimuson/esa-mcp-server",
   _varName: "esaMcpServerPlugin",
 };
 
@@ -96283,6 +96408,7 @@ const obsidianMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyanheads/obsidian-mcp-server",
   _varName: "obsidianMcpServerPlugin",
 };
 
@@ -96293,6 +96419,7 @@ const mcpconfluencePlugin: Plugin = {
     "A model context server that provides prompts that can be used as slash commands for clients like Zed Editor, in order to add page contents as context to the AI assistant.",
   image: "https://github.com/mouhamadalmounayar.png",
   actions: [],
+  githubUrl: "https://github.com/mouhamadalmounayar/mcp-confluence",
   _varName: "mcpconfluencePlugin",
 };
 
@@ -96330,6 +96457,7 @@ const jinaaiGroundingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-jinaai-grounding",
   _varName: "jinaaiGroundingMcpServerPlugin",
 };
 
@@ -96427,6 +96555,7 @@ const eolMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ducthinh993/mcp-server-endoflife",
   _varName: "eolMcpServerPlugin",
 };
 
@@ -96775,6 +96904,7 @@ const azureDevopsMcpServerForClinePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/stefanskiasan/azure-devops-mcp-server",
   _varName: "azureDevopsMcpServerForClinePlugin",
 };
 
@@ -96865,6 +96995,7 @@ const mcpJinaaiSearchServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-jinaai-search",
   _varName: "mcpJinaaiSearchServerPlugin",
 };
 
@@ -96991,6 +97122,7 @@ const mcpPuppeteerLinuxServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PhialsBasement/MCP-Puppeteer-Linux",
   _varName: "mcpPuppeteerLinuxServerPlugin",
 };
 
@@ -97044,6 +97176,7 @@ const mcpwslexecPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-wsl-exec",
   _varName: "mcpwslexecPlugin",
 };
 
@@ -97054,6 +97187,7 @@ const difyMcpServerPlugin: Plugin = {
     "Enables the conversion of Dify applications into Model Context Protocol tools, supporting streaming responses and configured via YAML.",
   image: "https://github.com/faiz-gear.png",
   actions: [],
+  githubUrl: "https://github.com/faiz-gear/dify-mcp-server-ts",
   _varName: "difyMcpServerPlugin",
 };
 
@@ -97064,6 +97198,7 @@ const sillytavernMcpServerPlugin: Plugin = {
     "Enables external tool registration and execution through WebSocket-based communication, providing a unified interface for real-time tool management within SillyTavern.",
   image: "https://github.com/CG-Labs.png",
   actions: [],
+  githubUrl: "https://github.com/CG-Labs/SillyTavern-MCP-Extension",
   _varName: "sillytavernMcpServerPlugin",
 };
 
@@ -97074,6 +97209,7 @@ const mcpeunomiaPlugin: Plugin = {
     "Eunomia MCP Server is an extension of the Eunomiaframework that connects Eunomia instruments with servers.\n\nIt provides a simple way to orchestrate data governance policies (like PII detection or user access control) and seamlessly integrate them with external serve",
   image: "https://github.com/whataboutyou-ai.png",
   actions: [],
+  githubUrl: "https://github.com/whataboutyou-ai/eunomia-mcp-server",
   _varName: "mcpeunomiaPlugin",
 };
 
@@ -97084,6 +97220,7 @@ const mcpDuckduckgoSearchServerPlugin: Plugin = {
     "Enables integration with DuckDuckGo search capabilities for LLMs, supporting comprehensive web search, regional filtering, result types, and safe browsing with caching and customizable search parameters.",
   image: "https://github.com/spences10.png",
   actions: [],
+  githubUrl: "https://github.com/spences10/mcp-duckduckgo-search",
   _varName: "mcpDuckduckgoSearchServerPlugin",
 };
 
@@ -97225,6 +97362,7 @@ const apptweakMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/robertredbox/apptweak-mcp",
   _varName: "apptweakMcpServer1Plugin",
 };
 
@@ -97247,6 +97385,7 @@ const mcpWebcamServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/evalstate/mcp-webcam",
   _varName: "mcpWebcamServerPlugin",
 };
 
@@ -97319,6 +97458,7 @@ const mcpPerplexitySearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-perplexity-search",
   _varName: "mcpPerplexitySearchPlugin",
 };
 
@@ -97329,6 +97469,7 @@ const mcpLanguageServerPlugin: Plugin = {
     "Runs a language server and provides tools for communicating with it. Language servers excel at tasks that LLMs often struggle with, such as precisely understanding types, understanding relationships, and providing accurate symbol references.",
   image: "https://github.com/isaacphi.png",
   actions: [],
+  githubUrl: "https://github.com/isaacphi/mcp-language-server",
   _varName: "mcpLanguageServerPlugin",
 };
 
@@ -97366,6 +97507,7 @@ const vilniusTransportMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sarunasdaujotis/vilnius-transport-mcp-server",
   _varName: "vilniusTransportMcpServerPlugin",
 };
 
@@ -97479,6 +97621,7 @@ const deepseekMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DMontgomery40/deepseek-mcp-server",
   _varName: "deepseekMcpServer3Plugin",
 };
 
@@ -97502,6 +97645,7 @@ const starknetMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/milancermak/starknet-mcp",
   _varName: "starknetMcpServerPlugin",
 };
 
@@ -97512,6 +97656,7 @@ const actorsmcpserverPlugin: Plugin = {
     "Use 3,000+ pre-built cloud tools from Apify, known as Actors, to extract data from websites, e-commerce, social media, search engines, maps, and more",
   image: "https://github.com/apify.png",
   actions: [],
+  githubUrl: "https://github.com/apify/actors-mcp-server",
   _varName: "actorsmcpserverPlugin",
 };
 
@@ -97612,6 +97757,7 @@ const tavilysearchmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/apappascs/tavily-search-mcp-server",
   _varName: "tavilysearchmcpserverPlugin",
 };
 
@@ -97641,6 +97787,7 @@ const mcptungshingPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/baranwang/mcp-tung-shing",
   _varName: "mcptungshingPlugin",
 };
 
@@ -97651,6 +97798,7 @@ const discordMcpServerPlugin: Plugin = {
     "Enables LLMs to interact with Discord channels by sending and reading messages through Discord's API, with a focus on maintaining user control and security.",
   image: "https://github.com/v-3.png",
   actions: [],
+  githubUrl: "https://github.com/v-3/discordmcp",
   _varName: "discordMcpServerPlugin",
 };
 
@@ -97718,6 +97866,7 @@ const mcpServerFetchTypescriptPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tatn/mcp-server-fetch-typescript",
   _varName: "mcpServerFetchTypescriptPlugin",
 };
 
@@ -97783,6 +97932,7 @@ const mcpServerFetchPythonPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tatn/mcp-server-fetch-python",
   _varName: "mcpServerFetchPythonPlugin",
 };
 
@@ -97884,6 +98034,7 @@ const penroseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/penrose-mcp",
   _varName: "penroseMcpServerPlugin",
 };
 
@@ -97894,6 +98045,7 @@ const mcpTitanMemoryServerPlugin: Plugin = {
     "A neural memory system that learns and predicts sequences, maintaining state via memory vectors for enhanced code generation and understanding.",
   image: "https://github.com/synthience.png",
   actions: [],
+  githubUrl: "https://github.com/synthience/mcp-titan-cognitive-memory",
   _varName: "mcpTitanMemoryServerPlugin",
 };
 
@@ -97941,6 +98093,7 @@ const brevPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/brevdev/brev-mcp",
   _varName: "brevPlugin",
 };
 
@@ -97950,6 +98103,7 @@ const hidePlugin: Plugin = {
   description: "A MCP server for Hide – headless IDE for coding agents.",
   image: "https://github.com/hide-org.png",
   actions: [],
+  githubUrl: "https://github.com/hide-org/hide-mcp",
   _varName: "hidePlugin",
 };
 
@@ -97960,6 +98114,7 @@ const axiomPlugin: Plugin = {
     "A Model Context Protocol server implementation for Axiom that enables AI agents to query your data using Axiom Processing Language (APL).",
   image: "https://github.com/axiomhq.png",
   actions: [],
+  githubUrl: "https://github.com/axiomhq/mcp-server-axiom",
   _varName: "axiomPlugin",
 };
 
@@ -98097,6 +98252,7 @@ const steelMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/steel-dev/steel-mcp-server",
   _varName: "steelMcpServerPlugin",
 };
 
@@ -98122,6 +98278,7 @@ const llamacloudMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/run-llama/mcp-server-llamacloud",
   _varName: "llamacloudMcpServerPlugin",
 };
 
@@ -98221,6 +98378,7 @@ const folderrPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/folderr-tech/folderr-mcp-server",
   _varName: "folderrPlugin",
 };
 
@@ -98231,6 +98389,7 @@ const postgrestPlugin: Plugin = {
     "This is an MCP server for PostgREST. It allows LLMs perform database queries and operations on Postgres databases via PostgREST. This server works with both Supabase projects (which use PostgREST) and standalone PostgREST servers.",
   image: "https://github.com/supabase-community.png",
   actions: [],
+  githubUrl: "https://github.com/supabase-community/mcp-supabase",
   _varName: "postgrestPlugin",
 };
 
@@ -98317,6 +98476,7 @@ const eyevinnOpenSourceCloudMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/EyevinnOSC/mcp-server",
   _varName: "eyevinnOpenSourceCloudMcpServerPlugin",
 };
 
@@ -98608,6 +98768,7 @@ const upstashMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/upstash/mcp-server",
   _varName: "upstashMcpServerPlugin",
 };
 
@@ -98697,6 +98858,7 @@ const genkitMcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/firebase/genkit",
   _varName: "genkitMcpPlugin",
 };
 
@@ -98745,6 +98907,7 @@ const mcpservermotherduckPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/motherduckdb/mcp-server-motherduck",
   _varName: "mcpservermotherduckPlugin",
 };
 
@@ -98755,6 +98918,7 @@ const mcpTitanMemoryServer1Plugin: Plugin = {
     "Enables neural memory sequence learning with a memory-augmented model for improved code understanding and generation, featuring state management, novelty detection, and model persistence.",
   image: "https://github.com/synthience.png",
   actions: [],
+  githubUrl: "https://github.com/synthience/mcp-titan-cognitive-memory",
   _varName: "mcpTitanMemoryServer1Plugin",
 };
 
@@ -98778,6 +98942,7 @@ const memoryStoreMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/divslingerx/mcp-server",
   _varName: "memoryStoreMcpServerPlugin",
 };
 
@@ -98801,6 +98966,7 @@ const daytonaMcpPythonInterpreterPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nkkko/daytona-mcp-interpreter",
   _varName: "daytonaMcpPythonInterpreterPlugin",
 };
 
@@ -98867,6 +99033,7 @@ const mcpSvelteDocsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-svelte-docs",
   _varName: "mcpSvelteDocsServerPlugin",
 };
 
@@ -98891,6 +99058,7 @@ const googleCustomSearchEngineMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Richard-Weiss/mcp-google-cse",
   _varName: "googleCustomSearchEngineMcpServerPlugin",
 };
 
@@ -98921,6 +99089,7 @@ const mcpServerDiffTypescriptPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tatn/mcp-server-diff-typescript",
   _varName: "mcpServerDiffTypescriptPlugin",
 };
 
@@ -99160,6 +99329,7 @@ const bitbucketServerMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/garc33/bitbucket-server-mcp-server",
   _varName: "bitbucketServerMcpPlugin",
 };
 
@@ -99190,6 +99360,7 @@ const mcpServerDiffPythonPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tatn/mcp-server-diff-python",
   _varName: "mcpServerDiffPythonPlugin",
 };
 
@@ -99376,6 +99547,7 @@ const projectHandoffsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/davidorex/project-handoffs",
   _varName: "projectHandoffsMcpServerPlugin",
 };
 
@@ -99385,6 +99557,7 @@ const bearMcpServer1Plugin: Plugin = {
   description: "Allows the AI to read from your Bear Notes",
   image: "https://github.com/akseyh.png",
   actions: [],
+  githubUrl: "https://github.com/akseyh/bear-mcp-server",
   _varName: "bearMcpServer1Plugin",
 };
 
@@ -99519,6 +99692,7 @@ const markdownifyMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zcaceres/markdownify-mcp",
   _varName: "markdownifyMcpServerPlugin",
 };
 
@@ -99529,6 +99703,7 @@ const googleTasksMcpServer1Plugin: Plugin = {
     "Integrates with Google Tasks to allow listing, reading, searching, creating, updating, and deleting tasks.",
   image: "https://github.com/zcaceres.png",
   actions: [],
+  githubUrl: "https://github.com/zcaceres/gtasks-mcp",
   _varName: "googleTasksMcpServer1Plugin",
 };
 
@@ -99613,6 +99788,7 @@ const fetchMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zcaceres/fetch-mcp",
   _varName: "fetchMcpServer1Plugin",
 };
 
@@ -99695,6 +99871,7 @@ const superWindowsCliMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/delorenj/super-win-cli-mcp-server",
   _varName: "superWindowsCliMcpServerPlugin",
 };
 
@@ -99705,6 +99882,7 @@ const protolinkaiMcpServerPlugin: Plugin = {
     "This server provides a standardized framework using the Model Context Protocol (MCP) to seamlessly integrate and manage diverse tools, enabling features like Twitter automation, cryptocurrency updates, and ElizaOS interaction.",
   image: "https://github.com/StevenROyola.png",
   actions: [],
+  githubUrl: "https://github.com/StevenROyola/ProtoLink",
   _varName: "protolinkaiMcpServerPlugin",
 };
 
@@ -99728,6 +99906,7 @@ const mcpServerStarter2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/StevenStavrakis/mcp-starter-template",
   _varName: "mcpServerStarter2Plugin",
 };
 
@@ -99738,6 +99917,7 @@ const mistralCodestralMcpServerPlugin: Plugin = {
     "Provides code completion, bug fixing, and test generation for multiple programming languages, integrating with the Mistral Codestral API to enhance code development processes.",
   image: "https://github.com/bsmi021.png",
   actions: [],
+  githubUrl: "https://github.com/bsmi021/mcp-mistral-codestral",
   _varName: "mistralCodestralMcpServerPlugin",
 };
 
@@ -99784,6 +99964,7 @@ const switchbotMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/genm/switchbot-mcp",
   _varName: "switchbotMcpServerPlugin",
 };
 
@@ -99867,6 +100048,7 @@ const mcpJinaaiReaderServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-jinaai-reader",
   _varName: "mcpJinaaiReaderServerPlugin",
 };
 
@@ -99897,6 +100079,7 @@ const difyMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AI-FE/dify-mcp-server",
   _varName: "difyMcpServer1Plugin",
 };
 
@@ -99907,6 +100090,7 @@ const claudeusWordpressMcpPlugin: Plugin = {
     "A server enabling seamless interaction between AI models and WordPress sites with secure, standardized communication using the WordPress REST API for comprehensive site management.",
   image: "https://github.com/deus-h.png",
   actions: [],
+  githubUrl: "https://github.com/deus-h/claudeus-wp-mcp",
   _varName: "claudeusWordpressMcpPlugin",
 };
 
@@ -99916,6 +100100,7 @@ const datadogPlugin: Plugin = {
   description: "provide access to monitor and cluster logs from datadog",
   image: "https://github.com/didlawowo.png",
   actions: [],
+  githubUrl: "https://github.com/didlawowo/mcp-collection",
   _varName: "datadogPlugin",
 };
 
@@ -99970,6 +100155,7 @@ const testRunnerMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/privsim/mcp-test-runner",
   _varName: "testRunnerMcpPlugin",
 };
 
@@ -100088,6 +100274,7 @@ const xanoMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SarimSiddd/xano_mcp",
   _varName: "xanoMcpServer1Plugin",
 };
 
@@ -100098,6 +100285,7 @@ const devhubMcpServerPlugin: Plugin = {
     "Enables management of development projects with GitHub integration, facilitating project tracking, repository linking, and metadata maintenance within the Model Context Protocol.",
   image: "https://github.com/peterparker57.png",
   actions: [],
+  githubUrl: "https://github.com/peterparker57/devhub-mcp-server",
   _varName: "devhubMcpServerPlugin",
 };
 
@@ -100127,6 +100315,7 @@ const browseruseMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Saik0s/mcp-browser-use",
   _varName: "browseruseMcpServer1Plugin",
 };
 
@@ -100211,6 +100400,7 @@ const mcpServerForTicketmasterEventsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/delorenj/mcp-server-ticketmaster",
   _varName: "mcpServerForTicketmasterEventsPlugin",
 };
 
@@ -100338,6 +100528,7 @@ const mcpTavilySearchServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-tavily-search",
   _varName: "mcpTavilySearchServerPlugin",
 };
 
@@ -100361,6 +100552,7 @@ const mcpWindowsWebsiteDownloaderServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/angrysky56/mcp-windows-website-downloader",
   _varName: "mcpWindowsWebsiteDownloaderServerPlugin",
 };
 
@@ -100371,6 +100563,7 @@ const mslucidiavoicegatewaymcpPlugin: Plugin = {
     "A server providing text-to-speech and speech-to-text functionalities using Windows' native speech services without external dependencies.",
   image: "https://github.com/ExpressionsBot.png",
   actions: [],
+  githubUrl: "https://github.com/ExpressionsBot/MS-Lucidia-Voice-Gateway-MCP",
   _varName: "mslucidiavoicegatewaymcpPlugin",
 };
 
@@ -100417,6 +100610,7 @@ const cooperhewittmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/behole/cooper-hewitt-mcp",
   _varName: "cooperhewittmcpPlugin",
 };
 
@@ -100495,6 +100689,7 @@ const polymarketMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/berlinbra/polymarket-mcp",
   _varName: "polymarketMcpServerPlugin",
 };
 
@@ -100505,6 +100700,7 @@ const ospMarketingToolsMcpServerPlugin: Plugin = {
     "Enables seamless integration with any LLM client supporting MCP for creating and optimizing technical content and product positioning using Open Strategy Partners' methodologies.",
   image: "https://github.com/open-strategy-partners.png",
   actions: [],
+  githubUrl: "https://github.com/open-strategy-partners/osp_marketing_tools",
   _varName: "ospMarketingToolsMcpServerPlugin",
 };
 
@@ -100534,6 +100730,7 @@ const textwellMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/worldnine/textwell-mcp",
   _varName: "textwellMcpServerPlugin",
 };
 
@@ -100607,6 +100804,7 @@ const branchThinkingMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/m-siles/branch-thinking",
   _varName: "branchThinkingMcpServerPlugin",
 };
 
@@ -100617,6 +100815,7 @@ const reaperMcpServerPlugin: Plugin = {
     "Connects Reaper projects to an MCP client like Claude Desktop, allowing users to ask questions and retrieve parsed information about the projects using natural language.",
   image: "https://github.com/dschuler36.png",
   actions: [],
+  githubUrl: "https://github.com/dschuler36/reaper-mcp-server",
   _varName: "reaperMcpServerPlugin",
 };
 
@@ -100690,6 +100889,7 @@ const branchThinkingMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/m-siles/branch-thinking",
   _varName: "branchThinkingMcpServer1Plugin",
 };
 
@@ -100966,6 +101166,7 @@ const iapticMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/iaptic/mcp-server-iaptic",
   _varName: "iapticMcpServerPlugin",
 };
 
@@ -100997,6 +101198,7 @@ const coinFlipMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TeglonLabs/coin-flip-mcp",
   _varName: "coinFlipMcpServerPlugin",
 };
 
@@ -101007,6 +101209,7 @@ const githuboauthMcpServerPlugin: Plugin = {
     "Facilitates authentication with GitHub using OAuth protocol, allowing secure access and interaction with GitHub repositories and services.",
   image: "https://github.com/Nikhil-Patil-RI.png",
   actions: [],
+  githubUrl: "https://github.com/Nikhil-Patil-RI/MCP-Github-Oauth",
   _varName: "githuboauthMcpServerPlugin",
 };
 
@@ -101030,6 +101233,7 @@ const mcpStarterServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MatthewDailey/mcp-starter",
   _varName: "mcpStarterServerPlugin",
 };
 
@@ -101167,6 +101371,7 @@ const xcodeMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r-huijts/xcode-mcp-server",
   _varName: "xcodeMcpServer1Plugin",
 };
 
@@ -101177,6 +101382,7 @@ const mcpjirapythonServerPlugin: Plugin = {
     "A Python-based server allowing seamless integration with JIRA for managing and interacting with projects through custom APIs.",
   image: "https://github.com/Kallows.png",
   actions: [],
+  githubUrl: "https://github.com/Kallows/mcp-jira-python",
   _varName: "mcpjirapythonServerPlugin",
 };
 
@@ -101239,6 +101445,7 @@ const antibullshitMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/anti-bullshit-mcp-server",
   _varName: "antibullshitMcpServerPlugin",
 };
 
@@ -101389,6 +101596,7 @@ const systempromptMcpNotionServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Ejb503/systemprompt-mcp-notion",
   _varName: "systempromptMcpNotionServerPlugin",
 };
 
@@ -101460,6 +101668,7 @@ const iacrMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/doomdagadiggiedahdah/iacr-mcp-server",
   _varName: "iacrMcpServerPlugin",
 };
 
@@ -101470,6 +101679,7 @@ const mcpRemoteServerPlugin: Plugin = {
     "A configurable MCP server that dynamically loads capabilities from a remote configuration to bridge MCP clients with remote APIs for executing actions, accessing resources, and utilizing prompt templates.",
   image: "https://github.com/sirmews.png",
   actions: [],
+  githubUrl: "https://github.com/sirmews/mcp-remote-server",
   _varName: "mcpRemoteServerPlugin",
 };
 
@@ -101648,6 +101858,7 @@ const linearMcpServer7Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ibraheem4/linear-mcp",
   _varName: "linearMcpServer7Plugin",
 };
 
@@ -101658,6 +101869,7 @@ const gmailMcpServer5Plugin: Plugin = {
     "Integrates with Gmail to enable sending, reading, drafting, and managing emails via the Model Context Protocol (MCP), allowing users to interact with email tasks through automated client prompts.",
   image: "https://github.com/jmonsellier.png",
   actions: [],
+  githubUrl: "https://github.com/jmonsellier/gmail-mcp-server",
   _varName: "gmailMcpServer5Plugin",
 };
 
@@ -101749,6 +101961,7 @@ const mcpmemorylibsqlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/spences10/mcp-memory-libsql",
   _varName: "mcpmemorylibsqlPlugin",
 };
 
@@ -101933,6 +102146,7 @@ const n8nWorkflowBuilderMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/makafeli/n8n-workflow-builder",
   _varName: "n8nWorkflowBuilderMcpServerPlugin",
 };
 
@@ -101943,6 +102157,7 @@ const mcpgooglePlugin: Plugin = {
     "A specialized Model Context Protocol (MCP) server that integrates Google services (Gmail, Calendar, etc.) into your AI workflows. This server enables seamless access to Google services through MCP, allowing AI agents to interact with Gmail, Google Calendar, and other Google services.",
   image: "https://github.com/Ejb503.png",
   actions: [],
+  githubUrl: "https://github.com/Ejb503/systemprompt-mcp-google",
   _varName: "mcpgooglePlugin",
 };
 
@@ -101953,6 +102168,7 @@ const integrationAppMcpServerPlugin: Plugin = {
     "This MCP server implementation allows users to manage and expose actions as tools from their Integration App workspace through the Model Context Protocol.",
   image: "https://github.com/integration-app.png",
   actions: [],
+  githubUrl: "https://github.com/integration-app/mcp-server",
   _varName: "integrationAppMcpServerPlugin",
 };
 
@@ -101963,6 +102179,7 @@ const supabaseMemoryMcpServerPlugin: Plugin = {
     "Provides memory/knowledge graph storage capabilities using Supabase, enabling multiple Claude instances to safely share and maintain a knowledge graph with features like entity storage, concurrent access safety, and full text search.",
   image: "https://github.com/gtrusler.png",
   actions: [],
+  githubUrl: "https://github.com/gtrusler/mcp-brain",
   _varName: "supabaseMemoryMcpServerPlugin",
 };
 
@@ -101973,6 +102190,7 @@ const mcplogicPlugin: Plugin = {
     "MCP-Logic is a server that provides AI systems with automated reasoning capabilities, enabling logical theorem proving and model verification using Prover9/Mace4 through a clean MCP interface.",
   image: "https://github.com/angrysky56.png",
   actions: [],
+  githubUrl: "https://github.com/angrysky56/mcp-logic",
   _varName: "mcplogicPlugin",
 };
 
@@ -101983,6 +102201,7 @@ const supabaseMemoryMcpServer1Plugin: Plugin = {
     "An MCP server utilizing Supabase to provide memory and knowledge graph storage, enabling multiple Claude instances to share and manage data with database-level locking for safe concurrent access.",
   image: "https://github.com/gtrusler.png",
   actions: [],
+  githubUrl: "https://github.com/gtrusler/supabase-memory-mcp",
   _varName: "supabaseMemoryMcpServer1Plugin",
 };
 
@@ -101993,6 +102212,7 @@ const mcpJavascriptServerPlugin: Plugin = {
     "An unofficial JavaScript SDK to create customized servers for the Model Context Protocol, allowing definition of prompts, resources, and tools for tailored interactions.",
   image: "https://github.com/davlgd.png",
   actions: [],
+  githubUrl: "https://github.com/davlgd/mcp-js-server",
   _varName: "mcpJavascriptServerPlugin",
 };
 
@@ -102003,6 +102223,7 @@ const mcpServer5Plugin: Plugin = {
     "MCP Server provides a simpler API to interact with the Model Context Protocol by allowing users to define custom tools and services to streamline workflows and processes.",
   image: "https://github.com/agentico-dev.png",
   actions: [],
+  githubUrl: "https://github.com/agentico-dev/mcp-server",
   _varName: "mcpServer5Plugin",
 };
 
@@ -102013,6 +102234,7 @@ const notionApiMcpServerPlugin: Plugin = {
     "Enables advanced todo list management and content organization using Notion's API, supporting features like creating databases, dynamic filtering, and collaborative task tracking.",
   image: "https://github.com/pbohannon.png",
   actions: [],
+  githubUrl: "https://github.com/pbohannon/notion-api-mcp",
   _varName: "notionApiMcpServerPlugin",
 };
 
@@ -102022,6 +102244,7 @@ const jiraPlugin: Plugin = {
   description: "MCP to Connect JIRA by NodeJs",
   image: "https://github.com/vurtnec.png",
   actions: [],
+  githubUrl: "https://github.com/vurtnec/mcp-jira",
   _varName: "jiraPlugin",
 };
 
@@ -102100,6 +102323,7 @@ const mcpWebResearchServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qpd-v/mcp-DEEPwebresearch",
   _varName: "mcpWebResearchServerPlugin",
 };
 
@@ -102110,6 +102334,7 @@ const searxngmcpserverPlugin: Plugin = {
     "A TypeScript-based MCP server for SearXNG that allows users to create and summarize text notes using simple URIs and metadata, facilitating natural language interaction with stored content.",
   image: "https://github.com/maccam912.png",
   actions: [],
+  githubUrl: "https://github.com/maccam912/searxng-mcp-server",
   _varName: "searxngmcpserverPlugin",
 };
 
@@ -102259,6 +102484,7 @@ const holaspiritMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/syucream/holaspirit-mcp-server",
   _varName: "holaspiritMcpServerPlugin",
 };
 
@@ -102360,6 +102586,7 @@ const placidMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/felores/placid-mcp-server",
   _varName: "placidMcpServerPlugin",
 };
 
@@ -102424,6 +102651,7 @@ const mcpNotesServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/truaxki/mcp-notes",
   _varName: "mcpNotesServerPlugin",
 };
 
@@ -102434,6 +102662,7 @@ const jiraMcpServer2Plugin: Plugin = {
     "Enables AI models to interact with Jira using a standardized protocol, offering full Jira REST API integration with features like optimal performance through connection pooling, error handling, and request monitoring.",
   image: "https://github.com/uddeshya-23.png",
   actions: [],
+  githubUrl: "https://github.com/uddeshya-23/mcp-server-JIRA",
   _varName: "jiraMcpServer2Plugin",
 };
 
@@ -102522,6 +102751,7 @@ const scrapboxCosenseMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/worldnine/scrapbox-cosense-mcp",
   _varName: "scrapboxCosenseMcpServerPlugin",
 };
 
@@ -102610,6 +102840,7 @@ const keboolaExplorerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/keboola/keboola-mcp-server",
   _varName: "keboolaExplorerMcpServerPlugin",
 };
 
@@ -102620,6 +102851,7 @@ const modelContextProtocolMcpServerPlugin: Plugin = {
     "This server facilitates the invocation of AI models from providers like Anthropic, OpenAI, and Groq, enabling users to manage and configure large language model interactions seamlessly.",
   image: "https://github.com/hideya.png",
   actions: [],
+  githubUrl: "https://github.com/hideya/mcp-client-langchain-py",
   _varName: "modelContextProtocolMcpServerPlugin",
 };
 
@@ -102630,6 +102862,7 @@ const postgresqlMcpServer2Plugin: Plugin = {
     "A Model Context Protocol server providing LLMs read-only access to PostgreSQL databases for inspecting schemas and executing queries.",
   image: "https://github.com/vignesh-codes.png",
   actions: [],
+  githubUrl: "https://github.com/vignesh-codes/ai-agents-mcp-pg",
   _varName: "postgresqlMcpServer2Plugin",
 };
 
@@ -102640,6 +102873,7 @@ const mcpServerEnhancedSshPlugin: Plugin = {
     "A robust SSH server facilitating secure remote command execution with TMUX session management, multi-window support, and smart session recovery for improved AI-human interaction.",
   image: "https://github.com/8bit-wraith.png",
   actions: [],
+  githubUrl: "https://github.com/8bit-wraith/mcp",
   _varName: "mcpServerEnhancedSshPlugin",
 };
 
@@ -102650,6 +102884,7 @@ const mcpServer6Plugin: Plugin = {
     "This TypeScript-based MCP server allows users to manage a simple notes system through creating and summarizing text notes using Model Context Protocol (MCP).",
   image: "https://github.com/seonglae.png",
   actions: [],
+  githubUrl: "https://github.com/seonglae/mcp-notion",
   _varName: "mcpServer6Plugin",
 };
 
@@ -102685,6 +102920,7 @@ const mcpTerminalServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dillip285/mcp-terminal",
   _varName: "mcpTerminalServer1Plugin",
 };
 
@@ -102727,6 +102963,7 @@ const mcpshellserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tumf/mcp-shell-server",
   _varName: "mcpshellserverPlugin",
 };
 
@@ -102858,6 +103095,7 @@ const mcpWebBrowserServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/random-robbie/mcp-web-browser",
   _varName: "mcpWebBrowserServerPlugin",
 };
 
@@ -102868,6 +103106,7 @@ const claudeDevServerPlugin: Plugin = {
     "The Claude Dev Server enables direct interaction with the file system within a specified workspace, allowing users to perform file and directory operations and implement code artifacts in software development using natural language commands.",
   image: "https://github.com/arben-adm.png",
   actions: [],
+  githubUrl: "https://github.com/arben-adm/mcp-claude-dev",
   _varName: "claudeDevServerPlugin",
 };
 
@@ -102878,6 +103117,7 @@ const findFlightsMcpServerPlugin: Plugin = {
     "Enables searching and retrieving detailed flight information using the Duffel API, supporting various flight types and flexible search parameters for efficient travel planning.",
   image: "https://github.com/ravinahp.png",
   actions: [],
+  githubUrl: "https://github.com/ravinahp/flights-mcp",
   _varName: "findFlightsMcpServerPlugin",
 };
 
@@ -102901,6 +103141,8 @@ const projectContentServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl:
+    "https://github.com/MaheshDoiphode/mcp-cline-project-content-server",
   _varName: "projectContentServerPlugin",
 };
 
@@ -102910,6 +103152,7 @@ const mcptenkiPlugin: Plugin = {
   description: "Get weather of Japan",
   image: "https://github.com/acxelerator.png",
   actions: [],
+  githubUrl: "https://github.com/acxelerator/mcp-tenki",
   _varName: "mcptenkiPlugin",
 };
 
@@ -102920,6 +103163,7 @@ const transistorMcpServerPlugin: Plugin = {
     "Facilitates interaction with the Transistor.fm API, offering capabilities to manage podcasts, episodes, and access analytics efficiently.",
   image: "https://github.com/gxjansen.png",
   actions: [],
+  githubUrl: "https://github.com/gxjansen/Transistor-MCP",
   _varName: "transistorMcpServerPlugin",
 };
 
@@ -102949,6 +103193,7 @@ const duckDuckMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qwang07/duck-duck-mcp",
   _varName: "duckDuckMcpPlugin",
 };
 
@@ -103054,6 +103299,7 @@ const mcpRandPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/turlockmike/mcp-rand",
   _varName: "mcpRandPlugin",
 };
 
@@ -103064,6 +103310,7 @@ const googleDriveMcpServer1Plugin: Plugin = {
     "Enables integration with Google Drive for listing, reading, and searching over files, supporting various file types with automatic export for Google Workspace files.",
   image: "https://github.com/felores.png",
   actions: [],
+  githubUrl: "https://github.com/felores/gdrive-mcp-server",
   _varName: "googleDriveMcpServer1Plugin",
 };
 
@@ -103151,6 +103398,7 @@ const mcp2bravePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mcp2everything/mcp2brave",
   _varName: "mcp2bravePlugin",
 };
 
@@ -103251,6 +103499,7 @@ const mcpTodoChecklistServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/hevener10/mcp-todo-checklist",
   _varName: "mcpTodoChecklistServerPlugin",
 };
 
@@ -103261,6 +103510,7 @@ const sandboxMcpServerPlugin: Plugin = {
     "Provides isolated Docker environments for code execution, enabling users to create and manage containers, execute multi-language code, save and reproduce development environments, ensuring security and isolation.",
   image: "https://github.com/Tsuchijo.png",
   actions: [],
+  githubUrl: "https://github.com/Tsuchijo/sandbox-mcp",
   _varName: "sandboxMcpServerPlugin",
 };
 
@@ -103304,6 +103554,7 @@ const usescraperMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tanevanwifferen/usescraper-mcp-server",
   _varName: "usescraperMcpServerPlugin",
 };
 
@@ -103314,6 +103565,7 @@ const jiraMcpServer3Plugin: Plugin = {
     "Provides an interface to access and manage JIRA data through the Model Context Protocol, offering features like relationship tracking, data cleaning, and contextual insights for AI applications.",
   image: "https://github.com/cosmix.png",
   actions: [],
+  githubUrl: "https://github.com/cosmix/jira-mcp",
   _varName: "jiraMcpServer3Plugin",
 };
 
@@ -103324,6 +103576,7 @@ const finnhubMcpServerPlugin: Plugin = {
     "This server provides an interface with the Finnhub API, enabling users to obtain the latest market news, stock market data, basic financials, and recommendation trends for specific stocks.",
   image: "https://github.com/catherinedparnell.png",
   actions: [],
+  githubUrl: "https://github.com/catherinedparnell/mcp-finnhub",
   _varName: "finnhubMcpServerPlugin",
 };
 
@@ -103374,6 +103627,7 @@ const itermMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ferrislucas/iterm-mcp",
   _varName: "itermMcpServerPlugin",
 };
 
@@ -103384,6 +103638,7 @@ const googleHomeMcpServerPlugin: Plugin = {
     "Enables users to control Google Home smart plugs using the Smart Home API with OAuth2 authentication, offering real-time device state management and control operations.",
   image: "https://github.com/jmagar.png",
   actions: [],
+  githubUrl: "https://github.com/jmagar/ghome-mcp-server",
   _varName: "googleHomeMcpServerPlugin",
 };
 
@@ -103455,6 +103710,7 @@ const codeSnippetServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ngeojiajun/mcp-code-snippets",
   _varName: "codeSnippetServerPlugin",
 };
 
@@ -103465,6 +103721,7 @@ const matlabMcpServer1Plugin: Plugin = {
     "Allows interaction with MATLAB by creating and executing scripts and functions through Claude or other MCP clients, supporting script management and execution result retrieval with environment configuration capabilities.",
   image: "https://github.com/Tsuchijo.png",
   actions: [],
+  githubUrl: "https://github.com/Tsuchijo/matlab-mcp",
   _varName: "matlabMcpServer1Plugin",
 };
 
@@ -103961,6 +104218,7 @@ const twitterMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-twitter-server",
   _varName: "twitterMcpServer3Plugin",
 };
 
@@ -104009,6 +104267,7 @@ const metalMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aldrin-labs/metal-mcp-server",
   _varName: "metalMcpServerPlugin",
 };
 
@@ -104019,6 +104278,7 @@ const secondOpinionMcpServerPlugin: Plugin = {
     "Provides AI-powered assistance for coding problems using Google's Gemini AI, combined with Perplexity insights and Stack Overflow references, facilitating contextual analysis and automatic response archiving for improved troubleshooting.",
   image: "https://github.com/PoliTwit1984.png",
   actions: [],
+  githubUrl: "https://github.com/PoliTwit1984/second-opinion-mcp-server",
   _varName: "secondOpinionMcpServerPlugin",
 };
 
@@ -104121,6 +104381,7 @@ const sequentialThinkingMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/arben-adm/mcp-sequential-thinking",
   _varName: "sequentialThinkingMcpServerPlugin",
 };
 
@@ -104189,6 +104450,7 @@ const elasticsearchMcpServer1Plugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/cr7258/elasticsearch-mcp-server",
   _varName: "elasticsearchMcpServer1Plugin",
 };
 
@@ -104266,6 +104528,7 @@ const zigMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/openSVM/zig-mcp-server",
   _varName: "zigMcpServerPlugin",
 };
 
@@ -104276,6 +104539,7 @@ const mcpTraderServerPlugin: Plugin = {
     "The MCP Trader Server conducts comprehensive technical analysis on stocks, offering insights into trends, momentum indicators, volatility metrics, and volume analysis to support stock trading decisions.",
   image: "https://github.com/wshobson.png",
   actions: [],
+  githubUrl: "https://github.com/wshobson/mcp-trader",
   _varName: "mcpTraderServerPlugin",
 };
 
@@ -104286,6 +104550,7 @@ const mcpflowisePlugin: Plugin = {
     "The Flowise MCP Server enables clients to list chatflows and call predictions, integrating seamlessly with DIY Flowise or Flowise Cloud accounts. It provides a simple interface for executing chatflows/assistants predictions with existing Flowise configurations.",
   image: "https://github.com/matthewhand.png",
   actions: [],
+  githubUrl: "https://github.com/matthewhand/mcp-flowise",
   _varName: "mcpflowisePlugin",
 };
 
@@ -104320,6 +104585,7 @@ const mcpserverchatsumPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/chatmcp/mcp-server-chatsum",
   _varName: "mcpserverchatsumPlugin",
 };
 
@@ -104372,6 +104638,7 @@ const mcpservercollectorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/chatmcp/mcp-server-collector",
   _varName: "mcpservercollectorPlugin",
 };
 
@@ -104382,6 +104649,7 @@ const confluenceMcpServerPlugin: Plugin = {
     "Enables AI assistants to interact with Confluence Cloud for managing spaces, pages, and content via the Model Context Protocol (MCP).",
   image: "https://github.com/aaronsb.png",
   actions: [],
+  githubUrl: "https://github.com/aaronsb/confluence-cloud-mcp",
   _varName: "confluenceMcpServerPlugin",
 };
 
@@ -104617,6 +104885,7 @@ const loxoMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tbensonwest/loxo-mcp-server",
   _varName: "loxoMcpServerPlugin",
 };
 
@@ -104627,6 +104896,7 @@ const mcpNmapServerPlugin: Plugin = {
     "Enables AI assistants to perform network scanning operations using NMAP, offering a standardized interface for network analysis and security assessments through AI conversations.",
   image: "https://github.com/PhialsBasement.png",
   actions: [],
+  githubUrl: "https://github.com/PhialsBasement/nmap-mcp-server",
   _varName: "mcpNmapServerPlugin",
 };
 
@@ -104651,6 +104921,7 @@ const emailCheckerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ravinahp/email-checker-mcp",
   _varName: "emailCheckerMcpServerPlugin",
 };
 
@@ -104777,6 +105048,7 @@ const mcpWebscanServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bsmi021/mcp-server-webscan",
   _varName: "mcpWebscanServerPlugin",
 };
 
@@ -104787,6 +105059,7 @@ const systempromptMcpServerPlugin: Plugin = {
     "This TypeScript-based server implements a simple notes system, allowing users to create and manage text notes and generate summaries, showcasing core MCP concepts.",
   image: "https://github.com/Ejb503.png",
   actions: [],
+  githubUrl: "https://github.com/Ejb503/systemprompt-mcp-core",
   _varName: "systempromptMcpServerPlugin",
 };
 
@@ -104797,6 +105070,7 @@ const gleanMcpServerPlugin: Plugin = {
     "An MCP server that integrates the Glean API to provide search results and chatbot interaction.",
   image: "https://github.com/longyi1207.png",
   actions: [],
+  githubUrl: "https://github.com/longyi1207/glean-mcp-server",
   _varName: "gleanMcpServerPlugin",
 };
 
@@ -105290,6 +105564,7 @@ const aiddMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/skydeckai/mcp-server-aidd",
   _varName: "aiddMcpServerPlugin",
 };
 
@@ -105336,6 +105611,7 @@ const mcpclickhousePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ClickHouse/mcp-clickhouse",
   _varName: "mcpclickhousePlugin",
 };
 
@@ -105515,6 +105791,7 @@ const replicateMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/deepfates/mcp-replicate",
   _varName: "replicateMcpServerPlugin",
 };
 
@@ -105525,6 +105802,7 @@ const mcplancedbPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that enables LLMs to interact directly the documents that they have on-disk through agentic RAG and hybrid search in LanceDB. Ask LLMs questions about the dataset as a whole or about specific documents.",
   image: "https://github.com/adiom-data.png",
   actions: [],
+  githubUrl: "https://github.com/adiom-data/lance-mcp",
   _varName: "mcplancedbPlugin",
 };
 
@@ -105576,6 +105854,7 @@ const cloudinaryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/felores/cloudinary-mcp-server",
   _varName: "cloudinaryMcpServerPlugin",
 };
 
@@ -105586,6 +105865,7 @@ const personalMcpServerPlugin: Plugin = {
     "A Model Context Protocol server for tracking personal health and well-being, offering tools for workout logging, nutrition management, and daily journaling with AI-assisted analysis integration.",
   image: "https://github.com/evangstav.png",
   actions: [],
+  githubUrl: "https://github.com/evangstav/personal-mcp",
   _varName: "personalMcpServerPlugin",
 };
 
@@ -105621,6 +105901,7 @@ const mcpBrowserTabsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-browser-tabs",
   _varName: "mcpBrowserTabsServerPlugin",
 };
 
@@ -105645,6 +105926,7 @@ const tavilySearchMcpAgentPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/arben-adm/tavily-mcp-search",
   _varName: "tavilySearchMcpAgentPlugin",
 };
 
@@ -105655,6 +105937,7 @@ const mcpExpertServerPlugin: Plugin = {
     "A Model Context Protocol server utilizing Claude AI for generating intelligent queries and offering documentation assistance based on API documentation analysis.",
   image: "https://github.com/crazyrabbitLTC.png",
   actions: [],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-expert-server",
   _varName: "mcpExpertServerPlugin",
 };
 
@@ -105665,6 +105948,7 @@ const mcpServerForBinanceSpotTradingPlugin: Plugin = {
     "This server provides a robust interface for Binance spot trading operations, including secure management of API credentials, execution and management of spot orders, and monitoring of account balances and open orders.",
   image: "https://github.com/kydlikebtc.png",
   actions: [],
+  githubUrl: "https://github.com/kydlikebtc/mcp-server-bn",
   _varName: "mcpServerForBinanceSpotTradingPlugin",
 };
 
@@ -106106,6 +106390,7 @@ const dynamodbMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/imankamyabi/dynamodb-mcp-server",
   _varName: "dynamodbMcpServerPlugin",
 };
 
@@ -106116,6 +106401,7 @@ const mcplocaldevPlugin: Plugin = {
     "Create sandboxed local development environments directly from Github and execute tests, see coverage and more! Supports Python, Node, Bun and many test runners.",
   image: "https://github.com/txbm.png",
   actions: [],
+  githubUrl: "https://github.com/txbm/mcp-local-dev",
   _varName: "mcplocaldevPlugin",
 };
 
@@ -106229,6 +106515,7 @@ const githubmanagerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wheelhousedev/github-mcp",
   _varName: "githubmanagerMcpServerPlugin",
 };
 
@@ -106374,6 +106661,7 @@ const zoteroMcpConnectorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gyger/mcp-pyzotero",
   _varName: "zoteroMcpConnectorPlugin",
 };
 
@@ -106826,6 +107114,7 @@ const thingsMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hald/things-mcp",
   _varName: "thingsMcpServer1Plugin",
 };
 
@@ -106836,6 +107125,7 @@ const mcpServer7Plugin: Plugin = {
     "MCP Server simplifies the implementation of the Model Context Protocol by providing a user-friendly API to create custom tools and manage server workflows efficiently.",
   image: "https://github.com/la-rebelion.png",
   actions: [],
+  githubUrl: "https://github.com/la-rebelion/mcp-server",
   _varName: "mcpServer7Plugin",
 };
 
@@ -107806,6 +108096,7 @@ const redmineMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/yonaka15/mcp-server-redmine",
   _varName: "redmineMcpServerPlugin",
 };
 
@@ -107854,6 +108145,7 @@ const mcpReasonerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/parmarjh/mcp-reasoner",
   _varName: "mcpReasonerPlugin",
 };
 
@@ -107906,6 +108198,7 @@ const penumbraMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/penumbra-mcp",
   _varName: "penumbraMcpServerPlugin",
 };
 
@@ -107916,6 +108209,7 @@ const mcpJiraServerPlugin: Plugin = {
     "Enables AI applications to manage JIRA issues, workflows, and tasks through a standardized MCP interface, facilitating real-time updates and seamless interaction with JIRA's API.",
   image: "https://github.com/Warzuponus.png",
   actions: [],
+  githubUrl: "https://github.com/Warzuponus/mcp-jira",
   _varName: "mcpJiraServerPlugin",
 };
 
@@ -107926,6 +108220,7 @@ const filloutioMcpServerPlugin: Plugin = {
     "Enables form management, response handling, and analytics through the Fillout.io API for enhanced form interactions and insights.",
   image: "https://github.com/danielma-tic.png",
   actions: [],
+  githubUrl: "https://github.com/danielma-tic/fillout-mcp-server",
   _varName: "filloutioMcpServerPlugin",
 };
 
@@ -108004,6 +108299,7 @@ const puppeteerMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jwaldor/mcp-scrape-copilot",
   _varName: "puppeteerMcpServer2Plugin",
 };
 
@@ -108263,6 +108559,7 @@ const redisMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/farhankaz/redis-mcp",
   _varName: "redisMcpServerPlugin",
 };
 
@@ -108606,6 +108903,7 @@ const githubMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/asbloom-py/mcp-servers",
   _varName: "githubMcpServer3Plugin",
 };
 
@@ -108616,6 +108914,7 @@ const mtsMcpServerPlugin: Plugin = {
     "A comprehensive suite of Model Context Protocol servers designed to extend AI agent Claude's capabilities with integrations for knowledge management, reasoning, advanced search, news access, and workspace tools.",
   image: "https://github.com/CalvinMagezi.png",
   actions: [],
+  githubUrl: "https://github.com/CalvinMagezi/mts-mcp",
   _varName: "mtsMcpServerPlugin",
 };
 
@@ -108893,6 +109192,7 @@ const mcpServerReplicatePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gerred/mcp-server-replicate",
   _varName: "mcpServerReplicatePlugin",
 };
 
@@ -108903,6 +109203,7 @@ const mysqlServerMcpServerPlugin: Plugin = {
     "A TypeScript-based MCP server that facilitates SQL query execution and MySQL database connectivity using environment variables.",
   image: "https://github.com/xianzong85.png",
   actions: [],
+  githubUrl: "https://github.com/xianzong85/mysql-server-MCP-Server",
   _varName: "mysqlServerMcpServerPlugin",
 };
 
@@ -109448,6 +109749,7 @@ const iacMemoryMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AgentWong/iac-memory-mcp-server",
   _varName: "iacMemoryMcpServer1Plugin",
 };
 
@@ -109458,6 +109760,7 @@ const mcpChatAnalysisServerPlugin: Plugin = {
     "Facilitates semantic analysis of chat conversations through vector embeddings and knowledge graphs, offering tools for semantic search, concept extraction, and conversation pattern analysis.",
   image: "https://github.com/rebots-online.png",
   actions: [],
+  githubUrl: "https://github.com/rebots-online/mcp-chat-analysis-server",
   _varName: "mcpChatAnalysisServerPlugin",
 };
 
@@ -109495,6 +109798,7 @@ const discordRawApiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hanweg/mcp-discord-raw",
   _varName: "discordRawApiMcpServerPlugin",
 };
 
@@ -109572,6 +109876,7 @@ const mcpNeo4jServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/da-okazaki/mcp-neo4j-server",
   _varName: "mcpNeo4jServerPlugin",
 };
 
@@ -109601,6 +109906,7 @@ const babashkaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/babashka-mcp-server",
   _varName: "babashkaMcpServerPlugin",
 };
 
@@ -109611,6 +109917,7 @@ const mcpFilesystemPythonPlugin: Plugin = {
     "This server offers secure, read-only access to directory files via the MCP, supporting file searching, .gitignore compliance, path traversal protection, and MIME type detection using the 'file://' URI scheme.",
   image: "https://github.com/punkpeye.png",
   actions: [],
+  githubUrl: "https://github.com/punkpeye/mcp-filesystem-python",
   _varName: "mcpFilesystemPythonPlugin",
 };
 
@@ -109635,6 +109942,7 @@ const obsidianMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/obsidian-mcp",
   _varName: "obsidianMcpServer1Plugin",
 };
 
@@ -109696,6 +110004,7 @@ const geminiSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Lorhlona/geminiserchMCP",
   _varName: "geminiSearchMcpServerPlugin",
 };
 
@@ -109706,6 +110015,7 @@ const clinePersonasMcpServerPlugin: Plugin = {
     "An MCP server for managing and activating persona templates and components by writing to .clinerules files, supporting version tracking and file-based storage.",
   image: "https://github.com/bradfair.png",
   actions: [],
+  githubUrl: "https://github.com/bradfair/mcp-cline-personas",
   _varName: "clinePersonasMcpServerPlugin",
 };
 
@@ -109716,6 +110026,7 @@ const videoEditorMcpServerPlugin: Plugin = {
     "Enables video editing using natural language commands powered by FFmpeg, supporting operations like trimming, merging, format conversion, and more with real-time progress tracking and error handling.",
   image: "https://github.com/Kush36Agrawal.png",
   actions: [],
+  githubUrl: "https://github.com/Kush36Agrawal/Video_Editor_MCP",
   _varName: "videoEditorMcpServerPlugin",
 };
 
@@ -109830,6 +110141,7 @@ const playwrightServerMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/blackwhite084/playwright-plus-python-mcp",
   _varName: "playwrightServerMcpPlugin",
 };
 
@@ -109840,6 +110152,7 @@ const claudeChunksPlugin: Plugin = {
     "An MCP server that intelligently chunks large documents for Claude, enabling efficient context-aware processing and summary generation for enhanced document comprehension.",
   image: "https://github.com/vetlefo.png",
   actions: [],
+  githubUrl: "https://github.com/vetlefo/claude-chunks",
   _varName: "claudeChunksPlugin",
 };
 
@@ -109850,6 +110163,7 @@ const mcpFilesystemPython1Plugin: Plugin = {
     "A secure MCP server enabling read-only access and file search capabilities within a specified directory, while respecting .gitignore patterns.",
   image: "https://github.com/mtunell.png",
   actions: [],
+  githubUrl: "https://github.com/mtunell/mcp-filesystem-python",
   _varName: "mcpFilesystemPython1Plugin",
 };
 
@@ -109903,6 +110217,7 @@ const metaplexMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aldrin-labs/metaplex-mcp-server",
   _varName: "metaplexMcpServerPlugin",
 };
 
@@ -109950,6 +110265,7 @@ const sayMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/say-mcp-server",
   _varName: "sayMcpServerPlugin",
 };
 
@@ -109972,6 +110288,7 @@ const npmsearchmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/btwiuse/npm-search-mcp-server",
   _varName: "npmsearchmcpserverPlugin",
 };
 
@@ -109982,6 +110299,7 @@ const unrealEngineCodeAnalyzerMcpServerPlugin: Plugin = {
     "Provides deep source code analysis for Unreal Engine codebases, allowing AI assistants to understand C++ class structures, search code, and analyze subsystems.",
   image: "https://github.com/ayeletstudioindia.png",
   actions: [],
+  githubUrl: "https://github.com/ayeletstudioindia/unreal-analyzer-mcp",
   _varName: "unrealEngineCodeAnalyzerMcpServerPlugin",
 };
 
@@ -109992,6 +110310,7 @@ const memgptMcpServerPlugin: Plugin = {
     "A TypeScript-based server that provides a memory system for Large Language Models (LLMs), allowing users to interact with multiple LLM providers while maintaining conversation history and offering tools for managing providers and model configurations.",
   image: "https://github.com/Vic563.png",
   actions: [],
+  githubUrl: "https://github.com/Vic563/Memgpt-MCP-Server",
   _varName: "memgptMcpServerPlugin",
 };
 
@@ -110145,6 +110464,7 @@ const mcpServerTrelloPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/delorenj/mcp-server-trello",
   _varName: "mcpServerTrelloPlugin",
 };
 
@@ -110155,6 +110475,7 @@ const solanamcpserverPlugin: Plugin = {
     "mcp server that allows to do actual actions related to solana\nfirst version adds knowledge about RPC methods and how to call them",
   image: "https://github.com/aldrin-labs.png",
   actions: [],
+  githubUrl: "https://github.com/aldrin-labs/solana-mcp-server",
   _varName: "solanamcpserverPlugin",
 };
 
@@ -110203,6 +110524,7 @@ const solanadocsmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aldrin-labs/solana-docs-mcp-server",
   _varName: "solanadocsmcpserverPlugin",
 };
 
@@ -110602,6 +110924,7 @@ const mcpserverfirecrawlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mendableai/firecrawl-mcp-server",
   _varName: "mcpserverfirecrawlPlugin",
 };
 
@@ -110825,6 +111148,7 @@ const playwrightMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lebrodus/mcp-playwright",
   _varName: "playwrightMcpServer1Plugin",
 };
 
@@ -110835,6 +111159,7 @@ const mcpPytestServerPlugin: Plugin = {
     "A Node.js server that integrates with pytest to facilitate the ModelContextProtocol (MCP) service tools, enabling test execution recording and environment tracking.",
   image: "https://github.com/kieranlal.png",
   actions: [],
+  githubUrl: "https://github.com/kieranlal/mcp_pytest_service",
   _varName: "mcpPytestServerPlugin",
 };
 
@@ -110921,6 +111246,7 @@ const wecomBotMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/loonghao/wecom-bot-mcp-server",
   _varName: "wecomBotMcpServerPlugin",
 };
 
@@ -110956,6 +111282,7 @@ const marginaliaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bmorphism/marginalia-mcp-server",
   _varName: "marginaliaMcpServerPlugin",
 };
 
@@ -110966,6 +111293,7 @@ const slowtimeMcpServerPlugin: Plugin = {
     "A secure Model Context Protocol server that manages time-based operations using timing attack protection and timelock encryption, allowing for timed interval management and secure data storage.",
   image: "https://github.com/bmorphism.png",
   actions: [],
+  githubUrl: "https://github.com/bmorphism/slowtime-mcp-server",
   _varName: "slowtimeMcpServerPlugin",
 };
 
@@ -110976,6 +111304,7 @@ const optimizedMemoryMcpServerV2Plugin: Plugin = {
     "A Python-based server that implements the Model Context Protocol to interface with Claude Desktop as an MCP client, supporting interaction through efficient memory management.",
   image: "https://github.com/AgentWong.png",
   actions: [],
+  githubUrl: "https://github.com/AgentWong/optimized-memory-mcp-serverv2",
   _varName: "optimizedMemoryMcpServerV2Plugin",
 };
 
@@ -111155,6 +111484,7 @@ const wikimediaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/privetin/wikimedia",
   _varName: "wikimediaMcpServerPlugin",
 };
 
@@ -111639,6 +111969,7 @@ const mpcTallyApiServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mpc-tally-api-server",
   _varName: "mpcTallyApiServerPlugin",
 };
 
@@ -111662,6 +111993,7 @@ const mcpWeatherServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adhikasp/mcp-weather",
   _varName: "mcpWeatherServer1Plugin",
 };
 
@@ -111698,6 +112030,7 @@ const mcpScholarlyServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adityak74/mcp-scholarly",
   _varName: "mcpScholarlyServerPlugin",
 };
 
@@ -111786,6 +112119,7 @@ const mcpEtherscanServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-etherscan-server",
   _varName: "mcpEtherscanServer1Plugin",
 };
 
@@ -111827,6 +112161,7 @@ const cursorMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Buga-luga/cursor-mcp",
   _varName: "cursorMcpServer1Plugin",
 };
 
@@ -111868,6 +112203,7 @@ const postmanMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shannonlal/mcp-postman",
   _varName: "postmanMcpServerPlugin",
 };
 
@@ -111878,6 +112214,7 @@ const neodbMcpServerPlugin: Plugin = {
     "Enables interaction with NeoDB, a social book cataloging service, by providing tools to fetch user info, search books, and retrieve detailed book information through its API.",
   image: "https://github.com/xytangme.png",
   actions: [],
+  githubUrl: "https://github.com/xytangme/neodb-mcp",
   _varName: "neodbMcpServerPlugin",
 };
 
@@ -111925,6 +112262,7 @@ const mcpScreenshotServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sethbang/mcp-screenshot-server",
   _varName: "mcpScreenshotServerPlugin",
 };
 
@@ -111935,6 +112273,7 @@ const mcpAgentsServerPlugin: Plugin = {
     "Facilitates interaction and context sharing between AI models using the standardized Model Context Protocol (MCP) with features like interoperability, scalability, security, and flexibility across diverse AI systems.",
   image: "https://github.com/MCPAgents.png",
   actions: [],
+  githubUrl: "https://github.com/MCPAgents/mcpagentsdk-fs",
   _varName: "mcpAgentsServerPlugin",
 };
 
@@ -111945,6 +112284,7 @@ const boxMcpServerPlugin: Plugin = {
     "The Box MCP Server facilitates searching and reading PDF and Word files in Box using Developer Token authentication.",
   image: "https://github.com/hmk.png",
   actions: [],
+  githubUrl: "https://github.com/hmk/box-mcp-server",
   _varName: "boxMcpServerPlugin",
 };
 
@@ -111996,6 +112336,7 @@ const uiflowchartcreatorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/umshere/uiflowchartcreator",
   _varName: "uiflowchartcreatorPlugin",
 };
 
@@ -112006,6 +112347,7 @@ const moondreamMcpServerPlugin: Plugin = {
     "A powerful server that integrates the Moondream vision model to enable advanced image analysis, including captioning, object detection, and visual question answering, through the Model Context Protocol, compatible with AI assistants like Claude and Cline.",
   image: "https://github.com/NightTrek.png",
   actions: [],
+  githubUrl: "https://github.com/NightTrek/moondream-mcp",
   _varName: "moondreamMcpServerPlugin",
 };
 
@@ -112132,6 +112474,7 @@ const coingeckoMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/crazyrabbitLTC/mcp-coingecko-server",
   _varName: "coingeckoMcpServerPlugin",
 };
 
@@ -112227,6 +112570,7 @@ const supabaseNextjsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tengfone/supabase-nextjs-mcp-server",
   _varName: "supabaseNextjsMcpServerPlugin",
 };
 
@@ -112237,6 +112581,7 @@ const remotemcpServerPlugin: Plugin = {
     "Enables type-safe, bidirectional communication with Model Context Protocol services, allowing centralized management of model contexts over HTTP.",
   image: "https://github.com/ssut.png",
   actions: [],
+  githubUrl: "https://github.com/ssut/Remote-MCP",
   _varName: "remotemcpServerPlugin",
 };
 
@@ -112247,6 +112592,7 @@ const cosensemcpserverPlugin: Plugin = {
     "The cosense-mcp-server facilitates the integration with Claude Desktop by serving as a middleware command pipeline server, allowing for interaction with projects in cosense.",
   image: "https://github.com/yosider.png",
   actions: [],
+  githubUrl: "https://github.com/yosider/cosense-mcp-server",
   _varName: "cosensemcpserverPlugin",
 };
 
@@ -112257,6 +112603,7 @@ const youtubeMcpServer2Plugin: Plugin = {
     "This server allows AI language models to interact with YouTube content through a standardized interface, providing features such as video and channel information retrieval, transcript management, and playlist operations.",
   image: "https://github.com/ZubeidHendricks.png",
   actions: [],
+  githubUrl: "https://github.com/ZubeidHendricks/youtube-mcp-server",
   _varName: "youtubeMcpServer2Plugin",
 };
 
@@ -112281,6 +112628,7 @@ const mcpGithubIssueServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/mcp-github-issue",
   _varName: "mcpGithubIssueServerPlugin",
 };
 
@@ -112321,6 +112669,7 @@ const mcp2mqttPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mcp2everything/mcp2mqtt",
   _varName: "mcp2mqttPlugin",
 };
 
@@ -112500,6 +112849,7 @@ const openctiMcpServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/Spathodea-Network/opencti-mcp",
   _varName: "openctiMcpServerPlugin",
 };
 
@@ -112510,6 +112860,7 @@ const wordpressmcpserverPlugin: Plugin = {
     "interact with your WordPress site (s) using this MCP WordPress Server\n\n100% created with Cline. If you use Cline you can have it evaluate the code by pointing it to the repository and asking if the code is safe to use.\n\nSee the READ.me for a detailed overview.\n\nEnjoy!",
   image: "https://github.com/stefans71.png",
   actions: [],
+  githubUrl: "https://github.com/stefans71/wordpress-mcp-server",
   _varName: "wordpressmcpserverPlugin",
 };
 
@@ -112878,6 +113229,7 @@ const mcpPackageDocsServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/mcp-package-docs",
   _varName: "mcpPackageDocsServerPlugin",
 };
 
@@ -112888,6 +113240,7 @@ const claudeMcpServerForUsgsQuakesApiPlugin: Plugin = {
     "Provides access to the USGS Quakes API within Claude Desktop, enabling users to retrieve earthquake data and details through natural language queries.",
   image: "https://github.com/blake365.png",
   actions: [],
+  githubUrl: "https://github.com/blake365/usgs-quakes-mcp",
   _varName: "claudeMcpServerForUsgsQuakesApiPlugin",
 };
 
@@ -113012,6 +113365,7 @@ const mcpOrchestratorServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mokafari/orchestrator-server",
   _varName: "mcpOrchestratorServerPlugin",
 };
 
@@ -113072,6 +113426,7 @@ const googleNewsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ChanMeng666/server-google-news",
   _varName: "googleNewsMcpServerPlugin",
 };
 
@@ -113161,6 +113516,7 @@ const mcphnPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/erithwik/mcp-hn",
   _varName: "mcphnPlugin",
 };
 
@@ -113196,6 +113552,7 @@ const figmaMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TimHolden/figma-mcp-server",
   _varName: "figmaMcpServer3Plugin",
 };
 
@@ -113346,6 +113703,7 @@ const mcpServerForArangodbPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ravenwits/mcp-server-arangodb",
   _varName: "mcpServerForArangodbPlugin",
 };
 
@@ -113609,6 +113967,7 @@ const mcpdiscordPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hanweg/mcp-discord",
   _varName: "mcpdiscordPlugin",
 };
 
@@ -113619,6 +113978,7 @@ const homeAssistantMcp1Plugin: Plugin = {
     "Expose all Home Assistant voice intents through a Model Context Protocol Server allowing home control.",
   image: "https://github.com/allenporter.png",
   actions: [],
+  githubUrl: "https://github.com/allenporter/mcp-server-home-assistant",
   _varName: "homeAssistantMcp1Plugin",
 };
 
@@ -113648,6 +114008,7 @@ const hackerNewsMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/pskill9/hn-server",
   _varName: "hackerNewsMcpPlugin",
 };
 
@@ -114118,6 +114479,7 @@ const paperlessngxMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/nloui/paperless-mcp",
   _varName: "paperlessngxMcpServerPlugin",
 };
 
@@ -114341,6 +114703,7 @@ const mcpBrowserAutomationServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hrmeetsingh/mcp-browser-automation",
   _varName: "mcpBrowserAutomationServerPlugin",
 };
 
@@ -114376,6 +114739,7 @@ const perplexityMcpServer5Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PoliTwit1984/mcp-perplexity-server",
   _varName: "perplexityMcpServer5Plugin",
 };
 
@@ -114386,6 +114750,7 @@ const mcpSqliteServerPlugin: Plugin = {
     "A Node.js implementation of the Model Context Protocol server using SQLite, providing a npx-based alternative for environments lacking Python's UVX runner.",
   image: "https://github.com/johnnyoshika.png",
   actions: [],
+  githubUrl: "https://github.com/johnnyoshika/mcp-server-sqlite-npx",
   _varName: "mcpSqliteServerPlugin",
 };
 
@@ -114396,6 +114761,7 @@ const onenoteMcpServerPlugin: Plugin = {
     "Enables AI language models to interact with Microsoft OneNote via a standardized interface, supporting notebook and page management through natural language.",
   image: "https://github.com/ZubeidHendricks.png",
   actions: [],
+  githubUrl: "https://github.com/ZubeidHendricks/azure-onenote-mcp-server",
   _varName: "onenoteMcpServerPlugin",
 };
 
@@ -114446,6 +114812,7 @@ const kagiMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/apridachin/kagi-search-mcp",
   _varName: "kagiMcpServer1Plugin",
 };
 
@@ -114527,6 +114894,7 @@ const hubspotMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/baryhuang/mcp-hubspot",
   _varName: "hubspotMcpServerPlugin",
 };
 
@@ -114537,6 +114905,7 @@ const googleOrtoolsServerPlugin: Plugin = {
     "MCP-ORTools integrates Google's OR-Tools constraint programming solver with Large Language Models through the MCP, enabling AI models to:\n\nSubmit and validate constraint models\nSet model parameters\nSolve constraint satisfaction and optimization problems\nRetrieve and analyze solution",
   image: "https://github.com/Jacck.png",
   actions: [],
+  githubUrl: "https://github.com/Jacck/mcp-ortools",
   _varName: "googleOrtoolsServerPlugin",
 };
 
@@ -114562,6 +114931,7 @@ const mcpCompassPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/liuyoshio/mcp-compass",
   _varName: "mcpCompassPlugin",
 };
 
@@ -114572,6 +114942,7 @@ const chromaMcpServer1Plugin: Plugin = {
     "Enables LLMs to perform semantic search and document management using ChromaDB, supporting natural language queries with intuitive similarity metrics for retrieval augmented generation applications.",
   image: "https://github.com/privetin.png",
   actions: [],
+  githubUrl: "https://github.com/privetin/mcp-server-chroma",
   _varName: "chromaMcpServer1Plugin",
 };
 
@@ -114641,6 +115012,7 @@ const kazuphmcpobsidianPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-obsidian",
   _varName: "kazuphmcpobsidianPlugin",
 };
 
@@ -114669,6 +115041,7 @@ const kazuphmcpyoutubePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-youtube",
   _varName: "kazuphmcpyoutubePlugin",
 };
 
@@ -114863,6 +115236,7 @@ const kazuphmcptaskmanagerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-taskmanager",
   _varName: "kazuphmcptaskmanagerPlugin",
 };
 
@@ -114900,6 +115274,7 @@ const kazuphmcppocketPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-pocket",
   _varName: "kazuphmcppocketPlugin",
 };
 
@@ -114929,6 +115304,7 @@ const perplexityMcpServer6Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/jsonallen/perplexity-mcp",
   _varName: "perplexityMcpServer6Plugin",
 };
 
@@ -114939,6 +115315,7 @@ const trueragMcpServerPlugin: Plugin = {
     "Enables interaction with a TrueRAG system through a GraphQL API using the Model Context Protocol (MCP), facilitating access to policies with a Python SDK and GQL library integration.",
   image: "https://github.com/Ad-Veritas.png",
   actions: [],
+  githubUrl: "https://github.com/Ad-Veritas/mcp-server-trueRAG",
   _varName: "trueragMcpServerPlugin",
 };
 
@@ -114962,6 +115339,7 @@ const mcpToolServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/davidshtian/MCP-on-AWS-Bedrock",
   _varName: "mcpToolServerPlugin",
 };
 
@@ -115021,6 +115399,7 @@ const mcpMemoryServicePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/doobidoo/mcp-memory-service",
   _varName: "mcpMemoryServicePlugin",
 };
 
@@ -115031,6 +115410,7 @@ const mcpProxyServer1Plugin: Plugin = {
     "Enables interaction with remote MCP servers using SSE transport instead of STDIO for enhanced communication capabilities.",
   image: "https://github.com/sparfenyuk.png",
   actions: [],
+  githubUrl: "https://github.com/sparfenyuk/mcp-proxy",
   _varName: "mcpProxyServer1Plugin",
 };
 
@@ -115168,6 +115548,7 @@ const glideApiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/knmurphy/glide-api-mcp-server",
   _varName: "glideApiMcpServerPlugin",
 };
 
@@ -115257,6 +115638,7 @@ const veri5ightMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/5ajaki/veri5ight",
   _varName: "veri5ightMcpServerPlugin",
 };
 
@@ -115267,6 +115649,7 @@ const youtubeWatchLaterMcpServerPlugin: Plugin = {
     "Enables secure access to your YouTube Watch Later playlist, allowing retrieval of video URLs added within a specified timeframe through a simple interface using OAuth2 authentication.",
   image: "https://github.com/rados10.png",
   actions: [],
+  githubUrl: "https://github.com/rados10/youtube-watchlater-mcp",
   _varName: "youtubeWatchLaterMcpServerPlugin",
 };
 
@@ -115302,6 +115685,7 @@ const piapimcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/apinetwork/piapi-mcp-server",
   _varName: "piapimcpServerPlugin",
 };
 
@@ -115312,6 +115696,7 @@ const codingAssistantServerPlugin: Plugin = {
     "Server that enhances the capabilities of the Cline coding agent. It provides intelligent code suggestions, reduces hallucinations, and documents the knowledge base by leveraging your project's documentation and detecting the technologies used in your codebase.",
   image: "https://github.com/AviOfLagos.png",
   actions: [],
+  githubUrl: "https://github.com/AviOfLagos/MCP-coding-assistant",
   _varName: "codingAssistantServerPlugin",
 };
 
@@ -115322,6 +115707,7 @@ const calendarAutoauthMcpServerPlugin: Plugin = {
     "Server for Google Calendar integration in Cluade Desktop with auto authentication support. This server enables AI assistants to manage Google Calendar events through natural language interactions.",
   image: "https://github.com/GongRzhe.png",
   actions: [],
+  githubUrl: "https://github.com/GongRzhe/Calendar-Autoauth-MCP-Server",
   _varName: "calendarAutoauthMcpServerPlugin",
 };
 
@@ -115332,6 +115718,7 @@ const gmailAutoauthMcpServerPlugin: Plugin = {
     "Server for Gmail integration in Claude Desktop with auto authentication support. This server enables AI assistants to manage Gmail through natural language interactions.",
   image: "https://github.com/GongRzhe.png",
   actions: [],
+  githubUrl: "https://github.com/GongRzhe/Gmail-MCP-Server",
   _varName: "gmailAutoauthMcpServerPlugin",
 };
 
@@ -115342,6 +115729,8 @@ const literatemcpPlugin: Plugin = {
     "Server for managing academic literature with structured note-taking and organization, designed for seamless interaction with Claude. Built with SQLite for simplicity and portability.",
   image: "https://github.com/YUZongmin.png",
   actions: [],
+  githubUrl:
+    "https://github.com/YUZongmin/sqlite-literature-management-fastmcp-mcp-server",
   _varName: "literatemcpPlugin",
 };
 
@@ -115352,6 +115741,7 @@ const difyServerPlugin: Plugin = {
     "Server for using Dify. It achieves the invocation of the Dify workflow by calling the tools of MCP.",
   image: "https://github.com/YanxingLiu.png",
   actions: [],
+  githubUrl: "https://github.com/YanxingLiu/dify-mcp-server",
   _varName: "difyServerPlugin",
 };
 
@@ -115362,6 +115752,7 @@ const semanticScholarMcpServerPlugin: Plugin = {
     "Semantic Scholar API, providing comprehensive access to academic paper data, author information, and citation networks.",
   image: "https://github.com/YUZongmin.png",
   actions: [],
+  githubUrl: "https://github.com/YUZongmin/semantic-scholar-fastmcp-mcp-server",
   _varName: "semanticScholarMcpServerPlugin",
 };
 
@@ -115424,6 +115815,7 @@ const kazuphmcpgmailgasPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-gmail-gas",
   _varName: "kazuphmcpgmailgasPlugin",
 };
 
@@ -115508,6 +115900,7 @@ const kazuphmcpfetchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-fetch",
   _varName: "kazuphmcpfetchPlugin",
 };
 
@@ -115562,6 +115955,7 @@ const kazuphmcpgithubpera1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-github-pera1",
   _varName: "kazuphmcpgithubpera1Plugin",
 };
 
@@ -115572,6 +115966,7 @@ const wordpressMcpServerPlugin: Plugin = {
     "Enables AI assistants to interact with WordPress sites through the WordPress REST API. Supports multiple WordPress sites with secure authentication, enabling content management, post operations, and site configuration through natural language.",
   image: "https://github.com/emzimmer.png",
   actions: [],
+  githubUrl: "https://github.com/emzimmer/server-wp-mcp",
   _varName: "wordpressMcpServerPlugin",
 };
 
@@ -115617,6 +116012,7 @@ const clickhouseMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/iskakaushik/mcp-clickhouse",
   _varName: "clickhouseMcpServer1Plugin",
 };
 
@@ -115627,6 +116023,7 @@ const lumaMcpServerPlugin: Plugin = {
     "A server that provides Luma AI's video generation API as the Model Context Protocol (MCP)",
   image: "https://github.com/Sunwood-ai-labs.png",
   actions: [],
+  githubUrl: "https://github.com/Sunwood-ai-labs/luma-mcp-server",
   _varName: "lumaMcpServerPlugin",
 };
 
@@ -115697,6 +116094,7 @@ const amazonBedrockMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/zxkane/mcp-server-amazon-bedrock",
   _varName: "amazonBedrockMcpServerPlugin",
 };
 
@@ -115840,6 +116238,7 @@ const googleCalendarPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/GongRzhe/Calendar-MCP-Server",
   _varName: "googleCalendarPlugin",
 };
 
@@ -115924,6 +116323,7 @@ const mcpNpxFetchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tokenizin-agency/mcp-npx-fetch",
   _varName: "mcpNpxFetchPlugin",
 };
 
@@ -115947,6 +116347,7 @@ const australianBureauOfStatisticsAbsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/seansoreilly/abs",
   _varName: "australianBureauOfStatisticsAbsPlugin",
 };
 
@@ -115957,6 +116358,7 @@ const redisPlugin: Plugin = {
     "Provides access to Redis databases. This server enables LLMs to interact with Redis key-value stores through a set of standardized tools.",
   image: "https://github.com/GongRzhe.png",
   actions: [],
+  githubUrl: "https://github.com/GongRzhe/REDIS-MCP-Server",
   _varName: "redisPlugin",
 };
 
@@ -116010,6 +116412,7 @@ const mcpServerNeurolorapPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aindreyway/mcp-server-neurolora-p",
   _varName: "mcpServerNeurolorapPlugin",
 };
 
@@ -116163,6 +116566,7 @@ const cryptocurrencyMarketDataMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Nayshins/mcp-server-ccxt",
   _varName: "cryptocurrencyMarketDataMcpServerPlugin",
 };
 
@@ -116221,6 +116625,7 @@ const mcptoolbuilderPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hanweg/mcp-tool-builder",
   _varName: "mcptoolbuilderPlugin",
 };
 
@@ -116258,6 +116663,7 @@ const websiteDownloaderPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/pskill9/website-downloader",
   _varName: "websiteDownloaderPlugin",
 };
 
@@ -116492,6 +116898,7 @@ const googleWorkspaceMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/epaproditus/google-workspace-mcp-server",
   _varName: "googleWorkspaceMcpServer1Plugin",
 };
 
@@ -116502,6 +116909,7 @@ const chessAnalysisAssistantPlugin: Plugin = {
     "Helps you analyze chess positions and get professional evaluations using Stockfish.",
   image: "https://github.com/turlockmike.png",
   actions: [],
+  githubUrl: "https://github.com/turlockmike/chess-mcp",
   _varName: "chessAnalysisAssistantPlugin",
 };
 
@@ -116512,6 +116920,7 @@ const pagespeedMcpServerPlugin: Plugin = {
     "Acts as a bridge between AI models and Google's PageSpeed Insights API, enabling detailed performance analysis of websites.",
   image: "https://github.com/PhialsBasement.png",
   actions: [],
+  githubUrl: "https://github.com/PhialsBasement/Pagespeed-MCP-Server",
   _varName: "pagespeedMcpServerPlugin",
 };
 
@@ -116536,6 +116945,7 @@ const mozillaReadabilityParserMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/emzimmer/server-moz-readability",
   _varName: "mozillaReadabilityParserMcpServer1Plugin",
 };
 
@@ -116949,6 +117359,7 @@ const meilisearchMcpServer1Plugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/meilisearch/meilisearch-mcp",
   _varName: "meilisearchMcpServer1Plugin",
 };
 
@@ -116959,6 +117370,7 @@ const obsidianmcpPlugin: Plugin = {
     "Enables AI assistants to interact with Obsidian vaults, providing tools for reading, creating, editing and managing notes and tags.",
   image: "https://github.com/StevenStavrakis.png",
   actions: [],
+  githubUrl: "https://github.com/StevenStavrakis/obsidian-mcp",
   _varName: "obsidianmcpPlugin",
 };
 
@@ -117208,6 +117620,7 @@ const rijksmuseumMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r-huijts/rijksmuseum-mcp",
   _varName: "rijksmuseumMcpServerPlugin",
 };
 
@@ -117264,6 +117677,7 @@ const markdown2pdfmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/2b3pro/markdown2pdf-mcp",
   _varName: "markdown2pdfmcpPlugin",
 };
 
@@ -117273,6 +117687,7 @@ const googlecalendarmcpPlugin: Plugin = {
   description: "Lets LLMs read and manage Google Calendar events.",
   image: "https://github.com/nspady.png",
   actions: [],
+  githubUrl: "https://github.com/nspady/google-calendar-mcp",
   _varName: "googlecalendarmcpPlugin",
 };
 
@@ -117302,6 +117717,7 @@ const cedardiffMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/th3w1zard1/cedarscript-mcp",
   _varName: "cedardiffMcpServerPlugin",
 };
 
@@ -117452,6 +117868,7 @@ const openhueMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lsemenenko/openhue-mcp-server",
   _varName: "openhueMcpServerPlugin",
 };
 
@@ -117499,6 +117916,7 @@ const mcpFilePreviewServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/seanivore/mcp-file-preview",
   _varName: "mcpFilePreviewServerPlugin",
 };
 
@@ -117548,6 +117966,7 @@ const searxngServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ihor-sokoliuk/mcp-searxng",
   _varName: "searxngServerPlugin",
 };
 
@@ -117607,6 +118026,7 @@ const socialmediamcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/angheljf/social-media-mcp",
   _varName: "socialmediamcpPlugin",
 };
 
@@ -117616,6 +118036,7 @@ const mcpgeoPlugin: Plugin = {
   description: "Geocoding MCP server with GeoPY!",
   image: "https://github.com/webcoderz.png",
   actions: [],
+  githubUrl: "https://github.com/webcoderz/MCP-Geo",
   _varName: "mcpgeoPlugin",
 };
 
@@ -117626,6 +118047,7 @@ const swissPlugin: Plugin = {
     "Swiss MCP is your AI-powered command center for orchestrating complex tasks with ease. Think of it as your personal AI assistant that can coordinate multiple AI tools to accomplish amazing things!",
   image: "https://github.com/a1j9o94.png",
   actions: [],
+  githubUrl: "https://github.com/a1j9o94/swiss",
   _varName: "swissPlugin",
 };
 
@@ -117787,6 +118209,7 @@ const mcpneovimserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/bigcodegen/mcp-neovim-server",
   _varName: "mcpneovimserverPlugin",
 };
 
@@ -117856,6 +118279,7 @@ const sefariaJewishLibraryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sivan22/mcp-sefaria-server",
   _varName: "sefariaJewishLibraryMcpServerPlugin",
 };
 
@@ -118090,6 +118514,7 @@ const mcpmcMinecraftMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/gerred/mcpmc",
   _varName: "mcpmcMinecraftMcpPlugin",
 };
 
@@ -118100,6 +118525,7 @@ const mcpNotesPlugin: Plugin = {
     "A simple note-taking MCP server for recording and managing notes with AI models.",
   image: "https://github.com/9Ninety.png",
   actions: [],
+  githubUrl: "https://github.com/9Ninety/MCPNotes",
   _varName: "mcpNotesPlugin",
 };
 
@@ -118141,6 +118567,7 @@ const mcpvcdPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SeanMcLoughlin/mcp-vcd",
   _varName: "mcpvcdPlugin",
 };
 
@@ -118259,6 +118686,7 @@ const openrouterMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/heltonteixeira/openrouterai",
   _varName: "openrouterMcpServerPlugin",
 };
 
@@ -118283,6 +118711,7 @@ const wopalmcpserverhotnewsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wopal-cn/mcp-hotnews-server",
   _varName: "wopalmcpserverhotnewsPlugin",
 };
 
@@ -118293,6 +118722,7 @@ const ollamaMcpDatabaseAssistantPlugin: Plugin = {
     "An interactive chat interface that combines Ollama's LLM capabilities with PostgreSQL database access through the Model Context Protocol (MCP). Ask questions about your data in natural language and get AI-powered responses backed by real SQL queries.",
   image: "https://github.com/robdodson.png",
   actions: [],
+  githubUrl: "https://github.com/robdodson/ollama-mcp-db",
   _varName: "ollamaMcpDatabaseAssistantPlugin",
 };
 
@@ -118303,6 +118733,7 @@ const hnymcpPlugin: Plugin = {
     "Server for interacting with Honeycomb observability data. This server enables LLMs like Claude to directly analyze and query your Honeycomb datasets.",
   image: "https://github.com/honeycombio.png",
   actions: [],
+  githubUrl: "https://github.com/honeycombio/honeycomb-mcp",
   _varName: "hnymcpPlugin",
 };
 
@@ -118445,6 +118876,7 @@ const mcppdftoolsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/hanweg/mcp-pdf-tools",
   _varName: "mcppdftoolsPlugin",
 };
 
@@ -118650,6 +119082,7 @@ const mapboxmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/AidenYangX/mapbox-mcp-server",
   _varName: "mapboxmcpserverPlugin",
 };
 
@@ -118678,6 +119111,7 @@ const mcpgraphqlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/blurrah/mcp-graphql",
   _varName: "mcpgraphqlPlugin",
 };
 
@@ -118722,6 +119156,7 @@ const mcprestapiPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dkmaker/mcp-rest-api",
   _varName: "mcprestapiPlugin",
 };
 
@@ -118762,6 +119197,7 @@ const mcpServerForLogseqPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ergut/mcp-logseq-server",
   _varName: "mcpServerForLogseqPlugin",
 };
 
@@ -118848,6 +119284,7 @@ const elevenlabsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mamertofabian/elevenlabs-mcp-server",
   _varName: "elevenlabsMcpServerPlugin",
 };
 
@@ -118901,6 +119338,7 @@ const xMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DataWhisker/x-mcp-server",
   _varName: "xMcpServerPlugin",
 };
 
@@ -118910,6 +119348,7 @@ const mcpnativewindPlugin: Plugin = {
   description: "Rransforms Tailwind components to NativeWind 4.",
   image: "https://github.com/tokenizin-agency.png",
   actions: [],
+  githubUrl: "https://github.com/tokenizin-agency/mcp-nativewind",
   _varName: "mcpnativewindPlugin",
 };
 
@@ -118920,6 +119359,7 @@ const qbtimemcpserverPlugin: Plugin = {
     "Provides unified access to QuickBooks Time API functionality. This server consolidates multiple QuickBooks Time services into a single, efficient interface.",
   image: "https://github.com/aallsbury.png",
   actions: [],
+  githubUrl: "https://github.com/aallsbury/qb-time-mcp-server",
   _varName: "qbtimemcpserverPlugin",
 };
 
@@ -119318,6 +119758,7 @@ const cfbdmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/lenwood/cfbd-mcp-server",
   _varName: "cfbdmcpserverPlugin",
 };
 
@@ -119328,6 +119769,7 @@ const chromiamcpPlugin: Plugin = {
     "Enables AI to interact with Chromia Wallet for sending $CHR transactions.",
   image: "https://github.com/chromindscan.png",
   actions: [],
+  githubUrl: "https://github.com/chromindscan/chromia-mcp",
   _varName: "chromiamcpPlugin",
 };
 
@@ -119352,6 +119794,7 @@ const mcpwolframalphaPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SecretiveShell/MCP-wolfram-alpha",
   _varName: "mcpwolframalphaPlugin",
 };
 
@@ -119508,6 +119951,7 @@ const mcpjiraserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/1broseidon/mcp-jira-server",
   _varName: "mcpjiraserverPlugin",
 };
 
@@ -119950,6 +120394,7 @@ const roamResearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/2b3pro/roam-research-mcp",
   _varName: "roamResearchPlugin",
 };
 
@@ -119987,6 +120432,7 @@ const githubMapperMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dazeb/MCP-Github-Mapper",
   _varName: "githubMapperMcpServerPlugin",
 };
 
@@ -120016,6 +120462,7 @@ const webperfectMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/splendasucks/webperfect-mcp-server",
   _varName: "webperfectMcpServerPlugin",
 };
 
@@ -120104,6 +120551,7 @@ const mcpneuroloraPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aindreyway/mcp-neurolora",
   _varName: "mcpneuroloraPlugin",
 };
 
@@ -120158,6 +120606,7 @@ const mcpredditPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adhikasp/mcp-reddit",
   _varName: "mcpredditPlugin",
 };
 
@@ -120201,6 +120650,7 @@ const mcpfunctionapptesterPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dkmaker/mcp-function-app-tester",
   _varName: "mcpfunctionapptesterPlugin",
 };
 
@@ -120211,6 +120661,7 @@ const mcpdnstwistPlugin: Plugin = {
     "A Model Context Protocol (MCP) server for dnstwist, a powerful DNS fuzzing tool that helps detect typosquatting, phishing, and corporate espionage.",
   image: "https://github.com/BurtTheCoder.png",
   actions: [],
+  githubUrl: "https://github.com/BurtTheCoder/mcp-dnstwist",
   _varName: "mcpdnstwistPlugin",
 };
 
@@ -120342,6 +120793,7 @@ const languageservermcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/alexwohletz/language-server-mcp",
   _varName: "languageservermcpPlugin",
 };
 
@@ -120671,6 +121123,7 @@ const supabasemcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DynamicEndpoints/supabase-mcp",
   _varName: "supabasemcpPlugin",
 };
 
@@ -120976,6 +121429,7 @@ const pocketbasemcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DynamicEndpoints/pocketbase-mcp-server",
   _varName: "pocketbasemcpserverPlugin",
 };
 
@@ -120986,6 +121440,7 @@ const stockscreenMcpServerPlugin: Plugin = {
     "Provides comprehensive stock screening capabilities through Yahoo Finance. Enables LLMs to screen stocks based on technical, fundamental, and options criteria, with support for watchlist management and result storage.",
   image: "https://github.com/twolven.png",
   actions: [],
+  githubUrl: "https://github.com/twolven/mcp-stockscreen",
   _varName: "stockscreenMcpServerPlugin",
 };
 
@@ -120996,6 +121451,7 @@ const codesavantPlugin: Plugin = {
     "Provides code manipulation, execution, and version control capabilities. It allows AI assistants to read, write, and execute code while maintaining a history of changes.",
   image: "https://github.com/twolven.png",
   actions: [],
+  githubUrl: "https://github.com/twolven/mcp-codesavant",
   _varName: "codesavantPlugin",
 };
 
@@ -121109,6 +121565,7 @@ const mcpcodexkeeperPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/aindreyway/mcp-codex-keeper",
   _varName: "mcpcodexkeeperPlugin",
 };
 
@@ -121172,6 +121629,7 @@ const mcpZoteroPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kaliaboi/mcp-zotero",
   _varName: "mcpZoteroPlugin",
 };
 
@@ -121240,6 +121698,7 @@ const mcpazuretablestoragePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/dkmaker/mcp-azure-tablestorage",
   _varName: "mcpazuretablestoragePlugin",
 };
 
@@ -121302,6 +121761,7 @@ const mcpreasonerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Jacck/mcp-reasoner",
   _varName: "mcpreasonerPlugin",
 };
 
@@ -121574,6 +122034,7 @@ const mcpplaywrightPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/executeautomation/mcp-playwright",
   _varName: "mcpplaywrightPlugin",
 };
 
@@ -121603,6 +122064,7 @@ const mcpscreenshotPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kazuph/mcp-screenshot",
   _varName: "mcpscreenshotPlugin",
 };
 
@@ -121829,6 +122291,7 @@ const applescriptmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/joshrutkowski/applescript-mcp",
   _varName: "applescriptmcpPlugin",
 };
 
@@ -121844,6 +122307,7 @@ const mcptimeserverPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/SecretiveShell/MCP-timeserver",
   _varName: "mcptimeserverPlugin",
 };
 
@@ -122013,6 +122477,7 @@ const applenotifiermcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/turlockmike/apple-notifier-mcp",
   _varName: "applenotifiermcpPlugin",
 };
 
@@ -122061,6 +122526,7 @@ const findatamcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/xBlueCode/findata-mcp-server",
   _varName: "findatamcpserverPlugin",
 };
 
@@ -122071,6 +122537,7 @@ const mcpotzariaserverPlugin: Plugin = {
     "An MCP server that provides powerful search capabilities for Jewish texts and literature. This server enables Large Language Models to search and reference Jewish texts through a standardized interface.",
   image: "https://github.com/Sivan22.png",
   actions: [],
+  githubUrl: "https://github.com/Sivan22/mcp-otzaria-server",
   _varName: "mcpotzariaserverPlugin",
 };
 
@@ -122096,6 +122563,7 @@ const mcpdeletePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qpd-v/mcp-delete",
   _varName: "mcpdeletePlugin",
 };
 
@@ -122106,6 +122574,7 @@ const mcpragdocsPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that enables semantic search and retrieval of documentation using a vector database (Qdrant). This server allows you to add documentation from URLs or local files and then search through them using natural language queries.",
   image: "https://github.com/qpd-v.png",
   actions: [],
+  githubUrl: "https://github.com/qpd-v/mcp-ragdocs",
   _varName: "mcpragdocsPlugin",
 };
 
@@ -122156,6 +122625,7 @@ const mcpguidePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qpd-v/mcp-guide",
   _varName: "mcpguidePlugin",
 };
 
@@ -122166,6 +122636,7 @@ const mcpcommunicatortelegramPlugin: Plugin = {
     "An MCP server that enables communication with users through Telegram. This server provides a tool to ask questions to users and receive their responses via a Telegram bot.",
   image: "https://github.com/qpd-v.png",
   actions: [],
+  githubUrl: "https://github.com/qpd-v/mcp-communicator-telegram",
   _varName: "mcpcommunicatortelegramPlugin",
 };
 
@@ -122379,6 +122850,7 @@ const huntressmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/DynamicEndpoints/huntress-mcp-server",
   _varName: "huntressmcpserverPlugin",
 };
 
@@ -122389,6 +122861,7 @@ const mcpyoutubesheetsPlugin: Plugin = {
     "Provides functionality to search YouTube videos and automatically save the results to Google Sheets.",
   image: "https://github.com/Rickyyy1116.png",
   actions: [],
+  githubUrl: "https://github.com/Rickyyy1116/mcp-youtube-sheets",
   _varName: "mcpyoutubesheetsPlugin",
 };
 
@@ -122472,6 +122945,7 @@ const jiramcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/CamdenClark/jira-mcp",
   _varName: "jiramcpPlugin",
 };
 
@@ -122503,6 +122977,7 @@ const k8sinteractivemcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/TaichiHo/k8s-interactive-mcp",
   _varName: "k8sinteractivemcpPlugin",
 };
 
@@ -122513,6 +122988,7 @@ const mcpserverkintonePlugin: Plugin = {
     "Allows you to explore and manipulate kintone data using AI tools such as Claude Desktop!",
   image: "https://github.com/macrat.png",
   actions: [],
+  githubUrl: "https://github.com/macrat/mcp-server-kintone",
   _varName: "mcpserverkintonePlugin",
 };
 
@@ -122732,6 +123208,7 @@ const mcprtfmPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ryanjoachim/mcp-rtfm",
   _varName: "mcprtfmPlugin",
 };
 
@@ -122799,6 +123276,7 @@ const mcpimagedownloaderPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qpd-v/mcp-image-downloader",
   _varName: "mcpimagedownloaderPlugin",
 };
 
@@ -122835,6 +123313,7 @@ const aiHumanizerMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Text2Go/ai-humanizer-mcp-server",
   _varName: "aiHumanizerMcpServerPlugin",
 };
 
@@ -122902,6 +123381,7 @@ const awsmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/RafalWilinski/aws-mcp",
   _varName: "awsmcpPlugin",
 };
 
@@ -122986,6 +123466,7 @@ const airamcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sunwood-ai-labs/aira-mcp-server",
   _varName: "airamcpserverPlugin",
 };
 
@@ -125232,6 +125713,7 @@ const postmanmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/delano/postman-mcp-server",
   _varName: "postmanmcpserverPlugin",
 };
 
@@ -125242,6 +125724,7 @@ const mcpeverythingsearchPlugin: Plugin = {
     "This server provides:\n\n* Fast file search capabilities using Everything SDK\n* Windows-specific implementation\n* Complements existing filesystem servers with specialized search functionality",
   image: "https://github.com/mamertofabian.png",
   actions: [],
+  githubUrl: "https://github.com/mamertofabian/mcp-everything-search",
   _varName: "mcpeverythingsearchPlugin",
 };
 
@@ -125395,6 +125878,8 @@ const bod2501csamicrosoftpolicymcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl:
+    "https://github.com/DynamicEndpoints/Automated-BOD-25-01-CISA-Microsoft-Policies-MCP",
   _varName: "bod2501csamicrosoftpolicymcpPlugin",
 };
 
@@ -125405,6 +125890,7 @@ const homeassistantMcpPlugin: Plugin = {
     "Smart Device Control 🎮\n💡 Lights: Brightness, color, RGB\n🌡️ Climate: Temperature, HVAC, humidity\n🚪 Covers: Position and tilt\n🔌 Switches: On/off\n🚨 Sensors: State monitoring\n\nIntelligent Organization 🏠\nGrouping with context awareness.\n\nRobust Architecture 🛠️\nError handling, state validation ...",
   image: "https://github.com/jango-blockchained.png",
   actions: [],
+  githubUrl: "https://github.com/jango-blockchained/advanced-homeassistant-mcp",
   _varName: "homeassistantMcpPlugin",
 };
 
@@ -125448,6 +125934,7 @@ const mavenmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Bigsy/maven-mcp-server",
   _varName: "mavenmcpserverPlugin",
 };
 
@@ -125473,6 +125960,7 @@ const unichattsmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/amidabuddha/unichat-ts-mcp-server",
   _varName: "unichattsmcpserverPlugin",
 };
 
@@ -125496,6 +125984,7 @@ const mcpWordCounterPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qpd-v/mcp-wordcounter",
   _varName: "mcpWordCounterPlugin",
 };
 
@@ -125506,6 +125995,7 @@ const toolhouseMcpServerPlugin: Plugin = {
     "This MCP server allows you to connect MCP clients with Toolhouse's tools.",
   image: "https://github.com/toolhouse-community.png",
   actions: [],
+  githubUrl: "https://github.com/toolhouse-community/mcp-server-toolhouse",
   _varName: "toolhouseMcpServerPlugin",
 };
 
@@ -125516,6 +126006,7 @@ const geminiMcpServer1Plugin: Plugin = {
     "Model Context Protocol (MCP) server implementation that enables Claude Desktop to interact with Google's Gemini AI models.",
   image: "https://github.com/aliargun.png",
   actions: [],
+  githubUrl: "https://github.com/aliargun/mcp-server-gemini",
   _varName: "geminiMcpServer1Plugin",
 };
 
@@ -125574,6 +126065,7 @@ const mcpdatabaseserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/fireproof-storage/mcp-database-server",
   _varName: "mcpdatabaseserverPlugin",
 };
 
@@ -125584,6 +126076,7 @@ const mcpgithubprojectmanagerPlugin: Plugin = {
     "Provides comprehensive tools for managing GitHub projects, milestones, tasks, and sprints. This server integrates deeply with GitHub Projects V2, offering features like automated kanban workflows, sprint planning, and custom field management.",
   image: "https://github.com/kunwarVivek.png",
   actions: [],
+  githubUrl: "https://github.com/kunwarVivek/mcp-github-project-manager",
   _varName: "mcpgithubprojectmanagerPlugin",
 };
 
@@ -125594,6 +126087,7 @@ const mcpservergoogleanalyticsPlugin: Plugin = {
     "An MCP server implementation for accessing Google Analytics 4 (GA4) data, built using the Model Context Protocol TypeScript SDK.",
   image: "https://github.com/ruchernchong.png",
   actions: [],
+  githubUrl: "https://github.com/ruchernchong/mcp-server-google-analytics",
   _varName: "mcpservergoogleanalyticsPlugin",
 };
 
@@ -125603,6 +126097,7 @@ const mcpserverprometheusPlugin: Plugin = {
   description: "MCP server for interacting with Prometheus metrics and data.",
   image: "https://github.com/loglmhq.png",
   actions: [],
+  githubUrl: "https://github.com/loglmhq/mcp-server-prometheus",
   _varName: "mcpserverprometheusPlugin",
 };
 
@@ -125657,6 +126152,7 @@ const flightradar24mcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sunsetcoder/flightradar24-mcp-server",
   _varName: "flightradar24mcpserverPlugin",
 };
 
@@ -125667,6 +126163,7 @@ const mcpsolverPlugin: Plugin = {
     "A Model Context Protocol (MCP) server that exposes MiniZinc constraint solving capabilities to Large Language Models.",
   image: "https://github.com/szeider.png",
   actions: [],
+  githubUrl: "https://github.com/szeider/mcp-solver",
   _varName: "mcpsolverPlugin",
 };
 
@@ -125696,6 +126193,7 @@ const webbrowsermcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/blazickjp/web-browser-mcp-server",
   _varName: "webbrowsermcpserverPlugin",
 };
 
@@ -125706,6 +126204,7 @@ const mcpvegaliteserverPlugin: Plugin = {
     "A Model Context Protocol (MCP) server implementation that provides the LLM an interface for visualizing data using Vega-Lite syntax.",
   image: "https://github.com/isaacwasserman.png",
   actions: [],
+  githubUrl: "https://github.com/isaacwasserman/mcp-vegalite-server",
   _varName: "mcpvegaliteserverPlugin",
 };
 
@@ -126409,6 +126908,7 @@ const atlasmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyanheads/atlas-mcp-server",
   _varName: "atlasmcpserverPlugin",
 };
 
@@ -126517,6 +127017,7 @@ const mcpjinaaiPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JoeBuildsStuff/mcp-jina-ai",
   _varName: "mcpjinaaiPlugin",
 };
 
@@ -126527,6 +127028,7 @@ const zendeskmcpserverPlugin: Plugin = {
     "This server provides a comprehensive integration with Zendesk. Retrieving and managing tickets and comments. Ticket analyzes and response drafting. Access to help center articles as knowledge base.",
   image: "https://github.com/reminia.png",
   actions: [],
+  githubUrl: "https://github.com/reminia/zendesk-mcp-server",
   _varName: "zendeskmcpserverPlugin",
 };
 
@@ -126537,6 +127039,7 @@ const mcpapplenotesPlugin: Plugin = {
     "Enables semantic search and RAG (Retrieval Augmented Generation) over your Apple Notes.",
   image: "https://github.com/RafalWilinski.png",
   actions: [],
+  githubUrl: "https://github.com/RafalWilinski/mcp-apple-notes",
   _varName: "mcpapplenotesPlugin",
 };
 
@@ -126547,6 +127050,7 @@ const mcpminecraftPlugin: Plugin = {
     "Allows AI models to observe and interact with the Minecraft world through a bot.",
   image: "https://github.com/arjunkmrm.png",
   actions: [],
+  githubUrl: "https://github.com/arjunkmrm/mcp-minecraft",
   _varName: "mcpminecraftPlugin",
 };
 
@@ -126556,6 +127060,7 @@ const macappslauncherPlugin: Plugin = {
   description: "An MCP server to list and launch applications on MacOS",
   image: "https://github.com/JoshuaRileyDev.png",
   actions: [],
+  githubUrl: "https://github.com/JoshuaRileyDev/mac-apps-launcher",
   _varName: "macappslauncherPlugin",
 };
 
@@ -126566,6 +127071,7 @@ const mcpmaigretPlugin: Plugin = {
     "MCP server for maigret, a powerful OSINT tool that collects user account information from various public sources. This server provides tools for searching usernames across social networks and analyzing URLs.",
   image: "https://github.com/BurtTheCoder.png",
   actions: [],
+  githubUrl: "https://github.com/BurtTheCoder/mcp-maigret",
   _varName: "mcpmaigretPlugin",
 };
 
@@ -126869,6 +127375,7 @@ const appstoreconnectmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JoshuaRileyDev/app-store-connect-mcp-server",
   _varName: "appstoreconnectmcpserverPlugin",
 };
 
@@ -126954,6 +127461,7 @@ const mcptwikitPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adhikasp/mcp-twikit",
   _varName: "mcptwikitPlugin",
 };
 
@@ -126964,6 +127472,7 @@ const mcpsnowflakeserverPlugin: Plugin = {
     "Snowflake integration implementing read and (optional) write operations as well as insight tracking",
   image: "https://github.com/isaacwasserman.png",
   actions: [],
+  githubUrl: "https://github.com/isaacwasserman/mcp-snowflake-server",
   _varName: "mcpsnowflakeserverPlugin",
 };
 
@@ -127667,6 +128176,7 @@ const contentfulmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ivo-toby/contentful-mcp",
   _varName: "contentfulmcpPlugin",
 };
 
@@ -127711,6 +128221,7 @@ const clojarsmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Bigsy/Clojars-MCP-Server",
   _varName: "clojarsmcpserverPlugin",
 };
 
@@ -127781,6 +128292,7 @@ const cogneemcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/topoteretes/cognee",
   _varName: "cogneemcpPlugin",
 };
 
@@ -127871,6 +128383,7 @@ const mcpragdocs1Plugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/hannesrudolph/mcp-ragdocs",
   _varName: "mcpragdocs1Plugin",
 };
 
@@ -127881,6 +128394,8 @@ const sqliteexplorerfastmcpmcpserverPlugin: Plugin = {
     "An MCP server that provides safe, read-only access to SQLite databases through MCP. This server is built with the FastMCP framework, which enables LLMs to explore and query SQLite databases with built-in safety features and query validation.",
   image: "https://github.com/hannesrudolph.png",
   actions: [],
+  githubUrl:
+    "https://github.com/hannesrudolph/sqlite-explorer-fastmcp-mcp-server",
   _varName: "sqliteexplorerfastmcpmcpserverPlugin",
 };
 
@@ -127891,6 +128406,8 @@ const imessagequeryfastmcpmcpserverPlugin: Plugin = {
     "An MCP server that provides safe access to your iMessage database through MCP, enabling LLMs to query and analyze iMessage conversations with proper phone number validation and attachment handling",
   image: "https://github.com/hannesrudolph.png",
   actions: [],
+  githubUrl:
+    "https://github.com/hannesrudolph/imessage-query-fastmcp-mcp-server",
   _varName: "imessagequeryfastmcpmcpserverPlugin",
 };
 
@@ -127900,6 +128417,7 @@ const mcppineconePlugin: Plugin = {
   description: "Pinecone integration with vector search capabilities",
   image: "https://github.com/sirmews.png",
   actions: [],
+  githubUrl: "https://github.com/sirmews/mcp-pinecone",
   _varName: "mcppineconePlugin",
 };
 
@@ -128080,6 +128598,7 @@ const httpsgithubcomsammcjmcppackageversionPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sammcj/mcp-package-version",
   _varName: "httpsgithubcomsammcjmcppackageversionPlugin",
 };
 
@@ -128105,6 +128624,7 @@ const mcpsearchlinkupPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/LinkupPlatform/python-mcp-server",
   _varName: "mcpsearchlinkupPlugin",
 };
 
@@ -128148,6 +128668,7 @@ const mcpgitingestPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adhikasp/mcp-git-ingest",
   _varName: "mcpgitingestPlugin",
 };
 
@@ -128209,6 +128730,7 @@ const mcplinkedinPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/adhikasp/mcp-linkedin",
   _varName: "mcplinkedinPlugin",
 };
 
@@ -128368,6 +128890,7 @@ const mcpsummarizationfunctionsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Braffolk/mcp-summarization-functions",
   _varName: "mcpsummarizationfunctionsPlugin",
 };
 
@@ -128392,6 +128915,7 @@ const searxngPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/SecretiveShell/MCP-searxng",
   _varName: "searxngPlugin",
 };
 
@@ -128401,6 +128925,7 @@ const simulatormcpserverPlugin: Plugin = {
   description: "An MCP server to control iOS Simulators.",
   image: "https://github.com/JoshuaRileyDev.png",
   actions: [],
+  githubUrl: "https://github.com/JoshuaRileyDev/simulator-mcp-server",
   _varName: "simulatormcpserverPlugin",
 };
 
@@ -128527,6 +129052,7 @@ const mcpserverbrowserbasePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/browserbase/mcp-server-browserbase",
   _varName: "mcpserverbrowserbasePlugin",
 };
 
@@ -128578,6 +129104,7 @@ const mcppandocPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/vivekVells/mcp-pandoc",
   _varName: "mcppandocPlugin",
 };
 
@@ -128741,6 +129268,7 @@ const virustotalMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/BurtTheCoder/mcp-virustotal",
   _varName: "virustotalMcpServerPlugin",
 };
 
@@ -128765,6 +129293,7 @@ const mcpdatetimePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ZeparHyfar/mcp-datetime",
   _varName: "mcpdatetimePlugin",
 };
 
@@ -128859,6 +129388,7 @@ const mcpmysqlserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/f4ww4z/mcp-mysql-server",
   _varName: "mcpmysqlserverPlugin",
 };
 
@@ -128869,6 +129399,7 @@ const azureOpenaiPlugin: Plugin = {
     "A minimal server/client application implementation utilizing the Model Context Protocol (MCP) and Azure OpenAI.",
   image: "https://github.com/kimtth.png",
   actions: [],
+  githubUrl: "https://github.com/kimtth/mcp-aoai-web-browsing",
   _varName: "azureOpenaiPlugin",
 };
 
@@ -129137,6 +129668,7 @@ const airtablemcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/domdomegg/airtable-mcp-server",
   _varName: "airtablemcpserverPlugin",
 };
 
@@ -129147,6 +129679,7 @@ const homeassistantmcpPlugin: Plugin = {
     "Access Home Assistant data and control devices (lights, switches, thermostats, etc).",
   image: "https://github.com/tevonsb.png",
   actions: [],
+  githubUrl: "https://github.com/tevonsb/homeassistant-mcp",
   _varName: "homeassistantmcpPlugin",
 };
 
@@ -129343,6 +129876,7 @@ const mcptexteditorPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tumf/mcp-text-editor",
   _varName: "mcptexteditorPlugin",
 };
 
@@ -129366,6 +129900,7 @@ const mcpdicePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/yamaton/mcp-dice",
   _varName: "mcpdicePlugin",
 };
 
@@ -129543,6 +130078,7 @@ const mcpshodanPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/BurtTheCoder/mcp-shodan",
   _varName: "mcpshodanPlugin",
 };
 
@@ -129572,6 +130108,7 @@ const mcpPubmedSearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/wavelovey/pubmed_search",
   _varName: "mcpPubmedSearchPlugin",
 };
 
@@ -129582,6 +130119,7 @@ const metoromcpserverPlugin: Plugin = {
     "Query and interact with kubernetes environments monitored by Metoro. Look at APM, metrics, traces, profiling information with LLMs.",
   image: "https://github.com/metoro-io.png",
   actions: [],
+  githubUrl: "https://github.com/metoro-io/metoro-mcp-server",
   _varName: "metoromcpserverPlugin",
 };
 
@@ -129615,6 +130153,7 @@ const appleShortcutsServerPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/recursechat/mcp-server-apple-shortcuts",
   _varName: "appleShortcutsServerPlugin",
 };
 
@@ -129625,6 +130164,7 @@ const mcpSimpleOpenaiAssistantPlugin: Plugin = {
     "A simple MCP server for interacting with OpenAI assistants. This server allows other tools (like Claude Desktop) to create and interact with OpenAI assistants through the Model Context Protocol.",
   image: "https://github.com/andybrandt.png",
   actions: [],
+  githubUrl: "https://github.com/andybrandt/mcp-simple-openai-assistant",
   _varName: "mcpSimpleOpenaiAssistantPlugin",
 };
 
@@ -129635,6 +130175,7 @@ const mcpSimpleTimeserverPlugin: Plugin = {
     "An MCP server that allows checking local time on the client machine or current UTC time from an NTP server",
   image: "https://github.com/andybrandt.png",
   actions: [],
+  githubUrl: "https://github.com/andybrandt/mcp-simple-timeserver",
   _varName: "mcpSimpleTimeserverPlugin",
 };
 
@@ -129664,6 +130205,7 @@ const perplexityMcpServer7Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/tanigami/mcp-server-perplexity",
   _varName: "perplexityMcpServer7Plugin",
 };
 
@@ -129725,6 +130267,7 @@ const mcpinstallerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/anaisbetts/mcp-installer",
   _varName: "mcpinstallerPlugin",
 };
 
@@ -129748,6 +130291,7 @@ const anychatcompletionsmcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/pyroprompts/any-chat-completions-mcp",
   _varName: "anychatcompletionsmcpPlugin",
 };
 
@@ -130184,6 +130728,7 @@ const mcpAtlassian1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/sooperset/mcp-atlassian",
   _varName: "mcpAtlassian1Plugin",
 };
 
@@ -130331,6 +130876,7 @@ const mcpmiroPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/evalstate/mcp-miro",
   _varName: "mcpmiroPlugin",
 };
 
@@ -130356,6 +130902,7 @@ const unichatMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/amidabuddha/unichat-mcp-server",
   _varName: "unichatMcpServerPlugin",
 };
 
@@ -130366,6 +130913,7 @@ const notionMcpServer7Plugin: Plugin = {
     "MCP Server for the Notion API, enabling Claude to interact with Notion workspaces.",
   image: "https://github.com/suekou.png",
   actions: [],
+  githubUrl: "https://github.com/suekou/mcp-notion-server",
   _varName: "notionMcpServer7Plugin",
 };
 
@@ -130376,6 +130924,7 @@ const applenotesmcpPlugin: Plugin = {
     "Allows the AI to read from your local Apple Notes database (macOS only)",
   image: "https://github.com/sirmews.png",
   actions: [],
+  githubUrl: "https://github.com/sirmews/apple-notes-mcp",
   _varName: "applenotesmcpPlugin",
 };
 
@@ -130428,6 +130977,7 @@ const ancestryMcpPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/reeeeemo/ancestry-mcp",
   _varName: "ancestryMcpPlugin",
 };
 
@@ -130438,6 +130988,7 @@ const notionMcp1Plugin: Plugin = {
     "A simple Model Context Protocol (MCP) server that integrates with Notion's API to manage my personal todo list through Claude.",
   image: "https://github.com/danhilse.png",
   actions: [],
+  githubUrl: "https://github.com/danhilse/notion_mcp",
   _varName: "notionMcp1Plugin",
 };
 
@@ -130462,6 +131013,7 @@ const youtubeMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/anaisbetts/mcp-youtube",
   _varName: "youtubeMcpServer3Plugin",
 };
 
@@ -130472,6 +131024,7 @@ const obsidianPlugin: Plugin = {
     "This is a connector to allow Claude Desktop (or any MCP client) to read and search any directory containing Markdown notes (such as an Obsidian vault).",
   image: "https://github.com/smithery-ai.png",
   actions: [],
+  githubUrl: "https://github.com/smithery-ai/mcp-obsidian",
   _varName: "obsidianPlugin",
 };
 
@@ -130619,6 +131172,7 @@ const mcpServerForObsidianPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MarkusPfundstein/mcp-obsidian",
   _varName: "mcpServerForObsidianPlugin",
 };
 
@@ -130629,6 +131183,7 @@ const phabricatorMcpServerPlugin: Plugin = {
     "A Model Context Protocol (MCP) server implementation for interacting with Phabricator API. This server allows LLMs to interact with Phabricator through a standardized interface.",
   image: "https://github.com/baba786.png",
   actions: [],
+  githubUrl: "https://github.com/baba786/phabricator-mcp-server",
   _varName: "phabricatorMcpServerPlugin",
 };
 
@@ -130669,6 +131224,7 @@ const openaiMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/pierrebrunelle/mcp-server-openai",
   _varName: "openaiMcpServer2Plugin",
 };
 
@@ -130679,6 +131235,7 @@ const godocmcpPlugin: Plugin = {
     "godoc-mcp is a Model Context Protocol (MCP) server that provides efficient access to Go documentation. It helps LLMs understand Go projects by providing direct access to package documentation without needing to read entire source files.",
   image: "https://github.com/mrjoshuak.png",
   actions: [],
+  githubUrl: "https://github.com/mrjoshuak/godoc-mcp",
   _varName: "godocmcpPlugin",
 };
 
@@ -130710,6 +131267,7 @@ const mcpOpenaiServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/mzxrai/mcp-openai",
   _varName: "mcpOpenaiServerPlugin",
 };
 
@@ -130914,6 +131472,7 @@ const gitMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "gitMcpServer2Plugin",
 };
 
@@ -131209,6 +131768,7 @@ const gitlabMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "gitlabMcpServer1Plugin",
 };
 
@@ -131865,6 +132425,7 @@ const githubMcpServer4Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "githubMcpServer4Plugin",
 };
 
@@ -132124,6 +132685,7 @@ const nsTravelInformationMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/r-huijts/ns-mcp-server",
   _varName: "nsTravelInformationMcpServerPlugin",
 };
 
@@ -132188,6 +132750,7 @@ const mcpsimplearxivPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/andybrandt/mcp-simple-arxiv",
   _varName: "mcpsimplearxivPlugin",
 };
 
@@ -132234,6 +132797,7 @@ const mcpWebResearchServer1Plugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/mzxrai/mcp-webresearch",
   _varName: "mcpWebResearchServer1Plugin",
 };
 
@@ -132317,6 +132881,7 @@ const arxivMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/blazickjp/arxiv-mcp-server",
   _varName: "arxivMcpServer1Plugin",
 };
 
@@ -132345,6 +132910,7 @@ const tavilysearchPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Tomatio13/mcp-server-tavily",
   _varName: "tavilysearchPlugin",
 };
 
@@ -132440,6 +133006,7 @@ const search1apiMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/fatwang2/search1api-mcp",
   _varName: "search1apiMcpServerPlugin",
 };
 
@@ -132469,6 +133036,7 @@ const exaMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/exa-labs/exa-mcp-server",
   _varName: "exaMcpServerPlugin",
 };
 
@@ -132497,6 +133065,7 @@ const kagiMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ac3xx/mcp-servers-kagi",
   _varName: "kagiMcpServer2Plugin",
 };
 
@@ -132541,6 +133110,7 @@ const fetchMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "fetchMcpServer2Plugin",
 };
 
@@ -132565,6 +133135,7 @@ const nytimesArticleSearchMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/angheljf/nyt",
   _varName: "nytimesArticleSearchMcpServerPlugin",
 };
 
@@ -132620,6 +133191,7 @@ const braveSearchMcpServer1Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "braveSearchMcpServer1Plugin",
 };
 
@@ -133419,6 +133991,7 @@ const raygunMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/MindscapeHQ/mcp-server-raygun",
   _varName: "raygunMcpServerPlugin",
 };
 
@@ -133429,6 +134002,7 @@ const sentryMcpServer1Plugin: Plugin = {
     "This server provides tools to inspect error reports, stacktraces, and other debugging information from your Sentry account.",
   image: "https://github.com/modelcontextprotocol.png",
   actions: [],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "sentryMcpServer1Plugin",
 };
 
@@ -133566,6 +134140,7 @@ const googleMapsMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "googleMapsMcpServerPlugin",
 };
 
@@ -134117,6 +134692,7 @@ const memorymeshPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/CheMiguel23/MemoryMesh",
   _varName: "memorymeshPlugin",
 };
 
@@ -134234,6 +134810,7 @@ const knowledgeGraphMemoryServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "knowledgeGraphMemoryServer3Plugin",
 };
 
@@ -134268,6 +134845,7 @@ const coinmarketPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/anjor/coinmarket-mcp-server",
   _varName: "coinmarketPlugin",
 };
 
@@ -134278,6 +134856,7 @@ const filesystemMcpServer3Plugin: Plugin = {
     "Go server implementing Model Context Protocol (MCP) for filesystem operations.",
   image: "https://github.com/mark3labs.png",
   actions: [],
+  githubUrl: "https://github.com/mark3labs/mcp-filesystem-server",
   _varName: "filesystemMcpServer3Plugin",
 };
 
@@ -134288,6 +134867,7 @@ const googleDriveServerPlugin: Plugin = {
     "This MCP server integrates with Google Drive to allow listing, reading, and searching over files.",
   image: "https://github.com/modelcontextprotocol.png",
   actions: [],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "googleDriveServerPlugin",
 };
 
@@ -134298,6 +134878,7 @@ const filesystemMcpServer4Plugin: Plugin = {
     "Node.js server implementing Model Context Protocol (MCP) for filesystem operations.",
   image: "https://github.com/modelcontextprotocol.png",
   actions: [],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "filesystemMcpServer4Plugin",
 };
 
@@ -134308,6 +134889,7 @@ const openapiPlugin: Plugin = {
     "This tool creates a Model Context Protocol (MCP) server that acts as a proxy for any API that has an OpenAPI v3.1 specification. This allows you to use Claude Desktop to easily interact with both local and remote server APIs.",
   image: "https://github.com/snaggle-ai.png",
   actions: [],
+  githubUrl: "https://github.com/snaggle-ai/openapi-mcp-server",
   _varName: "openapiPlugin",
 };
 
@@ -134384,6 +134966,7 @@ const dockermcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/QuantGeekDev/docker-mcp",
   _varName: "dockermcpPlugin",
 };
 
@@ -134394,6 +134977,7 @@ const neo4jMcpClientsServersPlugin: Plugin = {
     "This lets you use Claude Desktop, or any MCP Client, to use natural language to accomplish things with Neo4j and your Aura account.",
   image: "https://github.com/neo4j-contrib.png",
   actions: [],
+  githubUrl: "https://github.com/neo4j-contrib/mcp-neo4j",
   _varName: "neo4jMcpClientsServersPlugin",
 };
 
@@ -134403,6 +134987,7 @@ const vikingdbPlugin: Plugin = {
   description: "An mcp server for vikingdb store and search.",
   image: "https://github.com/KashiwaByte.png",
   actions: [],
+  githubUrl: "https://github.com/KashiwaByte/vikingdb-mcp-server",
   _varName: "vikingdbPlugin",
 };
 
@@ -134413,6 +134998,7 @@ const mongodbPlugin: Plugin = {
     "A Model Context Protocol server that provides access to MongoDB databases. This server enables LLMs to inspect collection schemas and execute read-only queries.",
   image: "https://github.com/kiliczsh.png",
   actions: [],
+  githubUrl: "https://github.com/kiliczsh/mcp-mongo-server",
   _varName: "mongodbPlugin",
 };
 
@@ -134423,6 +135009,7 @@ const mongodb1Plugin: Plugin = {
     "A Model Context Protocol (MCP) server that enables LLMs to interact directly with MongoDB databases. Query collections, inspect schemas, and manage data seamlessly through natural language.",
   image: "https://github.com/QuantGeekDev.png",
   actions: [],
+  githubUrl: "https://github.com/QuantGeekDev/mongo-mcp",
   _varName: "mongodb1Plugin",
 };
 
@@ -134488,6 +135075,7 @@ const mcpserverduckdbPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ktanaka101/mcp-server-duckdb",
   _varName: "mcpserverduckdbPlugin",
 };
 
@@ -134624,6 +135212,7 @@ const supabaseMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/JoshuaRileyDev/supabase-mcp-server",
   _varName: "supabaseMcpServer3Plugin",
 };
 
@@ -134701,6 +135290,7 @@ const sqliteMcpServer2Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "sqliteMcpServer2Plugin",
 };
 
@@ -134724,6 +135314,7 @@ const postgresqlPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "postgresqlPlugin",
 };
 
@@ -134747,6 +135338,7 @@ const mysqlMcpServer3Plugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/designcomputer/mysql_mcp_server",
   _varName: "mysqlMcpServer3Plugin",
 };
 
@@ -134776,6 +135368,7 @@ const bigqueryMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/ergut/mcp-bigquery-server",
   _varName: "bigqueryMcpServerPlugin",
 };
 
@@ -134786,6 +135379,7 @@ const bigqueryMcpServer1Plugin: Plugin = {
     "A Model Context Protocol server that provides access to BigQuery. This server enables LLMs to inspect database schemas and execute queries.",
   image: "https://github.com/LucasHild.png",
   actions: [],
+  githubUrl: "https://github.com/LucasHild/mcp-server-bigquery",
   _varName: "bigqueryMcpServer1Plugin",
 };
 
@@ -134796,6 +135390,7 @@ const tinybirdMcpServerPlugin: Plugin = {
     "An MCP server to interact with a Tinybird Workspace from any MCP client.",
   image: "https://github.com/tinybirdco.png",
   actions: [],
+  githubUrl: "https://github.com/tinybirdco/mcp-tinybird",
   _varName: "tinybirdMcpServerPlugin",
 };
 
@@ -134806,6 +135401,7 @@ const openDataModelContextProtocolPlugin: Plugin = {
     "Access to many public datasets right from your LLM application.",
   image: "https://github.com/OpenDataMCP.png",
   actions: [],
+  githubUrl: "https://github.com/OpenDataMCP/OpenDataMCP",
   _varName: "openDataModelContextProtocolPlugin",
 };
 
@@ -134816,6 +135412,7 @@ const inoyuApacheUnomiMcpServerPlugin: Plugin = {
     "A Model Context Protocol server enabling Claude to maintain user context through Apache Unomi profile management.",
   image: "https://github.com/sergehuber.png",
   actions: [],
+  githubUrl: "https://github.com/sergehuber/inoyu-mcp-unomi-server",
   _varName: "inoyuApacheUnomiMcpServerPlugin",
 };
 
@@ -134825,6 +135422,7 @@ const mcpgsuitePlugin: Plugin = {
   description: "MCP server to interact with Google produts.",
   image: "https://github.com/MarkusPfundstein.png",
   actions: [],
+  githubUrl: "https://github.com/MarkusPfundstein/mcp-gsuite",
   _varName: "mcpgsuitePlugin",
 };
 
@@ -134835,6 +135433,7 @@ const blueskyContextServerPlugin: Plugin = {
     "A simple MCP server that can enable MCP clients to query Bluesky instances.",
   image: "https://github.com/laulauland.png",
   actions: [],
+  githubUrl: "https://github.com/laulauland/bluesky-context-server",
   _varName: "blueskyContextServerPlugin",
 };
 
@@ -135001,6 +135600,7 @@ const slackMcpServerPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/modelcontextprotocol/servers",
   _varName: "slackMcpServerPlugin",
 };
 
@@ -135054,6 +135654,7 @@ const mcpservercommandsPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/g0t4/mcp-server-commands",
   _varName: "mcpservercommandsPlugin",
 };
 
@@ -135064,6 +135665,7 @@ const mcpk8sgoPlugin: Plugin = {
     "This project is intended as a both MCP server connecting to Kubernetes and a library to build more servers for any custom resources in Kubernetes.",
   image: "https://github.com/strowk.png",
   actions: [],
+  githubUrl: "https://github.com/strowk/mcp-k8s-go",
   _varName: "mcpk8sgoPlugin",
 };
 
@@ -135074,6 +135676,7 @@ const mcpservercloudflarePlugin: Plugin = {
     "Lets you use Claude Desktop, or any MCP Client, to use natural language to accomplish things on your Cloudflare account.",
   image: "https://github.com/cloudflare.png",
   actions: [],
+  githubUrl: "https://github.com/cloudflare/mcp-server-cloudflare",
   _varName: "mcpservercloudflarePlugin",
 };
 
@@ -135103,6 +135706,7 @@ const mcpserveryoutubetranscriptPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kimtaeyoon83/mcp-server-youtube-transcript",
   _varName: "mcpserveryoutubetranscriptPlugin",
 };
 
@@ -135267,6 +135871,7 @@ const mcpserverplaywrightPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Automata-Labs-team/MCP-Server-Playwright",
   _varName: "mcpserverplaywrightPlugin",
 };
 
@@ -135298,6 +135903,7 @@ const mcpserverragwebbrowserPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/apify/mcp-server-rag-web-browser",
   _varName: "mcpserverragwebbrowserPlugin",
 };
 
@@ -135335,6 +135941,7 @@ const mcpserverqdrantPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/qdrant/mcp-server-qdrant",
   _varName: "mcpserverqdrantPlugin",
 };
 
@@ -135379,6 +135986,7 @@ const mcpsimplepubmedPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/andybrandt/mcp-simple-pubmed",
   _varName: "mcpsimplepubmedPlugin",
 };
 
@@ -135389,6 +135997,7 @@ const mcpnodejsserverPlugin: Plugin = {
     "MCP Server for the Gentoro services, enabling Claude to interact with Gentoro, which allows users to create and integrate tools into a common Bridge, defining all available capabilities.",
   image: "https://github.com/gentoro-GT.png",
   actions: [],
+  githubUrl: "https://github.com/gentoro-GT/mcp-nodejs-server",
   _varName: "mcpnodejsserverPlugin",
 };
 
@@ -135399,6 +136008,7 @@ const mcpserverbirdstatsPlugin: Plugin = {
     "Cross-reference your BirdNET-Pi data with eBird observations using natural language",
   image: "https://github.com/DMontgomery40.png",
   actions: [],
+  githubUrl: "https://github.com/DMontgomery40/mcp-server-birdstats",
   _varName: "mcpserverbirdstatsPlugin",
 };
 
@@ -135440,6 +136050,7 @@ const mcpsnykPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Sladey01/mcp-snyk",
   _varName: "mcpsnykPlugin",
 };
 
@@ -135450,6 +136061,7 @@ const videoeditingmcpPlugin: Plugin = {
     "Upload, edit, and generate videos from everyone's favorite LLM and Video Jungle.",
   image: "https://github.com/burningion.png",
   actions: [],
+  githubUrl: "https://github.com/burningion/video-editing-mcp",
   _varName: "videoeditingmcpPlugin",
 };
 
@@ -135497,6 +136109,7 @@ const mcpservertmdbPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/Laksh-star/mcp-server-tmdb",
   _varName: "mcpservertmdbPlugin",
 };
 
@@ -135507,6 +136120,7 @@ const mcpserverneonPlugin: Plugin = {
     "Lets you use Claude Desktop, or any MCP Client, to use natural language to accomplish things with Neon.",
   image: "https://github.com/neondatabase-labs.png",
   actions: [],
+  githubUrl: "https://github.com/neondatabase-labs/mcp-server-neon",
   _varName: "mcpserverneonPlugin",
 };
 
@@ -135585,6 +136199,7 @@ const cmdmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/PhialsBasement/CMD-MCP-Server",
   _varName: "cmdmcpserverPlugin",
 };
 
@@ -135594,6 +136209,7 @@ const mcpjetbrains1Plugin: Plugin = {
   description: "The server proxies requests from client to JetBrains IDE.",
   image: "https://github.com/JetBrains.png",
   actions: [],
+  githubUrl: "https://github.com/JetBrains/mcp-jetbrains",
   _varName: "mcpjetbrains1Plugin",
 };
 
@@ -135711,6 +136327,7 @@ const mcpknowledgegraphPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shaneholloman/mcp-knowledge-graph",
   _varName: "mcpknowledgegraphPlugin",
 };
 
@@ -135782,6 +136399,7 @@ const salesforcemcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/kablewy/salesforce-mcp-server",
   _varName: "salesforcemcpserverPlugin",
 };
 
@@ -135792,6 +136410,7 @@ const nutjswindowscontrolPlugin: Plugin = {
     "A Windows control server built using nut.js and Model Context Protocol (MCP), providing programmatic control over Windows system operations including mouse, keyboard, window management, and screen capture functionality.",
   image: "https://github.com/Cheffromspace.png",
   actions: [],
+  githubUrl: "https://github.com/Cheffromspace/MCPControl",
   _varName: "nutjswindowscontrolPlugin",
 };
 
@@ -135841,6 +136460,7 @@ const mcpserverdataexplorationPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/reading-plus-ai/mcp-server-data-exploration",
   _varName: "mcpserverdataexplorationPlugin",
 };
 
@@ -135920,6 +136540,7 @@ const llmcontextPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/cyberchitta/llm-context.py",
   _varName: "llmcontextPlugin",
 };
 
@@ -135979,6 +136600,7 @@ const mcphfspacePlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/evalstate/mcp-hfspace",
   _varName: "mcphfspacePlugin",
 };
 
@@ -136002,6 +136624,7 @@ const e2bmcpserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/e2b-dev/mcp-server",
   _varName: "e2bmcpserverPlugin",
 };
 
@@ -136035,6 +136658,7 @@ const coincapmcpPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/QuantGeekDev/coincap-mcp",
   _varName: "coincapmcpPlugin",
 };
 
@@ -136066,6 +136690,7 @@ const climcpserverPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/MladenSU/cli-mcp-server",
   _varName: "climcpserverPlugin",
 };
 
@@ -136232,6 +136857,7 @@ const mcpserverkubernetesPlugin: Plugin = {
       parameters: [],
     },
   ],
+  githubUrl: "https://github.com/Flux159/mcp-server-kubernetes",
   _varName: "mcpserverkubernetesPlugin",
 };
 
@@ -136281,36 +136907,31 @@ const openrpcmpcserverPlugin: Plugin = {
       ],
     },
   ],
+  githubUrl: "https://github.com/shanejonas/openrpc-mpc-server",
   _varName: "openrpcmpcserverPlugin",
 };
 
+const corePlugin: Plugin = {
+  id: "a5dcf686-50ee-41f5-bdcb-44eaacbeaf81",
+  name: "Core",
+  description: "",
+  image: "/logos/starknet.png",
+  actions: [],
+  _varName: "corePlugin",
+};
+
+const unruggablePlugin: Plugin = {
+  id: "8d3e05ef-c85a-43cc-8e57-486e94fcf39e",
+  name: "Unruggable",
+  description:
+    "Create secure, transparent memecoins with built-in protections against common exploits and rug pulls",
+  image: "/logos/unruggable.png",
+  actions: [],
+  _varName: "unruggablePlugin",
+};
+
 export const allPlugins: Array<Plugin> = [
-  corePlugin,
-  argentxPlugin,
-  braavosPlugin,
-  openzeppelinPlugin,
-  okxPlugin,
-  unruggablePlugin,
-  vesuPlugin,
-  opusPlugin,
-  avnuPlugin,
-  coingeckoPlugin,
-  dexscreenerPlugin,
-  artpeacePlugin,
-  twitterPlugin,
-  discordPlugin,
-  telegramPlugin,
-  duckduckgoPlugin,
-  dallEPlugin,
-  gmailPlugin,
-  gcalendarPlugin,
-  wikipediaPlugin,
-  searchapiPlugin,
-  atlanticPlugin,
-  coinmarketcapPlugin,
-  pragmaPlugin,
-  madaraPlugin,
-  fibrousPlugin,
+  ...corePlugins,
   odooMcpServerPlugin,
   mcpmymacPlugin,
   viteMcpServerPlugin,

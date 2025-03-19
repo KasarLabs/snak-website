@@ -216,10 +216,10 @@ function transformToPlugins(servers, attributes) {
 
       // Extraire le nom du référentiel pour l'utiliser comme fallback pour le nom du plugin
       let repoName = "";
-      if (server.repository?.url) {
-        const match = server.repository.url.match(
-          /github\.com\/(?:[^\/]+)\/([^\/]+)/,
-        );
+      const githubUrl = server.repository?.url || null;
+
+      if (githubUrl) {
+        const match = githubUrl.match(/github\.com\/(?:[^\/]+)\/([^\/]+)/);
         if (match) {
           repoName = match[1].replace(/-/g, " ").replace(/_/g, " ");
           // Mettre en majuscule la première lettre de chaque mot
@@ -235,12 +235,11 @@ function transformToPlugins(servers, attributes) {
         id: server.id,
         name: server.name || repoName || `Plugin ${server.id.substring(0, 8)}`,
         description:
-          server.description ||
-          `Plugin based on ${server.repository?.url || "MCP server"}`,
-        image: server.repository?.url
-          ? getGithubImageUrl(server.repository.url)
-          : "/logos/default.png",
+          server.description || `Plugin based on ${githubUrl || "MCP server"}`,
+        image: githubUrl ? getGithubImageUrl(githubUrl) : "/logos/default.png",
         actions: actions,
+        // Ajouter l'URL du dépôt GitHub si elle existe
+        githubUrl: githubUrl,
       };
 
       // Ajout au Map pour éviter les doublons

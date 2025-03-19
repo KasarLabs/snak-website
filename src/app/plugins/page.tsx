@@ -30,7 +30,7 @@ const APPS = allPlugins;
 const VIEWPORT_MARGIN = 300; // Marge supplémentaire en pixels autour de la viewport
 
 // Fonction utilitaire pour limiter la fréquence d'exécution d'une fonction
-function throttle<T extends (...args: any[]) => any>(
+function throttle<T extends (...args: Parameters<T>) => ReturnType<T>>(
   func: T,
   limit: number,
 ): (...args: Parameters<T>) => void {
@@ -89,15 +89,16 @@ export default function HomePage() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseMoveThrottleRef = useRef<
-    ((e: React.MouseEvent) => void) | undefined
+    ((e: React.MouseEvent<Element>) => void) | undefined
   >(undefined);
   const prevZoomScaleRef = useRef<number>(1);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [distanceMap] = useState(() => new Map<string, number>());
 
   // Initialiser le throttle une seule fois
   useEffect(() => {
-    mouseMoveThrottleRef.current = throttle((e: React.MouseEvent) => {
+    mouseMoveThrottleRef.current = throttle((e: React.MouseEvent<Element>) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const relativeX =
@@ -265,18 +266,19 @@ export default function HomePage() {
       // Copier les cercles pour ne pas modifier l'original
       const allCirclesCopy = [...filteredCircles];
 
-      // Ajouter la distance au centre pour chaque cercle
       allCirclesCopy.forEach((circle) => {
-        const distanceToCenter = Math.sqrt(
-          Math.pow(circle.x - viewportCenterX, 2) +
-            Math.pow(circle.y - viewportCenterY, 2),
+        distanceMap.set(
+          circle.id,
+          Math.sqrt(
+            Math.pow(circle.x - viewportCenterX, 2) +
+              Math.pow(circle.y - viewportCenterY, 2),
+          ),
         );
-        (circle as any).distanceToCenter = distanceToCenter;
       });
 
       // Trier par distance au centre
       allCirclesCopy.sort(
-        (a, b) => (a as any).distanceToCenter - (b as any).distanceToCenter,
+        (a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0),
       );
 
       return allCirclesCopy;
@@ -307,15 +309,15 @@ export default function HomePage() {
           Math.pow(circle.y - viewportCenterY, 2),
       );
 
-      // Ajouter la distance pour trier plus tard
-      (circle as any).distanceToCenter = distanceToCenter;
+      // Stocker la distance dans la Map
+      distanceMap.set(circle.id, distanceToCenter);
 
       return true;
-    });
+    }) as GridItem[];
 
     // Trier par distance au centre pour un affichage plus naturel
     inViewportCircles.sort(
-      (a, b) => (a as any).distanceToCenter - (b as any).distanceToCenter,
+      (a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0),
     );
 
     // Limiter le nombre de cercles affichés pour des performances optimales
@@ -327,6 +329,7 @@ export default function HomePage() {
     isClient,
     dynamicVisibleLimit,
     transform.scale,
+    distanceMap,
   ]);
 
   // Mettre à jour les cercles précédents quand les cercles actuels changent
@@ -416,22 +419,6 @@ export default function HomePage() {
     setIsFrozen(false);
   }, []);
 
-  // Calcul du message d'info sur les plugins
-  const pluginInfo = useMemo(() => {
-    const isShowingAll =
-      transform.scale <= ZOOM_CONFIG.ALL_PLUGINS_SCALE ||
-      visibleCircles.length === APPS.length;
-
-    return {
-      visible: visibleCircles.length,
-      total: APPS.length,
-      isShowingAll,
-      isZooming,
-      isZoomingIn: transform.scale > prevZoomScaleRef.current,
-      isZoomingOut: transform.scale < prevZoomScaleRef.current,
-    };
-  }, [visibleCircles.length, APPS.length, transform.scale, isZooming]);
-
   // Gérer les transitions de double-clic pour le zoom
   const handleDoubleClick = useCallback(() => {
     // Sauvegarde temporaire des cercles visibles actuels pour la transition
@@ -465,9 +452,7 @@ export default function HomePage() {
     >
       <TransformWrapper
         initialScale={1}
-        minScale={
-          isMobile ? ZOOM_CONFIG.MOBILE_MIN_SCALE : ZOOM_CONFIG.MIN_SCALE
-        }
+        minScale={1}
         maxScale={1}
         centerOnInit={true}
         doubleClick={{
