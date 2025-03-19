@@ -113684,12 +113684,7 @@ const mcpServerForArangodbPlugin: Plugin = {
         },
         {
           name: "type",
-          type: {
-            "2": "DOCUMENT_COLLECTION",
-            "3": "EDGE_COLLECTION",
-            DOCUMENT_COLLECTION: 2,
-            EDGE_COLLECTION: 3,
-          },
+          type: ["DOCUMENT_COLLECTION", "EDGE_COLLECTION"],
           description: "Type of collection to create",
           required: false,
         },

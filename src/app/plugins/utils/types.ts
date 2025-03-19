@@ -7,7 +7,7 @@ export interface Placeholder {
 
 export interface ActionParameter {
   name: string;
-  type: string;
+  type: string | string[];
   description: string;
   required: boolean;
 }
@@ -26,6 +26,7 @@ export interface Plugin {
   internal?: boolean;
   githubUrl?: string;
   actions: Action[];
+  _varName?: string;
 }
 
 export type GridItem = (Plugin | Placeholder) & {
