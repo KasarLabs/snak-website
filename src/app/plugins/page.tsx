@@ -67,7 +67,9 @@ const ZOOM_CONFIG = {
 };
 
 const APPS = allPlugins;
+// Augmenter la marge de viewport pour mobile pour voir plus de plugins
 const VIEWPORT_MARGIN = 200;
+const MOBILE_VIEWPORT_MARGIN = 300; // Marge plus grande pour mobile
 
 function throttle(func: ThrottledFunction, limit = 16): ThrottledFunction {
   let inThrottle = false;
@@ -141,6 +143,11 @@ export default function HomePage() {
   const transformRef = useRef(transform);
   const viewportRef = useRef(viewport);
 
+  // Référence pour stocker la dernière mise à jour des cercles visibles
+  const lastUpdateTimeRef = useRef(0);
+  // Référence pour stocker la requête d'animation
+  const rafIdRef = useRef<number | null>(null);
+
   // Mettre à jour les refs quand les états changent
   useEffect(() => {
     transformRef.current = transform;
@@ -169,30 +176,36 @@ export default function HomePage() {
   const updateViewport = useCallback(
     (currentTransform: Transform, size: WindowSize) => {
       const isMobileView = window.innerWidth <= 768;
-      const margin =
+
+      // Marge dynamique adaptée aux mobiles
+      const margin = isMobileView ? MOBILE_VIEWPORT_MARGIN : VIEWPORT_MARGIN;
+
+      // Ajuster la marge en fonction du niveau de zoom
+      const scaledMargin =
         currentTransform.scale <=
         (isMobileView
           ? ZOOM_CONFIG.MOBILE_ALL_PLUGINS_SCALE
           : ZOOM_CONFIG.ALL_PLUGINS_SCALE)
-          ? VIEWPORT_MARGIN * (isMobileView ? 2 : 4)
+          ? margin * (isMobileView ? 2 : 4)
           : currentTransform.scale <= 0.5
-            ? VIEWPORT_MARGIN * (isMobileView ? 1.5 : 2)
-            : VIEWPORT_MARGIN;
+            ? margin * (isMobileView ? 1.5 : 2)
+            : margin;
 
       const visibleWidth = size.width / currentTransform.scale;
       const visibleHeight = size.height / currentTransform.scale;
 
       setViewport({
-        left: currentTransform.positionX / currentTransform.scale - margin,
-        top: currentTransform.positionY / currentTransform.scale - margin,
+        left:
+          currentTransform.positionX / currentTransform.scale - scaledMargin,
+        top: currentTransform.positionY / currentTransform.scale - scaledMargin,
         right:
           currentTransform.positionX / currentTransform.scale +
           visibleWidth +
-          margin,
+          scaledMargin,
         bottom:
           currentTransform.positionY / currentTransform.scale +
           visibleHeight +
-          margin,
+          scaledMargin,
       });
     },
     [],
@@ -246,6 +259,10 @@ export default function HomePage() {
     return () => {
       if (zoomTimerRef.current) {
         clearTimeout(zoomTimerRef.current);
+      }
+      // Nettoyer les requêtes d'animation au démontage
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
       }
     };
   }, []);
@@ -304,13 +321,14 @@ export default function HomePage() {
   }, [allCircles, searchQuery]);
 
   // Calcul de la limite d'éléments visibles
+  // Augmenter les limites pour les mobiles
   const dynamicVisibleLimit = useMemo(() => {
     if (transform.scale <= ZOOM_CONFIG.ALL_PLUGINS_SCALE) {
-      return isMobile ? 150 : 300; // Limiter même à faible zoom pour les performances
+      return isMobile ? 250 : 300; // Augmenté pour mobile
     } else if (transform.scale <= 0.5) {
-      return isMobile ? 75 : 150;
+      return isMobile ? 150 : 150;
     } else {
-      return isMobile ? 50 : GRID_CONFIG.MAX_VISIBLE_ITEMS;
+      return isMobile ? 100 : GRID_CONFIG.MAX_VISIBLE_ITEMS;
     }
   }, [transform.scale, isMobile]);
 
@@ -337,8 +355,8 @@ export default function HomePage() {
       const viewportCenterY =
         (currentViewport.top + currentViewport.bottom) / 2;
 
-      // Limiter le nombre de plugins lorsqu'on dézoome complètement
-      const limitedCircles = filteredCircles.slice(0, isMobile ? 150 : 300);
+      // Augmenter le nombre de plugins visibles sur mobile
+      const limitedCircles = filteredCircles.slice(0, isMobile ? 250 : 300);
 
       limitedCircles.forEach((circle) => {
         distanceMap.set(
@@ -361,8 +379,14 @@ export default function HomePage() {
     const viewportCenterX = (currentViewport.left + currentViewport.right) / 2;
     const viewportCenterY = (currentViewport.top + currentViewport.bottom) / 2;
 
-    // Utiliser une marge adaptée
-    const margin = currentTransform.scale <= 0.5 ? 200 : 100;
+    // Utiliser une marge adaptée plus grande sur mobile
+    const margin = isMobile
+      ? currentTransform.scale <= 0.5
+        ? 300
+        : 200
+      : currentTransform.scale <= 0.5
+        ? 200
+        : 100;
 
     // Pré-allouer un tableau pour stocker les cercles dans la viewport
     const inViewportCircles = [];
@@ -403,20 +427,34 @@ export default function HomePage() {
     return inViewportCircles;
   }, [filteredCircles, dynamicVisibleLimit, isMobile, isClient]);
 
-  // Mise à jour des cercles visibles avec une RAF pour optimiser les performances
+  // Mise à jour des cercles visibles avec RAF et moins de rendus sur mobile
   useEffect(() => {
     if (!isClient) return;
 
+    // Annuler toute animation en cours
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+
     // Utiliser requestAnimationFrame pour synchroniser avec le rendu du navigateur
     const updateVisibleCircles = () => {
-      const newVisibleCircles = calculateVisibleCircles();
-      visibleCirclesRef.current = newVisibleCircles;
-      setVisibleCircles(newVisibleCircles);
+      const now = performance.now();
+
+      // Limiter les mises à jour, surtout sur mobile
+      const updateInterval = isMobile ? 100 : 50; // ms
+
+      if (now - lastUpdateTimeRef.current >= updateInterval) {
+        const newVisibleCircles = calculateVisibleCircles();
+        visibleCirclesRef.current = newVisibleCircles;
+        setVisibleCircles(newVisibleCircles);
+        lastUpdateTimeRef.current = now;
+      }
     };
 
     // Déclencher une mise à jour immédiate
     updateVisibleCircles();
-  }, [calculateVisibleCircles, viewport, transform, isClient]);
+  }, [calculateVisibleCircles, viewport, transform, isClient, isMobile]);
 
   // État visible pour le rendu
   const [visibleCircles, setVisibleCircles] = useState<GridItem[]>([]);
@@ -479,6 +517,32 @@ export default function HomePage() {
     }
   }, []);
 
+  // Ajuster les paramètres d'animation pour mobile
+  const getTransformConfig = useMemo(() => {
+    return {
+      initialScale: 1,
+      minScale: isMobile ? ZOOM_CONFIG.MOBILE_MIN_SCALE : ZOOM_CONFIG.MIN_SCALE,
+      maxScale: ZOOM_CONFIG.MAX_SCALE,
+      doubleClick: {
+        disabled: isMobile,
+        step: 0.7,
+        mode: "zoomIn" as const,
+        animationTime: isMobile ? 150 : 200, // Plus court pour mobile
+      },
+      pinch: {
+        disabled: false,
+        step: isMobile ? 0.8 : 1, // Réduit pour plus de fluidité sur mobile
+      },
+      limitToBounds: false,
+      wheel: {
+        step: isMobile ? 0.03 : 0.05, // Pas de zoom plus petit pour mobile
+        smoothStep: isMobile ? 0.01 : 0.02,
+      },
+      alignmentAnimation: { disabled: true },
+      velocityAnimation: { disabled: true },
+    };
+  }, [isMobile]);
+
   return (
     <div
       ref={containerRef}
@@ -487,23 +551,13 @@ export default function HomePage() {
       className="relative w-full h-screen bg-black overflow-hidden"
     >
       <TransformWrapper
-        initialScale={1}
-        minScale={
-          isMobile ? ZOOM_CONFIG.MOBILE_MIN_SCALE : ZOOM_CONFIG.MIN_SCALE
-        }
-        maxScale={ZOOM_CONFIG.MAX_SCALE}
+        initialScale={getTransformConfig.initialScale}
+        minScale={getTransformConfig.minScale}
+        maxScale={getTransformConfig.maxScale}
         centerOnInit={true}
-        doubleClick={{
-          disabled: isMobile,
-          step: 0.7,
-          mode: "zoomIn",
-          animationTime: 200, // Plus court pour Firefox/Mobile
-        }}
-        pinch={{
-          disabled: false,
-          step: 1, // Réduit pour plus de fluidité
-        }}
-        limitToBounds={false}
+        doubleClick={getTransformConfig.doubleClick}
+        pinch={getTransformConfig.pinch}
+        limitToBounds={getTransformConfig.limitToBounds}
         onTransformed={(e) => {
           requestAnimationFrame(() => {
             handleTransformChange(e);
@@ -519,12 +573,9 @@ export default function HomePage() {
           setHasPanned(true);
         }}
         // Meilleure gestion de la mémoire et des événements
-        alignmentAnimation={{ disabled: true }}
-        velocityAnimation={{ disabled: true }}
-        wheel={{
-          step: 0.05, // Pas de zoom plus petit pour plus de fluidité
-          smoothStep: 0.02,
-        }}
+        alignmentAnimation={getTransformConfig.alignmentAnimation}
+        velocityAnimation={getTransformConfig.velocityAnimation}
+        wheel={getTransformConfig.wheel}
       >
         <TransformComponent
           wrapperClass="!w-full !h-full"
@@ -557,6 +608,13 @@ export default function HomePage() {
         onClose={handleModalClose}
         isMobile={isMobile}
       />
+
+      {/* Indicateur de chargement pour mobile */}
+      {isMobile && (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xs opacity-50">
+          {visibleCircles.length} plugins affichés
+        </div>
+      )}
     </div>
   );
 }
