@@ -6,40 +6,87 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
 } from "react";
-import { motion } from "framer-motion";
 import { allPlugins } from "../../../data/plugins";
 import { PluginModal } from "./components/PluginModal";
-import { Plugin, GridItem } from "./utils/types";
+import type { Plugin, GridItem } from "./utils/types";
 import { useSearch } from "./context/SearchContext";
 import { generateHoneycombPositions } from "./utils/honeycomb";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Circle from "./components/Circle";
-import { Placeholder, Position } from "./utils/types";
 import { GRID_CONFIG } from "./constants/gridConfig";
 
-// Configuration pour le zoom minimal et l'affichage de tous les plugins
+// Types
+interface Transform {
+  scale: number;
+  positionX: number;
+  positionY: number;
+}
+
+interface MousePosition {
+  x: number;
+  y: number;
+}
+
+interface ThrottleEvent {
+  clientX: number;
+  clientY: number;
+}
+
+type ThrottledFunction<T = ThrottleEvent> = (arg: T) => void;
+
+interface WindowSize {
+  width: number;
+  height: number;
+}
+
+interface ViewportBounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+interface TransformState {
+  state: {
+    scale: number;
+    positionX: number;
+    positionY: number;
+  };
+}
+
+// Configuration pour le zoom et l'affichage
 const ZOOM_CONFIG = {
-  MIN_SCALE: 0.1, // Niveau de zoom minimal configurable
-  ALL_PLUGINS_SCALE: 0.3, // Seuil de zoom pour afficher tous les plugins
-  MOBILE_MIN_SCALE: 0.05, // Niveau de zoom minimal pour mobile
-  MOBILE_ALL_PLUGINS_SCALE: 0.15, // Seuil de zoom pour mobile
+  MIN_SCALE: 0.15,
+  MAX_SCALE: 1.3,
+  ALL_PLUGINS_SCALE: 0.3,
+  MOBILE_MIN_SCALE: 0.1,
+  MOBILE_ALL_PLUGINS_SCALE: 0.2,
 };
 
 const APPS = allPlugins;
-const VIEWPORT_MARGIN = 300; // Marge supplémentaire en pixels autour de la viewport
+const VIEWPORT_MARGIN = 200;
 
-// Fonction utilitaire pour limiter la fréquence d'exécution d'une fonction
-function throttle<T extends (...args: Parameters<T>) => ReturnType<T>>(
-  func: T,
-  limit: number,
-): (...args: Parameters<T>) => void {
-  let lastCall = 0;
-  return (...args: Parameters<T>) => {
-    const now = Date.now();
-    if (now - lastCall >= limit) {
-      lastCall = now;
-      func(...args);
+function throttle(func: ThrottledFunction, limit = 16): ThrottledFunction {
+  let inThrottle = false;
+  let lastFunc: ThrottledFunction | null = null;
+
+  return function (this: unknown, arg: ThrottleEvent) {
+    if (!inThrottle) {
+      func.apply(this, [arg]);
+      inThrottle = true;
+
+      setTimeout(() => {
+        inThrottle = false;
+        if (lastFunc) {
+          lastFunc.apply(this, [arg]);
+          lastFunc = null;
+        }
+      }, limit);
+    } else {
+      lastFunc = () => func.apply(this, [arg]);
     }
   };
 }
@@ -49,11 +96,11 @@ export default function HomePage() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCircle, setSelectedCircle] = useState<Plugin | null>(null);
   const { searchQuery } = useSearch();
-  const [windowSize, setWindowSize] = useState({
+  const [windowSize, setWindowSize] = useState<WindowSize>({
     width: typeof window !== "undefined" ? window.innerWidth : 1200,
     height: typeof window !== "undefined" ? window.innerHeight : 800,
   });
-  const [mousePosition, setMousePosition] = useState({
+  const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: windowSize.width / 2,
     y: windowSize.height / 2,
   });
@@ -61,129 +108,140 @@ export default function HomePage() {
   const [expandedActions, setExpandedActions] = useState<Set<number>>(
     new Set(),
   );
-  const [transform, setTransform] = useState({
+  const [transform, setTransform] = useState<Transform>({
     scale: 1,
     positionX: 0,
     positionY: 0,
   });
   const [hasPanned, setHasPanned] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
-  const [frozenMousePosition, setFrozenMousePosition] = useState({
-    x: windowSize.width / 2,
-    y: windowSize.height / 2,
-  });
-  const [viewport, setViewport] = useState({
+  const [frozenMousePosition, setFrozenMousePosition] = useState<MousePosition>(
+    {
+      x: windowSize.width / 2,
+      y: windowSize.height / 2,
+    },
+  );
+  const [viewport, setViewport] = useState<ViewportBounds>({
     left: 0,
     top: 0,
     right: windowSize.width,
     bottom: windowSize.height,
   });
-  // État pour stocker les cercles visibles précédents lors des transitions de zoom
-  const [previousVisibleCircles, setPreviousVisibleCircles] = useState<
-    GridItem[]
-  >([]);
-  // État pour suivre si on est en train de faire une transition
-  const [isZooming, setIsZooming] = useState(false);
-  // Timer pour la transition de zoom
+
+  // Utilisation de useRef pour éviter les re-rendus
+  const visibleCirclesRef = useRef<GridItem[]>([]);
   const zoomTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mouseMoveThrottleRef = useRef<
-    ((e: React.MouseEvent<Element>) => void) | undefined
-  >(undefined);
-  const prevZoomScaleRef = useRef<number>(1);
-
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const mouseMoveThrottleRef = useRef<ThrottledFunction | undefined>(undefined);
+  const prevZoomScaleRef = useRef(1);
   const [isMobile, setIsMobile] = useState(false);
-  const [distanceMap] = useState(() => new Map<string, number>());
+  const distanceMapRef = useRef(new Map<string, number>());
 
-  // Initialiser le throttle une seule fois
+  // Optimisation: utiliser useRef pour les états qui ne doivent pas déclencher de re-rendu
+  const transformRef = useRef(transform);
+  const viewportRef = useRef(viewport);
+
+  // Mettre à jour les refs quand les états changent
   useEffect(() => {
-    mouseMoveThrottleRef.current = throttle((e: React.MouseEvent<Element>) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const relativeX =
-        (e.clientX - rect.left + transform.positionX) / transform.scale;
-      const relativeY =
-        (e.clientY - rect.top + transform.positionY) / transform.scale;
-      setMousePosition({ x: relativeX, y: relativeY });
-    }, GRID_CONFIG.MOUSE_MOVE_THROTTLE);
+    transformRef.current = transform;
   }, [transform]);
 
   useEffect(() => {
+    viewportRef.current = viewport;
+  }, [viewport]);
+
+  // Initialiser le throttle une seule fois avec RAF
+  useEffect(() => {
+    mouseMoveThrottleRef.current = throttle((e: ThrottleEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const relativeX =
+        (e.clientX - rect.left + transformRef.current.positionX) /
+        transformRef.current.scale;
+      const relativeY =
+        (e.clientY - rect.top + transformRef.current.positionY) /
+        transformRef.current.scale;
+      setMousePosition({ x: relativeX, y: relativeY });
+    }, 16); // 60fps
+  }, []);
+
+  // Fonction d'update de viewport extraite pour être réutilisable
+  const updateViewport = useCallback(
+    (currentTransform: Transform, size: WindowSize) => {
+      const isMobileView = window.innerWidth <= 768;
+      const margin =
+        currentTransform.scale <=
+        (isMobileView
+          ? ZOOM_CONFIG.MOBILE_ALL_PLUGINS_SCALE
+          : ZOOM_CONFIG.ALL_PLUGINS_SCALE)
+          ? VIEWPORT_MARGIN * (isMobileView ? 2 : 4)
+          : currentTransform.scale <= 0.5
+            ? VIEWPORT_MARGIN * (isMobileView ? 1.5 : 2)
+            : VIEWPORT_MARGIN;
+
+      const visibleWidth = size.width / currentTransform.scale;
+      const visibleHeight = size.height / currentTransform.scale;
+
+      setViewport({
+        left: currentTransform.positionX / currentTransform.scale - margin,
+        top: currentTransform.positionY / currentTransform.scale - margin,
+        right:
+          currentTransform.positionX / currentTransform.scale +
+          visibleWidth +
+          margin,
+        bottom:
+          currentTransform.positionY / currentTransform.scale +
+          visibleHeight +
+          margin,
+      });
+    },
+    [],
+  );
+
+  // Gestion du resize et détection mobile
+  useEffect(() => {
     setIsClient(true);
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
+
     checkMobile();
+
     const handleResize = () => {
       const newWidth = window.innerWidth;
       const newHeight = window.innerHeight;
       setWindowSize({ width: newWidth, height: newHeight });
       checkMobile();
 
-      const margin =
-        transform.scale <=
-        (isMobile
-          ? ZOOM_CONFIG.MOBILE_ALL_PLUGINS_SCALE
-          : ZOOM_CONFIG.ALL_PLUGINS_SCALE)
-          ? VIEWPORT_MARGIN * (isMobile ? 4 : 8)
-          : transform.scale <= 0.5
-            ? VIEWPORT_MARGIN * (isMobile ? 2 : 4)
-            : VIEWPORT_MARGIN;
-
-      const visibleWidth = newWidth / transform.scale;
-      const visibleHeight = newHeight / transform.scale;
-
-      setViewport({
-        left: transform.positionX / transform.scale - margin,
-        top: transform.positionY / transform.scale - margin,
-        right: transform.positionX / transform.scale + visibleWidth + margin,
-        bottom: transform.positionY / transform.scale + visibleHeight + margin,
+      updateViewport(transformRef.current, {
+        width: newWidth,
+        height: newHeight,
       });
     };
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [transform.positionX, transform.positionY, transform.scale, isMobile]);
+  }, [updateViewport]);
 
-  // Mettre à jour la viewport lorsque la transformation change
+  // Mise à jour de la viewport lors des changements de transformation
   useEffect(() => {
-    const margin =
-      transform.scale <=
-      (isMobile
-        ? ZOOM_CONFIG.MOBILE_ALL_PLUGINS_SCALE
-        : ZOOM_CONFIG.ALL_PLUGINS_SCALE)
-        ? VIEWPORT_MARGIN * (isMobile ? 4 : 8)
-        : transform.scale <= 0.5
-          ? VIEWPORT_MARGIN * (isMobile ? 2 : 4)
-          : VIEWPORT_MARGIN;
-
-    const visibleWidth = windowSize.width / transform.scale;
-    const visibleHeight = windowSize.height / transform.scale;
-
-    setViewport({
-      left: transform.positionX / transform.scale - margin,
-      top: transform.positionY / transform.scale - margin,
-      right: transform.positionX / transform.scale + visibleWidth + margin,
-      bottom: transform.positionY / transform.scale + visibleHeight + margin,
-    });
+    updateViewport(transform, windowSize);
 
     if (transform.scale !== prevZoomScaleRef.current) {
-      setIsZooming(true);
-
       if (zoomTimerRef.current) {
         clearTimeout(zoomTimerRef.current);
       }
 
       zoomTimerRef.current = setTimeout(() => {
-        setIsZooming(false);
         zoomTimerRef.current = null;
-      }, 500);
+      }, 300);
     }
 
     prevZoomScaleRef.current = transform.scale;
-  }, [transform, windowSize, isMobile]);
+  }, [transform, windowSize, updateViewport]);
 
-  // Nettoyer le timer lors du démontage du composant
+  // Nettoyage
   useEffect(() => {
     return () => {
       if (zoomTimerRef.current) {
@@ -192,81 +250,97 @@ export default function HomePage() {
     };
   }, []);
 
+  // Génération des positions en nid d'abeille
   const allCircles = useMemo(() => {
     if (!isClient) return [];
 
     const config = {
-      spacing: 45, // Adjust based on your needs
-      hexRatio: 0.866, // Math.sqrt(3)/2 for regular hexagons
+      spacing: 45,
+      hexRatio: 0.866,
     };
 
-    const grid: GridItem[] = [];
-    // Augmenter le rayon pour créer plus de positions pour tous les plugins
+    // Optimisation: utiliser une méthode plus efficace pour générer les positions
     const positions = generateHoneycombPositions(
-      3500, // Augmenté de 2500 à 3500 pour avoir plus de positions
+      2000,
       windowSize.width,
       windowSize.height,
       config,
     );
+
+    // Créer un tableau de la taille exacte nécessaire pour éviter les redimensionnements
+    const resultGrid = new Array(Math.max(APPS.length, positions.length));
+
     APPS.forEach((app, index) => {
       if (index < positions.length) {
-        grid.push({
+        resultGrid[index] = {
           ...app,
           x: positions[index].x,
           y: positions[index].y,
-        });
+        };
       }
     });
+
+    // Remplir les positions restantes avec des placeholders
     for (let i = APPS.length; i < positions.length; i++) {
-      const placeholder: Placeholder & Position = {
+      resultGrid[i] = {
         id: `placeholder-${i}`,
         name: `Placeholder ${i}`,
         x: positions[i].x,
         y: positions[i].y,
-        color: "#0A0A0A", // You can adjust this default color
+        color: "#0A0A0A",
       };
-      grid.push(placeholder);
     }
-    return grid;
+
+    return resultGrid.filter(Boolean);
   }, [isClient, windowSize]);
 
+  // Filtrage par recherche
   const filteredCircles = useMemo(() => {
     if (!searchQuery) return allCircles;
+    const query = searchQuery.toLowerCase();
     return allCircles.filter((circle) =>
-      circle.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      circle.name.toLowerCase().includes(query),
     );
   }, [allCircles, searchQuery]);
 
-  // Calculer la limite dynamique d'éléments visibles en fonction du niveau de zoom
+  // Calcul de la limite d'éléments visibles
   const dynamicVisibleLimit = useMemo(() => {
-    // Plus le zoom est faible (scale petit), plus on affiche d'éléments
     if (transform.scale <= ZOOM_CONFIG.ALL_PLUGINS_SCALE) {
-      // À faible zoom, montrer tous les éléments
-      return Infinity;
+      return isMobile ? 150 : 300; // Limiter même à faible zoom pour les performances
     } else if (transform.scale <= 0.5) {
-      // Zoom intermédiaire, augmenter progressivement la limite
-      return GRID_CONFIG.MAX_VISIBLE_ITEMS * 3;
+      return isMobile ? 75 : 150;
     } else {
-      // Zoom normal, utiliser la limite standard
-      return GRID_CONFIG.MAX_VISIBLE_ITEMS;
+      return isMobile ? 50 : GRID_CONFIG.MAX_VISIBLE_ITEMS;
     }
-  }, [transform.scale]);
+  }, [transform.scale, isMobile]);
 
-  // Calculer les cercles actuellement visibles dans la viewport
-  const currentVisibleCircles = useMemo(() => {
+  // Optimisation du calcul des cercles visibles avec une version plus performante
+  const calculateVisibleCircles = useCallback(() => {
     if (!isClient) return [];
 
-    // Si on est en dessous du seuil de zoom, afficher tous les cercles sans filtrage par viewport
-    if (transform.scale <= ZOOM_CONFIG.ALL_PLUGINS_SCALE) {
-      // En dézoom important, on affiche tous les plugins, mais on les trie par distance
-      // au centre de l'écran pour un meilleur rendu
-      const viewportCenterX = (viewport.left + viewport.right) / 2;
-      const viewportCenterY = (viewport.top + viewport.bottom) / 2;
+    const currentViewport = viewportRef.current;
+    const currentTransform = transformRef.current;
+    const distanceMap = distanceMapRef.current;
 
-      // Copier les cercles pour ne pas modifier l'original
-      const allCirclesCopy = [...filteredCircles];
+    // Vider la map de distance pour éviter des fuites de mémoire
+    distanceMap.clear();
 
-      allCirclesCopy.forEach((circle) => {
+    // À faible zoom, optimiser pour le dézoom
+    if (
+      currentTransform.scale <=
+      (isMobile
+        ? ZOOM_CONFIG.MOBILE_ALL_PLUGINS_SCALE
+        : ZOOM_CONFIG.ALL_PLUGINS_SCALE)
+    ) {
+      const viewportCenterX =
+        (currentViewport.left + currentViewport.right) / 2;
+      const viewportCenterY =
+        (currentViewport.top + currentViewport.bottom) / 2;
+
+      // Limiter le nombre de plugins lorsqu'on dézoome complètement
+      const limitedCircles = filteredCircles.slice(0, isMobile ? 150 : 300);
+
+      limitedCircles.forEach((circle) => {
         distanceMap.set(
           circle.id,
           Math.sqrt(
@@ -276,115 +350,82 @@ export default function HomePage() {
         );
       });
 
-      // Trier par distance au centre
-      allCirclesCopy.sort(
+      limitedCircles.sort(
         (a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0),
       );
 
-      return allCirclesCopy;
+      return limitedCircles;
     }
 
-    // Sinon, filtrer les cercles dans la viewport comme avant
-    const inViewportCircles = filteredCircles.filter((circle) => {
-      // Calcul de distance au centre de la viewport pour un affichage plus naturel
-      const viewportCenterX = (viewport.left + viewport.right) / 2;
-      const viewportCenterY = (viewport.top + viewport.bottom) / 2;
+    // Optimisation pour Firefox/Mobile: réduire le nombre d'opérations
+    const viewportCenterX = (currentViewport.left + currentViewport.right) / 2;
+    const viewportCenterY = (currentViewport.top + currentViewport.bottom) / 2;
 
-      // Utiliser une marge de tolérance adaptée au niveau de zoom
-      const margin = transform.scale <= 0.5 ? 300 : 100;
+    // Utiliser une marge adaptée
+    const margin = currentTransform.scale <= 0.5 ? 200 : 100;
 
-      // Vérifier si le cercle est dans la viewport avec marge
-      const isInViewport =
-        circle.x >= viewport.left - margin &&
-        circle.x <= viewport.right + margin &&
-        circle.y >= viewport.top - margin &&
-        circle.y <= viewport.bottom + margin;
+    // Pré-allouer un tableau pour stocker les cercles dans la viewport
+    const inViewportCircles = [];
+    const maxCircles = Math.min(filteredCircles.length, dynamicVisibleLimit);
 
-      // Si pas dans la viewport, ne pas afficher
-      if (!isInViewport) return false;
+    // Utiliser for au lieu de filter/map pour de meilleures performances
+    for (let i = 0; i < filteredCircles.length; i++) {
+      const circle = filteredCircles[i];
 
-      // Calculer la distance au centre
-      const distanceToCenter = Math.sqrt(
-        Math.pow(circle.x - viewportCenterX, 2) +
-          Math.pow(circle.y - viewportCenterY, 2),
+      // Vérifier si dans la viewport
+      if (
+        circle.x >= currentViewport.left - margin &&
+        circle.x <= currentViewport.right + margin &&
+        circle.y >= currentViewport.top - margin &&
+        circle.y <= currentViewport.bottom + margin
+      ) {
+        // Calculer la distance au centre
+        const distanceToCenter = Math.sqrt(
+          Math.pow(circle.x - viewportCenterX, 2) +
+            Math.pow(circle.y - viewportCenterY, 2),
+        );
+
+        distanceMap.set(circle.id, distanceToCenter);
+        inViewportCircles.push(circle);
+
+        // Arrêter après avoir trouvé suffisamment de cercles
+        if (inViewportCircles.length >= maxCircles) break;
+      }
+    }
+
+    // Trier par distance (seulement si nécessaire)
+    if (inViewportCircles.length > 1) {
+      inViewportCircles.sort(
+        (a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0),
       );
+    }
 
-      // Stocker la distance dans la Map
-      distanceMap.set(circle.id, distanceToCenter);
+    return inViewportCircles;
+  }, [filteredCircles, dynamicVisibleLimit, isMobile, isClient]);
 
-      return true;
-    }) as GridItem[];
-
-    // Trier par distance au centre pour un affichage plus naturel
-    inViewportCircles.sort(
-      (a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0),
-    );
-
-    // Limiter le nombre de cercles affichés pour des performances optimales
-    // Utiliser la limite dynamique basée sur le niveau de zoom
-    return inViewportCircles.slice(0, dynamicVisibleLimit);
-  }, [
-    filteredCircles,
-    viewport,
-    isClient,
-    dynamicVisibleLimit,
-    transform.scale,
-    distanceMap,
-  ]);
-
-  // Mettre à jour les cercles précédents quand les cercles actuels changent
-  // mais seulement quand on n'est pas en train de zoomer
+  // Mise à jour des cercles visibles avec une RAF pour optimiser les performances
   useEffect(() => {
-    if (!isZooming) {
-      setPreviousVisibleCircles(currentVisibleCircles);
-    }
-  }, [currentVisibleCircles, isZooming]);
+    if (!isClient) return;
 
-  // Cercles à afficher: utiliser les précédents lors du zoom pour une transition plus douce
-  const visibleCircles = useMemo(() => {
-    // Si on est en train de zoomer ou dézoomer, conserver les cercles précédents
-    // pour éviter le recadrage soudain
-    if (isZooming) {
-      // Combiner et dédupliquer les cercles actuels et précédents
-      const allCircleIds = new Set<string>();
-      const combinedCircles: GridItem[] = [];
+    // Utiliser requestAnimationFrame pour synchroniser avec le rendu du navigateur
+    const updateVisibleCircles = () => {
+      const newVisibleCircles = calculateVisibleCircles();
+      visibleCirclesRef.current = newVisibleCircles;
+      setVisibleCircles(newVisibleCircles);
+    };
 
-      // Ajouter d'abord les cercles actuels
-      for (const circle of currentVisibleCircles) {
-        if (!allCircleIds.has(circle.id)) {
-          allCircleIds.add(circle.id);
-          combinedCircles.push(circle);
-        }
-      }
+    // Déclencher une mise à jour immédiate
+    updateVisibleCircles();
+  }, [calculateVisibleCircles, viewport, transform, isClient]);
 
-      // Si on zoome (scale augmente), privilégier les cercles actuels
-      // Si on dézoome (scale diminue), inclure aussi les cercles précédents
-      if (transform.scale < prevZoomScaleRef.current) {
-        // On est en train de dézoomer, inclure également les précédents
-        for (const circle of previousVisibleCircles) {
-          if (!allCircleIds.has(circle.id)) {
-            allCircleIds.add(circle.id);
-            combinedCircles.push(circle);
-          }
-        }
-      }
+  // État visible pour le rendu
+  const [visibleCircles, setVisibleCircles] = useState<GridItem[]>([]);
 
-      return combinedCircles;
-    }
-
-    // Sinon, retourner les cercles actuellement visibles
-    return currentVisibleCircles;
-  }, [
-    currentVisibleCircles,
-    previousVisibleCircles,
-    isZooming,
-    transform.scale,
-  ]);
-
+  // Handlers d'interaction
   const handleCirclePress = useCallback(
     (circle: GridItem) => {
-      if (!hasPanned && "actions" in circle) {
-        setSelectedCircle(circle);
+      if (!hasPanned && "actions" in circle && "description" in circle) {
+        setSelectedCircle(circle as Plugin);
         setIsModalVisible(true);
         setIsFrozen(true);
         setFrozenMousePosition(mousePosition);
@@ -394,24 +435,22 @@ export default function HomePage() {
     [hasPanned, mousePosition],
   );
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: ReactMouseEvent<HTMLDivElement>) => {
     if (mouseMoveThrottleRef.current) {
-      mouseMoveThrottleRef.current(e);
+      mouseMoveThrottleRef.current({
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
     }
   }, []);
 
-  const handleTransformChange = useCallback(
-    (newTransform: {
-      state: { scale: number; positionX: number; positionY: number };
-    }) => {
-      setTransform({
-        scale: newTransform.state.scale,
-        positionX: -newTransform.state.positionX,
-        positionY: -newTransform.state.positionY,
-      });
-    },
-    [],
-  );
+  const handleTransformChange = useCallback((newTransform: TransformState) => {
+    setTransform({
+      scale: newTransform.state.scale,
+      positionX: -newTransform.state.positionX,
+      positionY: -newTransform.state.positionY,
+    });
+  }, []);
 
   const handleModalClose = useCallback(() => {
     setIsModalVisible(false);
@@ -419,59 +458,59 @@ export default function HomePage() {
     setIsFrozen(false);
   }, []);
 
-  // Gérer les transitions de double-clic pour le zoom
   const handleDoubleClick = useCallback(() => {
-    // Sauvegarde temporaire des cercles visibles actuels pour la transition
-    setPreviousVisibleCircles(currentVisibleCircles);
-    setIsZooming(true);
-
     if (zoomTimerRef.current) {
       clearTimeout(zoomTimerRef.current);
     }
 
     zoomTimerRef.current = setTimeout(() => {
-      setIsZooming(false);
       zoomTimerRef.current = null;
-    }, 700); // Temps plus long pour le double-clic car l'animation est plus longue
-  }, [currentVisibleCircles]);
+    }, 500);
+  }, []);
+
+  // Mémoisation du gestionnaire d'événements tactiles
+  const handleTouchMove = useCallback((e: ReactTouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (touch && mouseMoveThrottleRef.current) {
+      mouseMoveThrottleRef.current({
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+    }
+  }, []);
 
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onTouchMove={(e) => {
-        const touch = e.touches[0];
-        if (touch && mouseMoveThrottleRef.current) {
-          mouseMoveThrottleRef.current({
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-          } as React.MouseEvent);
-        }
-      }}
+      onTouchMove={handleTouchMove}
       className="relative w-full h-screen bg-black overflow-hidden"
     >
       <TransformWrapper
         initialScale={1}
-        minScale={1}
-        maxScale={1}
+        minScale={
+          isMobile ? ZOOM_CONFIG.MOBILE_MIN_SCALE : ZOOM_CONFIG.MIN_SCALE
+        }
+        maxScale={ZOOM_CONFIG.MAX_SCALE}
         centerOnInit={true}
         doubleClick={{
-          disabled: isMobile, // Désactiver le double-clic sur mobile
+          disabled: isMobile,
           step: 0.7,
           mode: "zoomIn",
-          animationTime: 300,
+          animationTime: 200, // Plus court pour Firefox/Mobile
         }}
         pinch={{
-          // Activer le pinch-to-zoom sur mobile
           disabled: false,
-          step: 5,
+          step: 1, // Réduit pour plus de fluidité
         }}
         limitToBounds={false}
         onTransformed={(e) => {
-          handleTransformChange(e);
-          if (e.state.scale !== prevZoomScaleRef.current) {
-            handleDoubleClick();
-          }
+          requestAnimationFrame(() => {
+            handleTransformChange(e);
+            if (e.state.scale !== prevZoomScaleRef.current) {
+              handleDoubleClick();
+            }
+          });
         }}
         onPanningStart={() => {
           setHasPanned(false);
@@ -479,20 +518,22 @@ export default function HomePage() {
         onPanning={() => {
           setHasPanned(true);
         }}
+        // Meilleure gestion de la mémoire et des événements
+        alignmentAnimation={{ disabled: true }}
+        velocityAnimation={{ disabled: true }}
+        wheel={{
+          step: 0.05, // Pas de zoom plus petit pour plus de fluidité
+          smoothStep: 0.02,
+        }}
       >
         <TransformComponent
           wrapperClass="!w-full !h-full"
           contentClass="!w-full !h-full"
         >
           <div className="relative w-full h-full">
-            <motion.div
-              className="absolute w-full h-full"
-              initial={false}
-              layout={false}
-            >
-              {visibleCircles.map((circle, index) => {
-                // Assurer que chaque cercle a un ID unique pour React
-                const uniqueKey = `${circle.id}-${index}`;
+            <div className="absolute w-full h-full">
+              {visibleCircles.map((circle) => {
+                const uniqueKey = circle.id || `circle-${circle.x}-${circle.y}`;
                 return (
                   <Circle
                     key={uniqueKey}
@@ -504,12 +545,11 @@ export default function HomePage() {
                   />
                 );
               })}
-            </motion.div>
+            </div>
           </div>
         </TransformComponent>
       </TransformWrapper>
 
-      {/* Modal avec ajustements pour mobile */}
       <PluginModal
         plugin={selectedCircle}
         isVisible={isModalVisible}
