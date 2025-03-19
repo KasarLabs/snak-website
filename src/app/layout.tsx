@@ -21,8 +21,7 @@ export const metadata: Metadata = {
       media: "(prefers-color-scheme: light)",
     },
   ],
-  description:
-    "Snak is a toolkit for creating AI agents powered by Starknet.",
+  description: "Snak is a toolkit for creating AI agents powered by Starknet.",
   keywords: [
     "Starknet",
     "blockchain",

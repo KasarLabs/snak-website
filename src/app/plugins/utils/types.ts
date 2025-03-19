@@ -24,6 +24,7 @@ export interface Plugin {
   description: string;
   image: string;
   internal?: boolean;
+  githubUrl?: string;
   actions: Action[];
 }
 
